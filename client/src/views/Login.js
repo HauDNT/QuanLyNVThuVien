@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage, validateYupSchema } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import { AuthContext } from "../helpers/AuthContext";
+import '../styles/Form.scss';
 
 function Login() {
   const initValuesLogin = {
@@ -27,35 +28,44 @@ function Login() {
   const handleLogin = (information) => {};
 
   return (
-    <div className="loginContainer">
+    <div className="container-fluid">
       <Formik
         initialValues={initValuesLogin}
         validationSchema={validateSchema}
         onSubmit={handleLogin}
       >
         {({ handleChange, values }) => (
-          <Form className="loginForm">
-            <label>Tên tài khoản: </label>
-            <Field
-              autoComplete="off"
-              id="loginFormInput"
-              name="username"
-              placeholder="(Tên tài khoản của bạn...)"
-              onChange={handleChange}
-              value={values.username}
-            />
-            <ErrorMessage name="username" component="span" />
+          <Form className="loginForm blurry-form">
+            <div className="mb-3 text-center form-header">
+                HỆ THỐNG QUẢN TRỊ THƯ VIỆN
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Tên tài khoản</label>
+              <Field
+                className="form-control"
+                autoComplete="off"
+                id="loginFormInput"
+                name="username"
+                placeholder="(Tên tài khoản của bạn...)"
+                onChange={handleChange}
+                value={values.username}
+              />
+              <ErrorMessage className="error-message" name="username" component="span" />
+            </div>
 
-            <label>Mật khẩu: </label>
-            <Field
-              autoComplete="off"
-              id="loginFormInput"
-              name="password"
-              placeholder="(Mật khẩu của bạn...)"
-              onChange={handleChange}
-              value={values.password}
-            />
-            <ErrorMessage name="password" component="span" />
+            <div className="mb-3">
+              <label className="form-label">Mật khẩu</label>
+              <Field 
+                className="form-control"
+                autoComplete="off"
+                id="loginFormInput"
+                name="password"
+                placeholder="(Mật khẩu của bạn...)"
+                onChange={handleChange}
+                value={values.password}
+              />
+              <ErrorMessage className="error-message" name="password" component="span" />
+            </div>
 
             <button className="btn btn-primary btn-login" type="submit">
               Đăng nhập

@@ -1,0 +1,60 @@
+.container-fluid {
+    font-family: 'Nunito';
+    margin: 0;
+    height: 100vh;
+    background-image: url('../assets/images/background-1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+    Form {
+        background-color: white;
+        position: relative;
+        left: 50%;
+        top: 25%;
+        translate: -50%;
+        padding: 30px;
+        padding-bottom: 70px;
+        width: 40%;
+        height: auto;
+        border-radius: 10px;
+
+        .form-header {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            border: 1px solod #ccc;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            font-weight: 500;
+            font-size: 16px;
+            color: red;
+        }
+
+        button {
+            position: fixed;
+            right: 5%;
+            bottom: 5%;
+            width: 150px;
+            height: 40px;
+        }
+    }
+
+    .regisForm {
+        top: 20%;
+    }
+
+    .blurry-form {
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+    }
+}

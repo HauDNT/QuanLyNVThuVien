@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage, validateYupSchema } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import { AuthContext } from "../helpers/AuthContext";
+import '../styles/Form.scss';
 
 function Register() {
   const navigator = useNavigate();
@@ -43,46 +44,58 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="container-fluid">
       <Formik
         initialValues={initValuesRegis}
         validationSchema={validateSchema}
         onSubmit={handleRegis}
       >
         {({ handleChange, values }) => (
-          <Form className="regisForm">
-            <label>Tên tài khoản: </label>
-            <Field
-              autoComplete="off"
-              id="regisFormInput"
-              name="username"
-              placeholder="(Tên tài khoản của bạn...)"
-              onChange={handleChange}
-              value={values.username}
-            />
-            <ErrorMessage name="username" component="span" />
+          <Form className="regisForm blurry-form">
+            <div className="mb-3 text-center form-header">
+              ĐĂNG KÝ TÀI KHOẢN QUẢN TRỊ
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Tên tài khoản: </label>
+              <Field
+                className="form-control"
+                autoComplete="off"
+                id="regisFormInput"
+                name="username"
+                placeholder="(Tên tài khoản của bạn...)"
+                onChange={handleChange}
+                value={values.username}
+              />
+              <ErrorMessage className="error-message" name="username" component="span" />
+            </div>
 
-            <label>Mật khẩu: </label>
-            <Field
-              autoComplete="off"
-              id="regisFormInput"
-              name="password"
-              placeholder="(Mật khẩu của bạn...)"
-              onChange={handleChange}
-              value={values.password}
-            />
-            <ErrorMessage name="password" component="span" />
+            <div className="mb-3">
+              <label className="form-label">Mật khẩu: </label>
+              <Field
+                className="form-control"
+                autoComplete="off"
+                id="regisFormInput"
+                name="password"
+                placeholder="(Mật khẩu của bạn...)"
+                onChange={handleChange}
+                value={values.password}
+              />
+              <ErrorMessage className="error-message" name="password" component="span" />
+            </div>
 
-            <label>Nhập lại mật khẩu: </label>
-            <Field
-              autoComplete="off"
-              id="regisFormInput"
-              name="re_password"
-              placeholder="(Nhập lại mật khẩu của bạn...)"
-              onChange={handleChange}
-              value={values.re_password}
-            />
-            <ErrorMessage name="re_password" component="span" />
+            <div className="mb-3">
+              <label className="form-label">Nhập lại mật khẩu: </label>
+              <Field
+                className="form-control"
+                autoComplete="off"
+                id="regisFormInput"
+                name="re_password"
+                placeholder="(Nhập lại mật khẩu của bạn...)"
+                onChange={handleChange}
+                value={values.re_password}
+              />
+              <ErrorMessage className="error-message" name="re_password" component="span" />
+            </div>
 
             <button className="btn btn-primary btn-regis" type="submit">
               Đăng ký
