@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage, validateYupSchema } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {SERVER_PORT} from '../constance.js';
 // import { AuthContext } from "../helpers/AuthContext";
 import '../styles/Form.scss';
 
@@ -33,7 +34,7 @@ function Register() {
 
   const handleRegis = (data) => {
     if (data.password === data.re_password) {
-      axios.post('http://localhost:3002/users/register', data).then(() => {
+      axios.post(`http://localhost:${SERVER_PORT}/users/register`, data).then(() => {
         toast.success("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ");
         navigator('/login');
       });

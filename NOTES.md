@@ -1,5 +1,5 @@
 --------PHẦN CLIENT---------
-
+1. Đã cập nhật lại PORT Docker, PORT Server vào file constance.js và sử dụng nó trong các lần gọi API . Như vậy từ nay về sau chỉ cần thay đổi 1 lần trong file constance.js mà không cần thay đổi ở đâu nữa vẫn chạy ổn định.
 
 
 
@@ -7,7 +7,7 @@
 
 --------PHẦN SERVER----------
 1. Ta sử dụng file mysql.yml để khai báo các thông số của Database tạo trong Docker:
-# mysql.yml:
+### mysql.yml:
     services:
     db-mysql:
         image: mysql:5.7.40
@@ -21,11 +21,11 @@
 
 2. Ta thay đổi PORT của Server NodeJS thành 3002 và một số thông tin của Database để nó kết nối đúng
 đến Database trong Docker:
-# App NodeJS params:
+### App NodeJS params:
     NODE_ENV = development
     PORT = 3002
     HOST_NAME = localhost
-# DB's info:
+### DB's info:
     DB_HOST = localhost
     DB_USER = root
     DB_PASSWORD = 123456
@@ -39,3 +39,5 @@ module.exports = {
   }
   ...
 }
+
+4. Đã cập nhật lại PORT Docker vào file .env và tái sử dụng nó trong file config.js và file index.js. Như vậy từ nay về sau chỉ cần thay đổi 1 lần trong file .env là có thể chạy được chương trình.

@@ -1,3 +1,6 @@
+require('dotenv').config();
+const DOCKER_PORT = process.env.DOCKER_PORT;
+
 module.exports = {
   "development": {
     "username": `${process.env.DB_USER}`,
@@ -5,7 +8,7 @@ module.exports = {
     "database": `${process.env.DB_NAME}`,
     "host": `${process.env.DB_HOST}`,
     "dialect": "mysql",
-    "port": 3001, //Port ánh xạ từ Docker sang Localhost (được định nghĩa trong file mysql.yml)
+    "port": DOCKER_PORT, //Port ánh xạ từ Docker sang Localhost (được định nghĩa trong file mysql.yml)
   },
   "test": {
     "username": "root",
