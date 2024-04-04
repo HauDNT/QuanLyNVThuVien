@@ -3,6 +3,15 @@ const bcrypt = require('bcrypt');           // Using Bcrypt to hash and check pa
 const {sign} = require('jsonwebtoken');     // Using Json Web Token
 
 class UsersController {
+    async findAllUsers(req, res) {
+        try {
+            const allUsers = await Users.findAll();
+            res.json({allUsers: allUsers});
+        } catch (errorMessage) {
+            return res.json({error: 'Error from server. Try again later!'});
+        }
+    }
+
     async register(req, res) {
         try {
             const {username, password} = req.body;
