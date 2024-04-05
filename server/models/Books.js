@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        DDC: {      // Mã phân loại DDC
+            type: DataTypes.STRING(6),
+            allowNull: false,
+        },
         MainTitle: {    // Tiêu đề chính
             type: DataTypes.STRING(100),
             allowNull: false,

@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
+        Email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         Position: {     // Chức vụ (Trưởng phòng, nhân viên,...)
             type: DataTypes.STRING,
             allowNull: false,
