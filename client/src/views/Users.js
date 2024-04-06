@@ -1,5 +1,7 @@
 import React, {useState, useEffect, Fragment} from "react";
 import axios from "axios";
+import {FcInfo} from "react-icons/fc";
+import {FaEdit, FaTimesCircle } from "react-icons/fa";
 
 function HomePage() {
     const [listUsers, setListUsers] = useState([]);
@@ -13,12 +15,15 @@ function HomePage() {
     return (
         <>
         <div className="container-fluid">
-            <h1 className="text-center">USER'S INFO</h1>
             <table className="table">
                 <thead className="thead-dark">
                     <tr>
-                        <th scope="col" className="text-center"> Username </th>
-                        <th scope="col" className="text-center">Password</th>
+                        <th scope="col" className="text-center"> Tên tài khoản </th>
+                        <th scope="col" className="text-center">Mật khẩu</th>
+                        <th scope="col" className="text-center">Vai trò</th>
+                        <th scope="col" className="text-center">Thông tin cá nhân</th>
+                        <th scope="col" className="text-center">Sửa</th>
+                        <th scope="col" className="text-center">Xóa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +31,16 @@ function HomePage() {
                         <tr key={user.id} className="text-center">
                             <td>{user.Username}</td>
                             <td>{user.Password}</td>
+                            <td>Thư viện viên</td>
+                            <td>
+                                <FcInfo className="info-icon"/>
+                            </td>
+                            <td>
+                                <FaEdit className="edit-icon"/>
+                            </td>
+                            <td>
+                                <FaTimesCircle  className="delete-icon"/>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
