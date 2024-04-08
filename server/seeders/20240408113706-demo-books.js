@@ -1,0 +1,87 @@
+'use strict';
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up (queryInterface, Sequelize) {
+    return queryInterface.bulkInsert('Books', [{
+      ISBN: '978-604-353-6',
+      DDC: 'C006B',
+      MainTitle: 'Harry Potter',
+      Subtitle: 'Children story',
+      Author: 'Null',
+      Publisher: 'NXB. Kim Dong',
+      PubPlace: 'Ha Noi',
+      PubYear: '2000',
+      QuantityCopies: 5000,
+      Size: '21cm',
+      NumPages: 100,
+      UnitPrice: 105000,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }, {
+      ISBN: '978-604-353-6',
+      DDC: 'C006B',
+      MainTitle: 'Harry Potter',
+      Subtitle: 'Children story',
+      Author: 'Null',
+      Publisher: 'NXB. Kim Dong',
+      PubPlace: 'Ha Noi',
+      PubYear: '2000',
+      QuantityCopies: 5000,
+      Size: '21cm',
+      NumPages: 100,
+      UnitPrice: 105000,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }, {
+      ISBN: '978-604-353-6',
+      DDC: 'C006B',
+      MainTitle: 'Harry Potter',
+      Subtitle: 'Children story',
+      Author: 'Null',
+      Publisher: 'NXB. Kim Dong',
+      PubPlace: 'Ha Noi',
+      PubYear: '2000',
+      QuantityCopies: 5000,
+      Size: '21cm',
+      NumPages: 100,
+      UnitPrice: 105000,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }, {
+      ISBN: '978-604-353-6',
+      DDC: 'C006B',
+      MainTitle: 'Harry Potter',
+      Subtitle: 'Children story',
+      Author: 'Null',
+      Publisher: 'NXB. Kim Dong',
+      PubPlace: 'Ha Noi',
+      PubYear: '2000',
+      QuantityCopies: 5000,
+      Size: '21cm',
+      NumPages: 100,
+      UnitPrice: 105000,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }, {
+      ISBN: '978-604-353-6',
+      DDC: 'C006B',
+      MainTitle: 'Harry Potter',
+      Subtitle: 'Children story',
+      Author: 'Null',
+      Publisher: 'NXB. Kim Dong',
+      PubPlace: 'Ha Noi',
+      PubYear: '2000',
+      QuantityCopies: 5000,
+      Size: '21cm',
+      NumPages: 100,
+      UnitPrice: 105000,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }]);
+  },
+
+  async down (queryInterface, Sequelize) {
+    return queryInterface.bulkDelete('Books', null, {});
+  }
+};

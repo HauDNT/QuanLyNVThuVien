@@ -41,3 +41,28 @@ module.exports = {
 }
 
 4. Đã cập nhật lại PORT Docker vào file .env và tái sử dụng nó trong file config.js và file index.js. Như vậy từ nay về sau chỉ cần thay đổi 1 lần trong file .env là có thể chạy được chương trình.
+
+5. Tên của model được define và khi gọi khóa ngoại từ model khác phải y như nhau.
+VD:
+#### Model Bills:
+  Bill.belongsTo(models.BillTypes, {
+      foreignKey: {
+          name: 'TypeOfBill',
+          allowNull: false,
+      }
+  });
+
+#### Model BillTypes:
+module.exports = (sequelize, DataTypes) => {
+    const BillTypes = sequelize.define("Bill_Types", {
+        Name: {
+            type: DataTypes.STRING(50),
+            allowNull: false,
+        },
+    }, {
+        freezeTableName: true,
+        timestamps: false,
+    });
+}
+
+=> Hai tên "BillTypes" & "Bill_Types" khác nhau nên sẽ gây lỗi. Ta cần lưu ý điều này!

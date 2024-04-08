@@ -8,7 +8,7 @@ class UsersController {
             const allUsers = await Users.findAll();
             res.json({allUsers: allUsers});
         } catch (errorMessage) {
-            return res.json({error: 'Error from server. Try again later!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
