@@ -2,8 +2,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
-import Nav from "./views/Navbar";
-import SideBar from "./views/SideBar";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Users from "./views/Users";
@@ -27,21 +25,17 @@ function App() {
       />
       
       <BrowserRouter>
-        <Nav/>
-        <div className="row">
-            <div className="leftSide col-2">
-              <SideBar/>
-            </div>
-            <div className="rightSide col-10">
-              <Routes>
-                <Route path="/" exact Component={Home} />
-                <Route path="/users" exact Component={Users} />
-                <Route path="/login" exact Component={Login} />
-                <Route path="/register" exact Component={Register} />
-                <Route path='*' exact Component={PageNotFound}/>
-              </Routes>
-            </div>
-          </div>
+        <Routes>
+          <Route path="/login" exact Component={Login} />
+          <Route path="/register" exact Component={Register} />
+          <Route path="/" element={<Home/>}>
+            <Route
+              path="users"
+              element={<Users/>}
+            />
+          </Route>
+          <Route path='/*' exact Component={PageNotFound}/>
+        </Routes>
       </BrowserRouter>
 
       <script

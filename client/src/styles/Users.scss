@@ -1,0 +1,28 @@
+.user-page {
+    table {
+        margin-top: 10px;
+        border: 1px solid #ccc;
+
+        .info-icon,
+        .edit-icon,
+        .delete-icon {
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            color: rgb(0, 123, 255);
+        }
+
+        .delete-icon {
+            color: red;
+        }
+
+        td {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

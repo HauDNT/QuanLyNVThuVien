@@ -2,6 +2,7 @@ import React, {useState, useEffect, Fragment} from "react";
 import axios from "axios";
 import {FcInfo} from "react-icons/fc";
 import {FaEdit, FaTimesCircle } from "react-icons/fa";
+import "../styles/Users.scss";
 
 function HomePage() {
     const [listUsers, setListUsers] = useState([]);
@@ -14,7 +15,7 @@ function HomePage() {
 
     return (
         <>
-        <div className="container-fluid">
+        <div className="container-fluid user-page">
             <table className="table">
                 <thead className="thead-dark">
                     <tr>

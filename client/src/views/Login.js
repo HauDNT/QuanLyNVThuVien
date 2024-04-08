@@ -49,7 +49,7 @@ function Login() {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid form-page">
       <Formik
         initialValues={initValuesLogin}
         validationSchema={validateSchema}
