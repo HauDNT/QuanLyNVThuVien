@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(20),
             allowNull: false,
         },
+        IndiRegis: {    // Đã được ĐKCB chưa?
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+        },
     }, {
         freezeTableName: true,
     });

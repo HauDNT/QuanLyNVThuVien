@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             }
         });
+        Bill.hasOne(models.Bill_Type, {
+            onDelete: 'cascade',
+        });
     };
 
     return Bill;

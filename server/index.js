@@ -13,7 +13,11 @@ app.use(cors());
 
 // Init routes:
 const usersRouter = require('./routes/Users');
+const billsRouter = require('./routes/Bills');
+
+
 app.use('/users', usersRouter);
+app.use('/bills', billsRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
