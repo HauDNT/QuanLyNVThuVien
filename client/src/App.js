@@ -1,9 +1,9 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./views/Home";
 import Nav from "./views/Navbar";
 import SideBar from "./views/SideBar";
-import Home from "./views/Home";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Users from "./views/Users";

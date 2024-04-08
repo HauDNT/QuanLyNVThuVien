@@ -9,6 +9,8 @@ import {SERVER_PORT} from '../constance.js';
 import '../styles/Form.scss';
 
 function Login() {
+  const navigator = useNavigate();
+
   const initValuesLogin = {
     username: "",
     password: "",
@@ -25,8 +27,26 @@ function Login() {
       .required("Bạn phải nhập vào mật khẩu!"),
   });
 
-  // Quay lại thì viết tiếp hàm Login nhé!
-  const handleLogin = (information) => {};
+  const handleLogin = (data) => {
+    if (!data || !data.username || !data.password) {
+      toast.error("Thông tin không hợp lệ. Hãy kiểm tra và thử lại!");
+      return;
+    }
+
+    axios.post(`http://localhost:${SERVER_PORT}/users/login`, data)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success(res.data.success);
+          navigator('/');
+        } 
+        else {
+          toast.error(res.data.error);
+        }
+      })
+      .catch(() => {
+        toast.error(data.error);
+      });
+  };
 
   return (
     <div className="container-fluid">

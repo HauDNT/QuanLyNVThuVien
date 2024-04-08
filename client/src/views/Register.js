@@ -4,9 +4,9 @@ import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage, validateYupSchema } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {SERVER_PORT} from '../constance.js';
+import { SERVER_PORT } from "../constance.js";
 // import { AuthContext } from "../helpers/AuthContext";
-import '../styles/Form.scss';
+import "../styles/Form.scss";
 
 function Register() {
   const navigator = useNavigate();
@@ -33,15 +33,29 @@ function Register() {
   });
 
   const handleRegis = (data) => {
-    if (data.password === data.re_password) {
-      axios.post(`http://localhost:${SERVER_PORT}/users/register`, data).then(() => {
-        toast.success("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ");
-        navigator('/login');
+    if (!data || !data.username || !data.password || !data.re_password) {
+      toast.error("Thông tin đăng ký không hợp lệ!");
+      return;
+    }
+
+    if (data.password !== data.re_password) {
+      toast.error("Mật khẩu không trùng khớp!");
+      return;
+    }
+
+    axios.post(`http://localhost:${SERVER_PORT}/users/register`, data)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success(res.data.success);
+          navigator('/login');
+        } 
+        else {
+          toast.error(res.data.error);
+        }
+      })
+      .catch(() => {
+        toast.error("Đã xảy ra lỗi từ phía máy chủ, hãy thử lại sau!");
       });
-    }
-    else {
-      toast.error("Mật khẩu không trùng khớp. Hãy kiểm tra và thử lại.");
-    }
   };
 
   return (
@@ -67,7 +81,11 @@ function Register() {
                 onChange={handleChange}
                 value={values.username}
               />
-              <ErrorMessage className="error-message" name="username" component="span" />
+              <ErrorMessage
+                className="error-message"
+                name="username"
+                component="span"
+              />
             </div>
 
             <div className="mb-3">
@@ -81,7 +99,11 @@ function Register() {
                 onChange={handleChange}
                 value={values.password}
               />
-              <ErrorMessage className="error-message" name="password" component="span" />
+              <ErrorMessage
+                className="error-message"
+                name="password"
+                component="span"
+              />
             </div>
 
             <div className="mb-3">
@@ -95,7 +117,11 @@ function Register() {
                 onChange={handleChange}
                 value={values.re_password}
               />
-              <ErrorMessage className="error-message" name="re_password" component="span" />
+              <ErrorMessage
+                className="error-message"
+                name="re_password"
+                component="span"
+              />
             </div>
 
             <button className="btn btn-primary btn-regis" type="submit">
