@@ -59,7 +59,7 @@ function Register() {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid form-page">
       <Formik
         initialValues={initValuesRegis}
         validationSchema={validateSchema}
