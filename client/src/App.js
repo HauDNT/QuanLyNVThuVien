@@ -2,10 +2,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
-import Login from "./views/Login";
-import Register from "./views/Register";
-import Users from "./views/Users";
-import Bills from "./views/Bills";
+import Login from "./views/Authenticate/Login";
+import Register from "./views/Authenticate/Register";
+import Users from "./views/Users/Users";
+import Bills from "./views/Bills/Bills";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 

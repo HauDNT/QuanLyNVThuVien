@@ -1,12 +1,12 @@
-import React, { Fragment, useContext } from "react";
+import React from "react";
 import axios from "axios";
 import * as Yup from "yup";
-import { Formik, Form, Field, ErrorMessage, validateYupSchema } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {SERVER_PORT} from '../constance.js';
+import config from '../../constance.js';
 // import { AuthContext } from "../helpers/AuthContext";
-import '../styles/Form.scss';
+import '../../styles/Form.scss';
 
 function Login() {
   const navigator = useNavigate();
@@ -33,7 +33,7 @@ function Login() {
       return;
     }
 
-    axios.post(`http://localhost:${SERVER_PORT}/users/login`, data)
+    axios.post(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`, data)
       .then((res) => {
         if (res.data.success) {
           toast.success(res.data.success);

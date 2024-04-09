@@ -1,8 +1,8 @@
 import React from "react";
 import "../styles/Home.scss";
 import { Outlet } from "react-router-dom";
-import Nav from "../views/Navbar";
-import SideBar from "../views/SideBar";
+import Nav from "./Components/Navbar";
+import SideBar from "./Components/SideBar";
 
 function Home() {
     return (
