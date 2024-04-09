@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import config from '../../constance.js';
-// import { AuthContext } from "../helpers/AuthContext";
+import { AuthenContext } from "../../helper/AuthenContext.js";
 import '../../styles/Form.scss';
 
 function Login() {
   const navigator = useNavigate();
+  const {setAuthenState} = useContext(AuthenContext);
 
   const initValuesLogin = {
     username: "",
@@ -36,6 +37,11 @@ function Login() {
     axios.post(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`, data)
       .then((res) => {
         if (res.data.success) {
+          localStorage.setItem('authenToken', res.data.authenToken);
+          setAuthenState({
+            username: res.data.username,
+            status: true,
+          });
           toast.success(res.data.success);
           navigator('/');
         } 

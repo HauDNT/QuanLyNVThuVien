@@ -1,6 +1,8 @@
+import {useState} from 'react';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {AuthenContext} from './helper/AuthenContext';
 import Home from "./views/Home";
 import Login from "./views/Authenticate/Login";
 import Register from "./views/Authenticate/Register";
@@ -10,6 +12,11 @@ import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
 function App() {
+  const [authenState, setAuthenState] = useState({
+    username: '',
+    status: false,
+  });
+
   return (
     <div className="App">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,7 +31,7 @@ function App() {
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous"
       />
-      
+
       <BrowserRouter>
         <Routes>
           <Route path="/login" exact Component={Login} />
