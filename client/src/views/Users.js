@@ -1,14 +1,15 @@
-import React, {useState, useEffect, Fragment} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
+import {SERVER_PORT} from '../constance.js';
 import {FcInfo} from "react-icons/fc";
 import {FaEdit, FaTimesCircle } from "react-icons/fa";
 import "../styles/Users.scss";
 
-function HomePage() {
+function Users() {
     const [listUsers, setListUsers] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3002/users/').then((res) => {
+        axios.get(`http://localhost:${SERVER_PORT}/users/`).then((res) => {
             setListUsers(res.data.allUsers);
         });
     }, []);
@@ -51,4 +52,4 @@ function HomePage() {
     );
 };
 
-export default HomePage;
+export default Users;

@@ -1,6 +1,7 @@
-const {Bills} = require('../models');
+const {Bills, BillToType} = require('../models');
 
 class BillsController {
+    // Lấy toàn bộ hóa đơn:
     async getAllBills(req, res) {
         try {
             const getBills = await Bills.findAll();
@@ -10,10 +11,29 @@ class BillsController {
         }
     };
 
-    async getReceiveBills(req, res) {
+    // Lấy hóa đơn mua / tặng:
+    async getBillOfType(req, res) {
+        const type = req.params.type;
+
         try {
-            const receiveBills = await Bills.findOne({where: {NumberBill: 41}});    // Testing success
-            res.json({bills: receiveBills});
+            const receiveBills = await Bills
+                .findAll({
+                    include: [
+                        {
+                            model: BillToType,
+                            require: true,
+                        }
+                    ],
+                    where: {
+                        '$BillToType.BillTypeId$': type,
+                    }
+                });
+
+                if (!receiveBills) {
+                    return res.json({ error: 'Không tìm thấy hóa đơn.' });
+                }
+
+                res.json({ receiveBills });
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }

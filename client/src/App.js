@@ -5,6 +5,7 @@ import Home from "./views/Home";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Users from "./views/Users";
+import Bills from "./views/Bills";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
@@ -29,10 +30,8 @@ function App() {
           <Route path="/login" exact Component={Login} />
           <Route path="/register" exact Component={Register} />
           <Route path="/" element={<Home/>}>
-            <Route
-              path="users"
-              element={<Users/>}
-            />
+            <Route path="users" element={<Users/>} />
+            <Route path="bills/:type" element={<Bills/>} />
           </Route>
           <Route path='/*' exact Component={PageNotFound}/>
         </Routes>
