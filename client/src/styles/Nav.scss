@@ -1,6 +1,7 @@
 .navbar {
     margin: 0;
     padding: 0;
+
     a {
         &:first-child {
             padding-left: 20px;
@@ -17,8 +18,14 @@
             color: white;
             text-decoration: none;
         }
+
         &:hover {
             opacity: 0.6;
+        }
+
+        &:last-child {
+            position: absolute;
+            right: 0;
         }
     }
 }

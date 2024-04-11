@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -9,7 +9,7 @@ import { AuthenContext } from "../../helper/AuthenContext.js";
 import '../../styles/Form.scss';
 
 function Login() {
-  const navigator = useNavigate();
+  let navigator = useNavigate();
   const {setAuthenState} = useContext(AuthenContext);
 
   const initValuesLogin = {
@@ -32,18 +32,25 @@ function Login() {
     if (!data || !data.username || !data.password) {
       toast.error("Thông tin không hợp lệ. Hãy kiểm tra và thử lại!");
       return;
-    }
+    };
 
     axios.post(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`, data)
       .then((res) => {
         if (res.data.success) {
-          localStorage.setItem('authenToken', res.data.authenToken);
-          setAuthenState({
+          localStorage.setItem('authenToken', res.data);
+          localStorage.setItem('username', res.data.username);
+          localStorage.setItem('status', res.data.status);
+          localStorage.setItem('id', res.data.id);
+
+          setAuthenState(prevState => ({
+            ...prevState,
+            id: res.data.id,
             username: res.data.username,
             status: true,
-          });
-          toast.success(res.data.success);
+          }));
+
           navigator('/');
+          // toast.success(res.data.success);
         } 
         else {
           toast.error(res.data.error);

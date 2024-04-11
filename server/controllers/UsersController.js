@@ -50,8 +50,9 @@ class UsersController {
             const authenToken = sign({username: getUSer.Username, id: getUSer.id}, "AuthenticateToken");
             return res.json({
                                 success: 'Đăng nhập thành công',
-                                username: getUSer.Username,
                                 id: getUSer.id,
+                                username: getUSer.Username,
+                                status: true,
                                 authenToken: authenToken,
                             });
         } catch (errorMessage) {
