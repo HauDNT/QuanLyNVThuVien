@@ -1,16 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import * as Yup from "yup";
+import { AuthenContext } from "../../helper/AuthenContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import config from '../../constance.js';
-import { AuthenContext } from "../../helper/AuthenContext.js";
-import '../../styles/Form.scss';
+import config from "../../constance.js";
+import "../../styles/Form.scss";
 
 function Login() {
+  const { setAuthenData } = useContext(AuthenContext);
+
   let navigator = useNavigate();
-  const {setAuthenState} = useContext(AuthenContext);
 
   const initValuesLogin = {
     username: "",
@@ -32,27 +33,29 @@ function Login() {
     if (!data || !data.username || !data.password) {
       toast.error("Thông tin không hợp lệ. Hãy kiểm tra và thử lại!");
       return;
-    };
+    }
 
-    axios.post(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`, data)
+    axios
+      .post(
+        `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`,
+        data
+      )
       .then((res) => {
-        if (res.data.success) {
-          localStorage.setItem('authenToken', res.data);
+        if (res.data && res.data.success) {
+          localStorage.setItem('id', res.data.id);
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
-          localStorage.setItem('id', res.data.id);
+          localStorage.setItem('authenToken', res.data.authenToken);
 
-          setAuthenState(prevState => ({
-            ...prevState,
-            id: res.data.id,
-            username: res.data.username,
-            status: true,
-          }));
+          setAuthenData ({
+            id: localStorage.getItem('id'), 
+            username: localStorage.getItem('username'), 
+            status: localStorage.getItem('status'), 
+            authenToken: localStorage.getItem('authenToken')
+          });
 
-          navigator('/');
-          // toast.success(res.data.success);
-        } 
-        else {
+          navigator("/");
+        } else {
           toast.error(res.data.error);
         }
       })
@@ -71,7 +74,7 @@ function Login() {
         {({ handleChange, values }) => (
           <Form className="loginForm blurry-form">
             <div className="mb-3 text-center form-header">
-                HỆ THỐNG QUẢN TRỊ THƯ VIỆN
+              HỆ THỐNG QUẢN TRỊ THƯ VIỆN
             </div>
             <div className="mb-3">
               <label className="form-label">Tên tài khoản</label>
@@ -84,12 +87,16 @@ function Login() {
                 onChange={handleChange}
                 value={values.username}
               />
-              <ErrorMessage className="error-message" name="username" component="span" />
+              <ErrorMessage
+                className="error-message"
+                name="username"
+                component="span"
+              />
             </div>
 
             <div className="mb-3">
               <label className="form-label">Mật khẩu</label>
-              <Field 
+              <Field
                 className="form-control"
                 autoComplete="off"
                 id="loginFormInput"
@@ -98,7 +105,11 @@ function Login() {
                 onChange={handleChange}
                 value={values.password}
               />
-              <ErrorMessage className="error-message" name="password" component="span" />
+              <ErrorMessage
+                className="error-message"
+                name="password"
+                component="span"
+              />
             </div>
 
             <button className="btn btn-primary btn-login" type="submit">

@@ -12,7 +12,8 @@ function Home() {
     if (!localStorage.getItem('authenToken') && !AuthenContext.status) {
       navigator('/login');
     }
-  });
+  }, []);
+  
 
   return (
       <div className="Home">

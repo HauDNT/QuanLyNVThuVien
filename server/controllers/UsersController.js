@@ -37,21 +37,21 @@ class UsersController {
     async login(req, res) {
         try {
             const {username, password} = req.body;
-            const getUSer = await Users.findOne({where: {Username: username}});
-            if (!getUSer) {
+            const getUser = await Users.findOne({where: {Username: username}});
+            if (!getUser) {
                 return res.json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
             }
             
-            const match = await bcrypt.compare(password, getUSer.Password);
+            const match = await bcrypt.compare(password, getUser.Password);
             if (!match) {
                 return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
             }
 
-            const authenToken = sign({username: getUSer.Username, id: getUSer.id}, "AuthenticateToken");
+            const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
             return res.json({
                                 success: 'Đăng nhập thành công',
-                                id: getUSer.id,
-                                username: getUSer.Username,
+                                id: getUser.id,
+                                username: getUser.Username,
                                 status: true,
                                 authenToken: authenToken,
                             });

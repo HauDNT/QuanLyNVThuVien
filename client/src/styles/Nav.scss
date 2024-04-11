@@ -19,13 +19,13 @@
             text-decoration: none;
         }
 
-        &:hover {
-            opacity: 0.6;
-        }
-
         &:last-child {
             position: absolute;
             right: 0;
+        }
+
+        &:hover {
+            opacity: 0.6;
         }
     }
 }

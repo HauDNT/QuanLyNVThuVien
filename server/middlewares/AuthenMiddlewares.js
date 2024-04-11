@@ -1,10 +1,11 @@
 const {verify} = require('jsonwebtoken');
 
 const validToken = (req, res, next) => {
-    const accessTokenUser = req.header('accessToken');
+    const accessTokenUser = req.header('authenToken');
 
     if (!accessTokenUser)
         return res.json({error: 'Bạn chưa đăng nhập.'});
+    
     try {
         const validToken = verify(accessTokenUser, 'AuthenticateToken');
 

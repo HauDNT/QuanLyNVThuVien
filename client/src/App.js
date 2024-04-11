@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenContext } from "./helper/AuthenContext";
-import { UsingLocalStorage } from "./helper/UsingLocalStorage";
 import config from "../src/constance.js";
 import Home from "./views/Home";
 import Login from "./views/Authenticate/Login";
@@ -15,66 +14,33 @@ import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
 function App() {
-  const [authenState, setAuthenState] = useState({
-    id: '',
+  const [ authenData, setAuthenData ] = useState({
+    id: 0,
     username: '',
     status: false,
+    authenToken: '',
   });
 
-  const [id, setId] = UsingLocalStorage("id");
-  const [username, setUsername] = UsingLocalStorage("username");
-  const [status, setStatus] = UsingLocalStorage("status");
-  const [authenToken, setAuthenToken] = UsingLocalStorage("authenToken");
-
-  const updateValues = (item, newValue) => {
-    switch(item) {
-      case 'id':
-        setId(newValue);
-        break;
-      case 'username':
-        setUsername(newValue);
-        break;
-      case 'status':
-        setStatus(newValue);
-        break;
-      case 'authenToken':
-        setAuthenToken(newValue);
-        break;
-      default:
-        break;
-    }
-  }
-
   useEffect(() => {
-    const token = localStorage.getItem("authenToken");
-
-    if (token) {
-      axios
-        .get(
-          `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/authen/verifyToken`,
-          { headers: { authenToken: token } }
-        )
-        .then((res) => {
-          updateValues('id', id);
-          updateValues('username', username);
-          updateValues('status', true);
-          updateValues('authenToken', authenToken);
-
-          // Khi trang web refresh nó sẽ chạy vô if
-          // if (res.data.error) {
-          //   updateValues('id', null);
-          //   updateValues('username', null);
-          //   updateValues('status', false);
-          //   updateValues('authenToken', null);
-          // } else {
-          //   updateValues('id', id);
-          //   updateValues('username', username);
-          //   updateValues('status', true);
-          //   updateValues('authenToken', authenToken);
-          // }
+    axios
+    .get(
+      `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/authen/verifyToken`,
+      { headers: { authenToken: localStorage.getItem('authenToken') } }
+    )
+    .then((res) => {
+      if (localStorage.getItem('status')) {
+        setAuthenData ({
+          id: localStorage.getItem('id'), 
+          username: localStorage.getItem('username'), 
+          status: localStorage.getItem('status'), 
+          authenToken: localStorage.getItem('authenToken')
         });
-    }
+      }
+
+      else setAuthenData({...authenData, status: false});
+    });
   }, []);
+
 
   return (
     <div className="App">
@@ -91,16 +57,16 @@ function App() {
         crossorigin="anonymous"
       />
 
-      <AuthenContext.Provider value={{ authenState, setAuthenState }}>
+      <AuthenContext.Provider value={{authenData, setAuthenData}}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" exact Component={Login} />
-            <Route path="/register" exact Component={Register} />
+            <Route path="/login" exact element={<Login/>} />
+            <Route path="/register" exact element={<Register/>} />
             <Route path="/" element={<Home />}>
               <Route path="users" element={<Users />} />
               <Route path="bills/:type" element={<Bills />} />
             </Route>
-            <Route path="/*" exact Component={PageNotFound} />
+            <Route path="/*" exact element={<PageNotFound/>} />
           </Routes>
         </BrowserRouter>
       </AuthenContext.Provider>
