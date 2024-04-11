@@ -4,16 +4,19 @@ const validToken = (req, res, next) => {
     const accessTokenUser = req.header('accessToken');
 
     if (!accessTokenUser)
-        return res.json({error: 'User not login!'});
+        return res.json({error: 'Bạn chưa đăng nhập.'});
     try {
-        const validToken = verify(accessTokenUser, 'secretkey');
-        {res.user = validToken};
+        const validToken = verify(accessTokenUser, 'AuthenticateToken');
 
         if (validToken) {
+            res.user = validToken;
             return next();
         }
+        else {
+            return res.json({error: 'Thông tin đăng nhập không hợp lệ - Authen Middleware'})
+        }
     } catch (errorMessage) {
-        return res.json({error: errorMessage});
+        return res.json({error: 'Đã xảy ra lỗi xác thực'});
     }
 } ;
 

@@ -47,10 +47,13 @@ class UsersController {
                 return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
             }
 
+            const authenToken = sign({username: getUSer.Username, id: getUSer.id}, "AuthenticateToken");
             return res.json({
                                 success: 'Đăng nhập thành công',
-                                username: getUSer.Username,
                                 id: getUSer.id,
+                                username: getUSer.Username,
+                                status: true,
+                                authenToken: authenToken,
                             });
         } catch (errorMessage) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'})

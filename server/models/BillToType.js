@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const BillToType = sequelize.define("Bill_Type", {}, {
+    const BillToType = sequelize.define("BillToType", {}, {
         freezeTableName: true,
         timestamps: false,
     }); 
@@ -7,13 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     BillToType.associate = (models) => {
         BillToType.belongsTo(models.Bills, {
             foreignKey: {
-                name: 'BillId',
                 allowNull: false,
             }
         });
         BillToType.belongsTo(models.BillTypes, {
             foreignKey: {
-                name: 'TypeId',
                 allowNull: false,
             }
         });
