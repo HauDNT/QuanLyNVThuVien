@@ -14,33 +14,30 @@ import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
 function App() {
-  const [ authenData, setAuthenData ] = useState({
+  const [authenData, setAuthenData] = useState({
     id: 0,
-    username: '',
+    username: "",
     status: false,
-    authenToken: '',
+    authenToken: "",
   });
 
   useEffect(() => {
     axios
-    .get(
-      `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/authen/verifyToken`,
-      { headers: { authenToken: localStorage.getItem('authenToken') } }
-    )
-    .then((res) => {
-      if (localStorage.getItem('status')) {
-        setAuthenData ({
-          id: localStorage.getItem('id'), 
-          username: localStorage.getItem('username'), 
-          status: localStorage.getItem('status'), 
-          authenToken: localStorage.getItem('authenToken')
-        });
-      }
-
-      else setAuthenData({...authenData, status: false});
-    });
+      .get(
+        `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/authen/verifyToken`,
+        { headers: { authenToken: localStorage.getItem("authenToken") } }
+      )
+      .then((res) => {
+        if (localStorage.getItem("status")) {
+          setAuthenData({
+            id: localStorage.getItem("id"),
+            username: localStorage.getItem("username"),
+            status: localStorage.getItem("status"),
+            authenToken: localStorage.getItem("authenToken"),
+          });
+        } else setAuthenData({ ...authenData, status: false });
+      });
   }, []);
-
 
   return (
     <div className="App">
@@ -57,35 +54,19 @@ function App() {
         crossorigin="anonymous"
       />
 
-      <AuthenContext.Provider value={{authenData, setAuthenData}}>
+      <AuthenContext.Provider value={{ authenData, setAuthenData }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" exact element={<Login/>} />
-            <Route path="/register" exact element={<Register/>} />
+            <Route path="/login" exact element={<Login />} />
+            <Route path="/register" exact element={<Register />} />
             <Route path="/" element={<Home />}>
               <Route path="users" element={<Users />} />
               <Route path="bills/:type" element={<Bills />} />
             </Route>
-            <Route path="/*" exact element={<PageNotFound/>} />
+            <Route path="/*" exact element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
       </AuthenContext.Provider>
-
-      <script
-        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"
-      ></script>
-      <script
-        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"
-      ></script>
-      <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"
-      ></script>
 
       <ToastContainer
         position="top-right"
@@ -99,6 +80,17 @@ function App() {
         pauseOnHover
         theme="light"
       />
+
+      <script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"
+      ></script>
     </div>
   );
 }
