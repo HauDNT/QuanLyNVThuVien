@@ -5,7 +5,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import config from "../../constance.js";
-// import { AuthContext } from "../helpers/AuthContext";
 import "../../styles/Form.scss";
 
 function Register() {
@@ -21,7 +20,7 @@ function Register() {
     username: Yup.string()
       .min(3)
       .max(15)
-      .required("Bạn phải nhập vào tên tài khoản!!"),
+      .required("Bạn phải nhập vào tên tài khoản!"),
     password: Yup.string()
       .min(4)
       .max(20)
@@ -43,7 +42,7 @@ function Register() {
       return;
     }
 
-    axios.post(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/register`, data)
+    axios.post(`http://${config.URL}/users/register`, data)
       .then((res) => {
         if (res.data.success) {
           toast.success(res.data.success);

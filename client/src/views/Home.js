@@ -13,7 +13,6 @@ function Home() {
       navigator('/login');
     }
   }, []);
-  
 
   return (
       <div className="Home">

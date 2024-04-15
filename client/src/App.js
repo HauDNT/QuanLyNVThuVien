@@ -8,6 +8,7 @@ import config from "../src/constance.js";
 import Home from "./views/Home";
 import Login from "./views/Authenticate/Login";
 import Register from "./views/Authenticate/Register";
+import ForgotPassword from "./views/Authenticate/ForgotPassword"; 
 import Users from "./views/Users/Users";
 import Bills from "./views/Bills/Bills";
 import PageNotFound from "./views/PageNotFound";
@@ -24,7 +25,7 @@ function App() {
   useEffect(() => {
     axios
       .get(
-        `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/authen/verifyToken`,
+        `http://${config.URL}/authen/verifyToken`,
         { headers: { authenToken: localStorage.getItem("authenToken") } }
       )
       .then((res) => {
@@ -59,6 +60,7 @@ function App() {
           <Routes>
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
+            <Route path="/forgotpassword" exact element={<ForgotPassword />} />
             <Route path="/" element={<Home />}>
               <Route path="users" element={<Users />} />
               <Route path="bills/:type" element={<Bills />} />

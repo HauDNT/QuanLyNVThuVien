@@ -10,7 +10,7 @@ function Users() {
     const [listUsers, setListUsers] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/`).then((res) => {
+        axios.get(`http://${config.URL}/users/`).then((res) => {
             setListUsers(res.data.allUsers);
         });
     }, []);

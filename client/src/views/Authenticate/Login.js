@@ -38,7 +38,7 @@ function Login() {
 
     axios
       .post(
-        `http://${config.DOMAIN_NAME}${config.SERVER_PORT}/users/login`,
+        `http://${config.URL}/users/login`,
         data
       )
       .then((res) => {
@@ -114,7 +114,7 @@ function Login() {
             </div>
 
             <div className="mb-3 forgot-passwordLink">
-              <Link to='/'>Quên mật khẩu?</Link>
+              <Link to='/forgotpassword'>Quên mật khẩu?</Link>
             </div>
 
             <button className="btn btn-primary btn-login" type="submit">

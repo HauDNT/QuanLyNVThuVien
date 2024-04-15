@@ -12,7 +12,7 @@ function Bills() {
 
     useEffect(() => {
         axios
-            .get(`http://${config.DOMAIN_NAME}${config.SERVER_PORT}/bills/${type}`)
+            .get(`http://${config.URL}/bills/${type}`)
             .then((res) => {
                 setListBills(res.data.receiveBills)
             });
