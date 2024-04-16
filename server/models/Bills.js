@@ -12,6 +12,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
+        Supplier: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        Discount: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        Notes: {
+            type: DataTypes.TEXT('medium'),
+            allowNull: false,
+        },
     }, {
         freezeTableName: true,
         timestamps: false,

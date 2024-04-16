@@ -38,6 +38,49 @@ class BillsController {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
+
+    // Tạo đơn mới:
+    async createBill(req, res) {
+        const billInfo = req.body;
+        
+        try {
+            if (!billInfo || Object.keys(billInfo).length === 0) {
+                return res.json({error: 'Không thể tạo đơn!'});
+            }
+
+            // Insert to table 'Bills':
+            await Bills.create (
+                {
+                    NumberBill: billInfo.numberBill,
+                    NameBill: billInfo.nameBill,
+                    Supplier: billInfo.supplierBill,
+                    Discount: billInfo.discountBill,
+                    DateGenerateBill: billInfo.dateGenerate,
+                    Notes: billInfo.notes,
+                }
+            )
+
+            let getThisBill = await Bills.findOne(
+                {
+                    attributes: ['id'],
+                    where: {NumberBill: billInfo.numberBill},
+                }
+            )
+            // Trả về một object chứa id nên ta phải gọi getThisBill.id để lấy giá trị id ra
+
+            // // Insert to table 'BillToType':
+            await BillToType.create (
+                {
+                    BillId: getThisBill.id,
+                    BillTypeId: +billInfo.typeBill, // Giá trị lấy từ select trong Client là chuỗi, thêm dấu + để chuyển nó về số
+                }
+            )
+
+            return res.json({success: 'Success'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
+        }
+    }
 }
 
 module.exports = new BillsController();

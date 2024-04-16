@@ -18,30 +18,30 @@ function Users() {
     return (
         <div className="container-fluid user-page">
             <Link className="btn btn-primary btn-insert-user" to="/">Tạo tài khoản mới</Link>
-            <table className="table">
+            <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
-                        <th scope="col" className="text-center"> Tên tài khoản </th>
-                        <th scope="col" className="text-center">Mật khẩu</th>
-                        <th scope="col" className="text-center">Vai trò</th>
-                        <th scope="col" className="text-center">Thông tin cá nhân</th>
-                        <th scope="col" className="text-center">Sửa</th>
-                        <th scope="col" className="text-center">Xóa</th>
+                        <th scope="col" className="table-dark text-center"> Tên tài khoản </th>
+                        <th scope="col" className="table-dark text-center">Mật khẩu</th>
+                        <th scope="col" className="table-dark text-center">Vai trò</th>
+                        <th scope="col" className="table-dark text-center">Thông tin cá nhân</th>
+                        <th scope="col" className="table-dark text-center">Sửa</th>
+                        <th scope="col" className="table-dark text-center">Xóa</th>
                     </tr>
                 </thead>
                 <tbody>
                     {listUsers.map((user) => (
                         <tr key={user.id} className="text-center">
-                            <td>{user.Username}</td>
-                            <td>{user.Password}</td>
-                            <td>Thư viện viên</td>
-                            <td>
+                            <td className="table-light">{user.Username}</td>
+                            <td className="table-light">{user.Password}</td>
+                            <td className="table-light">Thư viện viên</td>
+                            <td className="table-light">
                                 <FcInfo className="info-icon"/>
                             </td>
-                            <td>
+                            <td className="table-light">
                                 <FaEdit className="edit-icon"/>
                             </td>
-                            <td>
+                            <td className="table-light">
                                 <FaTimesCircle  className="delete-icon"/>
                             </td>
                         </tr>

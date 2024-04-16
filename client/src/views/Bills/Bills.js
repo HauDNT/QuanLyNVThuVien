@@ -8,6 +8,7 @@ import "../../styles/Bills.scss";
 
 function Bills() {
     let {type} = useParams();
+    const [backLink, setBackLink] = useState('');
     const [listBills, setListBills] = useState([]);
 
     useEffect(() => {
@@ -15,32 +16,33 @@ function Bills() {
             .get(`http://${config.URL}/bills/${type}`)
             .then((res) => {
                 setListBills(res.data.receiveBills)
+                setBackLink(`/bills/${type}`)
             });
     }, [type]);
 
     return (
         <div className="container-fluid bill-page">
-            <Link className="btn btn-primary btn-insert-bill" to="/">Tạo đơn mới</Link>
-            <table className="table">
+            <Link className="btn btn-primary btn-insert-bill" to="/bills/createbill">Tạo đơn mới</Link>
+            <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
-                        <th scope="col" className="text-center"> Mã đơn </th>
-                        <th scope="col" className="text-center"> Tên đơn </th>
-                        <th scope="col" className="text-center"> Thời gian tạo </th>
-                        <th scope="col" className="text-center"> Xem danh sách </th>
-                        <th scope="col" className="text-center">Sửa</th>
-                        <th scope="col" className="text-center">Xóa</th>
+                        <th scope="col" className="table-dark text-center"> Mã đơn </th>
+                        <th scope="col" className="table-dark text-center"> Tên đơn </th>
+                        <th scope="col" className="table-dark text-center"> Thời gian tạo </th>
+                        <th scope="col" className="table-dark text-center"> Xem danh sách </th>
+                        <th scope="col" className="table-dark text-center">Sửa</th>
+                        <th scope="col" className="table-dark text-center">Xóa</th>
                     </tr>
                 </thead>
                 <tbody>
                     {listBills.map((bill) => (
                             <tr key={bill.id} className="text-center">
-                                <td> {bill.NumberBill} </td>
-                                <td> {bill.NameBill} </td>
-                                <td> {bill.DateGenerateBill} </td>
-                                <td><FcViewDetails className="info-icon"/></td>
-                                <td><FaEdit className="edit-icon"/></td>
-                                <td><FaTimesCircle  className="delete-icon"/></td>
+                                <td className="table-secondary"> {bill.NumberBill} </td>
+                                <td className="table-secondary"> {bill.NameBill} </td>
+                                <td className="table-secondary"> {bill.DateGenerateBill} </td>
+                                <td className="table-secondary"><FcViewDetails className="info-icon"/></td>
+                                <td className="table-secondary"><FaEdit className="edit-icon"/></td>
+                                <td className="table-secondary"><FaTimesCircle  className="delete-icon"/></td>
                             </tr>
                         )
                     )}

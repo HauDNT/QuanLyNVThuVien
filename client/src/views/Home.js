@@ -17,7 +17,7 @@ function Home() {
   return (
       <div className="Home">
       <Nav/>
-      <div className="row">
+      <div className="row home-container">
           <div className="leftSide col-2">
             <SideBar/>
           </div>
