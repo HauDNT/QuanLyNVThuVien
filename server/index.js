@@ -15,11 +15,13 @@ app.use(cors());
 const usersRouter = require('./routes/Users');
 const billsRouter = require('./routes/Bills');
 const authenRouter = require('./routes/Authen');
+const createNewPassRouter = require('./routes/CreateNewPassword');
 
 
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
 app.use('/authen', authenRouter);
+app.use('/newpassword', createNewPassRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {

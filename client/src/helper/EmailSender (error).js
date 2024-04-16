@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Field, Form, ErrorMessage} from 'formik';
+import {Field, Form, ErrorMessage, Formik} from 'formik';
 import nodemailer from 'nodemailer';
 import {toast} from 'react-toastify';
 
@@ -42,33 +42,35 @@ const EmailSender = () => {
     }
 
     return (
-        <Form onSubmit={handleSendEmail}>
-            <label>Email</label>
-            <Field
-                autoComplete="off"
-                id="inputRegister"
-                type="email"
-                placeholder="(Email...)"
-                value={email}
-                onChange={handleChangeEmail}
-                name="email"
-            />
-            <ErrorMessage name="username" component="span"/>
+        <Formik>
+            <Form onSubmit={handleSendEmail}>
+                <label>Email</label>
+                <Field
+                    autoComplete="off"
+                    id="inputRegister"
+                    type="email"
+                    placeholder="(Email...)"
+                    value={email}
+                    onChange={handleChangeEmail}
+                    name="email"
+                />
+                <ErrorMessage name="username" component="span"/>
 
-            <label>Message</label>
-            <Field
-                autoComplete="off"
-                id="inputRegister"
-                type="email"
-                placeholder="(Message...)"
-                value={email}
-                onChange={handleChangeMessage}
-                name="email"
-            />
-            <ErrorMessage name="username" component="span"/>
+                <label>Message</label>
+                <Field
+                    autoComplete="off"
+                    id="inputRegister"
+                    type="email"
+                    placeholder="(Message...)"
+                    value={email}
+                    onChange={handleChangeMessage}
+                    name="email"
+                />
+                <ErrorMessage name="username" component="span"/>
 
-            <button className="btn-register" type='submit'>Send</button>
-        </Form>
+                <button className="btn-register" type='submit'>Send</button>
+            </Form>
+        </Formik>
     )
 }
 

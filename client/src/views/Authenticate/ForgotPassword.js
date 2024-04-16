@@ -1,3 +1,10 @@
+/*
+- Chức năng này đã gửi được email từ form (client) sang phía server và đã xác thực trùng khớp hợp lệ.
+- Nhưng chưa làm chức năng send email vì nodemailer bị lỗi
+không tương thích với phiên bản hiện tại.
+*/
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as Yup from "yup";
@@ -39,23 +46,22 @@ function ForgotPassword() {
             .required("Hãy nhập vào mã xác nhận gồm 6 chữ số!"),
     });
 
-    const generateVerifyCode = () => {
-        let codeGenerated = '';
-
-        for (let i = 1; i <= 6; i++) {
-            codeGenerated += Math.floor(Math.random() * 10);
-        }
-
-        setVerifyCode(codeGenerated);
-    };
-
     const handleSendCodeVerify = (data) => {
         if (!data || !data.email) {
             toast.error("Hãy điền đầy đủ thông tin!");
             return;
         }
+        
+        // Verify code and send email:
+        // generateVerifyCode();
+        toast.info(data.email);
 
-        generateVerifyCode();
+        axios
+            .post(`http://${config.URL}/newpassword/verifyemail`, { email: data.email })
+            .then((res) => {
+                toast.info(`Show result: ${res.data.verifyEmail}`)
+                // Không nhận được email
+            })
     };
 
     const handleCheckVerifyCode = (data) => {
@@ -111,9 +117,8 @@ function ForgotPassword() {
                         </button>
                     </Form>
                 )}
-
                 </Formik>
-            ): (
+            ) : (
                 <Formik
                     initialValues={initVerifyCode}
                     validationSchema={validVerifyCode}
