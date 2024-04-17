@@ -9,11 +9,14 @@
         margin-top: 10px;
         border: 1px solid #ccc;
 
-        .info-icon,
-        .edit-icon,
-        .delete-icon {
+        .table-icon {
             font-size: 25px;
             cursor: pointer;
+            transition: transform .2s;
+
+            &:hover {
+                transform: scale(1.3);
+            }
         }
 
         .edit-icon {

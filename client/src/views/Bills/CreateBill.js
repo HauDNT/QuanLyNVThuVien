@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
-import '../../styles/CreateBill.scss';
+import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreatBill() {
     const [status, setStatus] = useState(false);
     const [amountBills, setAmountBills] = useState(false);
+    const [typesBill, setTypesBill] = useState([]);
     const [inputValues, setInputValues] = useState({
         nameBill: '',
         typeBill: 1,
@@ -31,8 +31,13 @@ function CreatBill() {
             .get(`http://${config.URL}/bills/amount`)
             .then((res) => {
                 setAmountBills(res.data + 1);
-            })
-    }, [status, amountBills]);
+            });
+        axios
+            .get(`http://${config.URL}/bills/gettypes`)
+            .then((res) => {
+                setTypesBill(res.data.listTypes);
+            });
+    }, [status]);
 
     const handleCreateBill = (e) => {
         setStatus(true);
@@ -64,9 +69,9 @@ function CreatBill() {
     };
 
     return (
-        <div className="creatbill-container">
-            <h1 className="col-12">Tạo hóa đơn mới</h1>
-            <form method="POST" className="row createbill-form" onSubmit={handleCreateBill}>
+        <div className="creatpage-container">
+            <h1 className="col-12 creatpage-heading">Tạo hóa đơn mới</h1>
+            <form method="POST" className="row createpage-form" onSubmit={handleCreateBill}>
                 <div className="col-4 input-field">
                     <label for="input--bookcode" className="form-label">Mã đơn</label>
                     <input 
@@ -86,6 +91,7 @@ function CreatBill() {
                         className="form-control"
                         value={inputValues.nameBill}
                         onChange={(e) => setInputValues({...inputValues, nameBill: e.target.value})}
+                        required
                         />
                 </div>
                 <div className="col-4 input-field">
@@ -97,6 +103,7 @@ function CreatBill() {
                         className="form-control"
                         value={inputValues.supplierBill}
                         onChange={(e) => setInputValues({...inputValues, supplierBill: e.target.value})}
+                        required
                         />
                 </div>
                 <div className="col-4 input-field">
@@ -107,12 +114,20 @@ function CreatBill() {
                         id="input--discount" 
                         className="form-control"
                         value={inputValues.discountBill}
+                        required
                         onChange={(e) => setInputValues({...inputValues, discountBill: e.target.value})}
                         />
                 </div>
                 <div className="col-4 input-field">
-                    <label for="input--date-create-bill" className="form-label">Ngày tạo đơn</label>
-                    <input name="dateGenerate" type="date" id="input--date-create-bill" className="form-control"/>
+                    <label for="input--date-create-bill" className="form-label">Ngày tạo đơn (mm/dd/yyyy)</label>
+                    <input 
+                        name="dateGenerate" 
+                        type="date" 
+                        id="input--date-create-bill" 
+                        className="form-control"
+                        placeholder="dd-mm-yyyy"
+                        required
+                        />
                 </div>
                 <div className="col-4 input-field">
                     <label for="select--type-bill" className="form-label">Hình thức</label>
@@ -122,11 +137,12 @@ function CreatBill() {
                         class="form-select" 
                         id="select--type-bill" 
                         title="Loại đơn"
+                        required
                         onChange={(e) => setInputValues({...inputValues, typeBill: e.target.value})}
                         >
-                        <option value="1">Mua</option>
-                        <option value="2">Tặng</option>
-                        <option value="3">Không rõ</option>
+                        {typesBill.map((type) => (
+                            <option key={type.id} value={type.id}>{type.Name}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="col-12 input-field">

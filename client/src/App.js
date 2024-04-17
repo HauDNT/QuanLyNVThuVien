@@ -9,7 +9,8 @@ import Home from "./views/Home";
 import Login from "./views/Authenticate/Login";
 import Register from "./views/Authenticate/Register";
 import ForgotPassword from "./views/Authenticate/ForgotPassword"; 
-import Users from "./views/Users/Users";
+import UserAccounts from "./views/Users/Accounts";
+import CreateAccountUser from "./views/Users/CreateAccount";
 import Bills from "./views/Bills/Bills";
 import CreatBill from "./views/Bills/CreateBill";
 import PageNotFound from "./views/PageNotFound";
@@ -60,7 +61,8 @@ function App() {
             <Route path="/register" exact element={<Register />} />
             <Route path="/forgotpassword" exact element={<ForgotPassword />} />
             <Route path="/" element={<Home />}>
-              <Route path="users" element={<Users />} />
+              <Route path="users/" element={<UserAccounts />} />
+              <Route path="users/create" element={<CreateAccountUser />} />
               <Route path="bills/createbill" element={<CreatBill/>}/>
               <Route path="bills/:type" element={<Bills />} />
             </Route>

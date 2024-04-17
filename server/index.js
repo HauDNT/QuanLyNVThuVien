@@ -16,12 +16,16 @@ const usersRouter = require('./routes/Users');
 const billsRouter = require('./routes/Bills');
 const authenRouter = require('./routes/Authen');
 const createNewPassRouter = require('./routes/CreateNewPassword');
+const roomsRouter = require('./routes/Rooms');
+const positionsRouter = require('./routes/Positions');
 
 
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
 app.use('/authen', authenRouter);
 app.use('/newpassword', createNewPassRouter);
+app.use('/rooms/', roomsRouter);
+app.use('/positions/', positionsRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {

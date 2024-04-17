@@ -1,19 +1,28 @@
-.creatbill-container {
+.creatpage-container {
     height: max-content;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    overflow: hidden;
     margin: 0 10px;
+    border: 1px solid #C7C8CC;
+    border-radius: 10px;
+    background-color: #fcfbf7;
+    overflow: hidden;
     
-    h1 {
+    .creatpage-heading {
         text-align: center;
         padding: 10px 0;
-        background-color: #6895D2;
+        background-color: #0E46A3;
         color: white;
     }
 
-    .createbill-form {
-        padding: 15px;
+    .createpage-form {
+        padding: 0 15px 15px 15px;
+
+        .label-info {
+            margin-top: 10px;
+
+            &:nth-of-type(5) {
+                margin-top: 25px;
+            }
+        }
 
         .input-field {
             margin-top: 10px;
@@ -31,5 +40,4 @@
             }
         }
     }
-
 }

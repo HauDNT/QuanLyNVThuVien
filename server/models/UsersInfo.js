@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        Position: {     // Chức vụ (Trưởng phòng, nhân viên,...)
-            type: DataTypes.STRING,
-            charset: 'utf8mb4',
-            allowNull: false,
-        },
         Avatar: {
             type: DataTypes.BLOB('medium'),
             allowNull: false,
@@ -35,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
             }
         });
         UsersInfo.belongsTo(models.Rooms, {
+            foreignKey: {
+                allowNull: false,
+            }
+        });
+        UsersInfo.belongsTo(models.Positions, {
             foreignKey: {
                 allowNull: false,
             }

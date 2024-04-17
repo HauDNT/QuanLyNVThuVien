@@ -17,7 +17,7 @@ function Users() {
 
     return (
         <div className="container-fluid user-page">
-            <Link className="btn btn-primary btn-insert-user" to="/">Tạo tài khoản mới</Link>
+            <Link className="btn btn-primary btn-insert-user" to="/users/create">Tạo tài khoản mới</Link>
             <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
@@ -36,13 +36,13 @@ function Users() {
                             <td className="table-light">{user.Password}</td>
                             <td className="table-light">Thư viện viên</td>
                             <td className="table-light">
-                                <FcInfo className="info-icon"/>
+                                <FcInfo className="info-icon table-icon"/>
                             </td>
                             <td className="table-light">
-                                <FaEdit className="edit-icon"/>
+                                <FaEdit className="edit-icon table-icon"/>
                             </td>
                             <td className="table-light">
-                                <FaTimesCircle  className="delete-icon"/>
+                                <FaTimesCircle  className="delete-icon table-icon"/>
                             </td>
                         </tr>
                     ))}

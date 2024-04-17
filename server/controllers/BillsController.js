@@ -1,15 +1,24 @@
-const {Bills, BillToType, sequelize} = require('../models');
+const {Bills, BillToType, BillTypes, sequelize} = require('../models');
 
 class BillsController {
     // Lấy toàn bộ hóa đơn:
     async getAllBills(req, res) {
         try {
             const getBills = await Bills.findAll();
-            res.json({bills: getBills});
+            return res.json({bills: getBills});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
+
+    async getTypes(req, res) {
+        try {
+            const types = await BillTypes.findAll();
+            return res.json({listTypes: types});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    }
 
     // Lấy hóa đơn mua / tặng:
     async getBillOfType(req, res) {

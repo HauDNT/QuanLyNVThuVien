@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {Sidebar, Menu, MenuItem, SubMenu} from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 
@@ -6,12 +6,15 @@ function SideBar() {
     return (
         <Sidebar className="sidebar">
             <Menu>
-                <SubMenu label="Bổ sung vào đơn">
+                <SubMenu label="Bổ sung đơn">
                     <MenuItem component={<Link to="/bills/1"/>}>Đơn đặt</MenuItem>
                     <MenuItem component={<Link to="/bills/2"/>}>Đơn nhận</MenuItem>
                     <MenuItem component={<Link to="/bills/3"/>}>Khác</MenuItem>
                 </SubMenu>
-                <MenuItem component={<Link to="/users"/>}>Quản lý tài khoản</MenuItem>
+                <SubMenu label="Quản lý người dùng">
+                    <MenuItem component={<Link to="/users/"/>}>Quản lý tài khoản</MenuItem>
+                    <MenuItem component={<Link to="/users/"/>}>Quản lý quyền</MenuItem>
+                </SubMenu>
 
                 <SubMenu label="Items">
                     <MenuItem component={<Link to="/"/>}>1</MenuItem>

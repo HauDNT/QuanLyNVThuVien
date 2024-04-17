@@ -56,14 +56,20 @@ function Bills() {
                                 <td className="table-light"> {bill.NumberBill} </td>
                                 <td className="table-light"> {bill.NameBill} </td>
                                 <td className="table-light"> {bill.DateGenerateBill} </td>
-                                <td className="table-light"><FcViewDetails className="info-icon"/></td>
-                                <td className="table-light"><FaEdit className="edit-icon"/></td>
-                                <td onClick={() => handleDeteleBill(bill.id)} className="table-light"><FaTimesCircle  className="delete-icon"/></td>
+                                <td className="table-light">
+                                    <FcViewDetails className="info-icon table-icon"/>
+                                </td>
+                                <td className="table-light">
+                                    <FaEdit className="edit-icon table-icon"/>
+                                </td>
+                                <td onClick={() => handleDeteleBill(bill.id)} className="table-light">
+                                    <FaTimesCircle  className="delete-icon table-icon"/>
+                                </td>
                             </tr>
                         ))) : (
                         <tr>
                             <td className="table-light text-center" colSpan={6}>
-                                Chưa có hóa đơn nào thuộc loại này được tạo.
+                                Chưa có hóa đơn nào thuộc loại này được tạo
                             </td>
                         </tr>
                         )}
