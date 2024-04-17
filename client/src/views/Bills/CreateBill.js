@@ -1,13 +1,10 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import config from '../../constance.js';
 import '../../styles/CreateBill.scss';
 import { toast } from "react-toastify";
 
 function CreatBill() {
-    let navigate = useNavigate();
-
     const handleCreateBill = (e) => {
         // Get data from form:
         e.preventDefault();
@@ -25,19 +22,18 @@ function CreatBill() {
             .post(`http://${config.URL}/bills/createbill`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
             .then((res) => {
                 if (res.data.error) {
-                    toast.error("Đã xảy ra lỗi trong quá trình tạo đơn. Hãy thử lại sau!")
+                    toast.error(res.data.error)
                 }
                 else {
-                    toast.success("Tạo đơn thành công!");
-                    // navigate('bills/')
+                    toast.success(res.data.success);
                 }
             })
     };
 
     return (
-        <>
-            <h1>Tạo hóa đơn mới</h1>
-            <form method="POST" className="row creatbill-container" onSubmit={handleCreateBill}>
+        <div className="creatbill-container">
+            <h1 className="col-12">Tạo hóa đơn mới</h1>
+            <form method="POST" className="row" onSubmit={handleCreateBill}>
                 <div className="col-4 input-field">
                     <label for="input--bookcode" className="form-label">Mã đơn</label>
                     <input name="numberBill" type="text" id="input--bookcode" className="form-control"/>
@@ -70,11 +66,11 @@ function CreatBill() {
                     <label for="input--notes" className="form-label">Ghi chú thêm</label>
                     <input name="notes" type="text" id="input--notes" className="form-control"/>
                 </div>
-                <div className="col-3 mt-3">
+                <div className="col-12 mt-3 button-container">
                     <button type="submit" className="btn btn-primary mb-3">Tạo</button>
                 </div>
             </form>
-        </>
+        </div>
     );
 }
 

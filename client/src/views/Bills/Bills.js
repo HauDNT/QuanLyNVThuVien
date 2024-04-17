@@ -8,7 +8,6 @@ import "../../styles/Bills.scss";
 
 function Bills() {
     let {type} = useParams();
-    const [backLink, setBackLink] = useState('');
     const [listBills, setListBills] = useState([]);
 
     useEffect(() => {
@@ -16,7 +15,6 @@ function Bills() {
             .get(`http://${config.URL}/bills/${type}`)
             .then((res) => {
                 setListBills(res.data.receiveBills)
-                setBackLink(`/bills/${type}`)
             });
     }, [type]);
 

@@ -1,12 +1,32 @@
+
 .creatbill-container {
     height: max-content;
     padding: 10px;
-
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 10px;
+    
     h1 {
         text-align: center;
+        padding: 10px 0;
+        background-color: #6895D2;
+        color: white;
+        border-radius: 5px;
     }
 
     .input-field {
         margin-top: 10px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: right;
+
+        button {
+            width: 8em;
+            height: 90%;
+            font-size: 16px;
+            font-weight: 600;
+        }
     }
 }

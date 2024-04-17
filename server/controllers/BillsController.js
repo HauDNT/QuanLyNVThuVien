@@ -44,10 +44,19 @@ class BillsController {
         const billInfo = req.body;
         
         try {
+
+            // Kiểm tra data được gửi qua có hợp lệ không?
             if (!billInfo || Object.keys(billInfo).length === 0) {
                 return res.json({error: 'Không thể tạo đơn!'});
-            }
+            };
 
+            // Kiểm tra mã đơn hàng có bị trùng không?
+            const checkNumberBill = await Bills.findAll({where: {NumberBill: billInfo.numberBill}});
+
+            if (checkNumberBill.length > 0) {
+                return res.json({error: 'Đã tồn tại mã đơn này!'});
+            };
+            
             // Insert to table 'Bills':
             await Bills.create (
                 {
@@ -58,14 +67,14 @@ class BillsController {
                     DateGenerateBill: billInfo.dateGenerate,
                     Notes: billInfo.notes,
                 }
-            )
+            );
 
-            let getThisBill = await Bills.findOne(
+            let getThisBill = await Bills.findOne (
                 {
                     attributes: ['id'],
                     where: {NumberBill: billInfo.numberBill},
                 }
-            )
+            );
             // Trả về một object chứa id nên ta phải gọi getThisBill.id để lấy giá trị id ra
 
             // // Insert to table 'BillToType':
@@ -74,9 +83,9 @@ class BillsController {
                     BillId: getThisBill.id,
                     BillTypeId: +billInfo.typeBill, // Giá trị lấy từ select trong Client là chuỗi, thêm dấu + để chuyển nó về số
                 }
-            )
+            );
 
-            return res.json({success: 'Success'});
+            return res.json({success: 'Tạo hóa đơn mới thành công!'});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
         }
