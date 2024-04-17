@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(20),
             allowNull: false,
         },
-        Status: {      // Mã phân loại DDC
+        Status: {      // Duyệt/Chưa duyệt
             type: DataTypes.STRING(20),
             allowNull: false,
         },

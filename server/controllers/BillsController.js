@@ -1,4 +1,4 @@
-const {Bills, BillToType} = require('../models');
+const {Bills, BillToType, sequelize} = require('../models');
 
 class BillsController {
     // Lấy toàn bộ hóa đơn:
@@ -38,6 +38,40 @@ class BillsController {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
+
+    // Lấy số lượng đơn hiện tại:
+    async countAmountOfBills(req, res) {
+        try {
+            const amountBills = await Bills.findAll({
+                attributes: [
+                    [sequelize.fn('COUNT', sequelize.col('id')), 'billCount']
+                ],
+                raw: true,
+            });
+    
+            return res.json(amountBills[0].billCount);  // Trả về số lượng đơn
+    
+        } catch (error) {
+            return res.json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
+        }
+    };
+    
+    // Xóa một đơn theo id:
+    async deleteBill(req, res) {
+        try {
+            const billId = req.params.id;
+    
+            await Bills.destroy({
+                where: {
+                    id: billId,
+                }
+            });
+
+            return res.json({success: 'Xóa đơn thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
+        }
+    }
 
     // Tạo đơn mới:
     async createBill(req, res) {

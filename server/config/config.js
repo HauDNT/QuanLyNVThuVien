@@ -9,6 +9,8 @@ module.exports = {
     "host": `${process.env.DB_HOST}`,
     "dialect": "mysql",
     "port": DOCKER_PORT, //Port ánh xạ từ Docker sang Localhost (được định nghĩa trong file mysql.yml)
+    "charset": 'utf8',
+    "collate": 'utf8_general_ci'
   },
   "test": {
     "username": "root",

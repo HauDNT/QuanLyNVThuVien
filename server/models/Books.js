@@ -10,22 +10,27 @@ module.exports = (sequelize, DataTypes) => {
         },
         MainTitle: {    // Tiêu đề chính
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         SubTitle: {     // Tiêu đề phụ
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         Author: {       // Tác giả
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         Publisher: {    // Nhà xuất bản
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         PubPlace: {     // Nơi xuất bản
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         PubYear: {      // Năm xuất bản
@@ -49,7 +54,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
     });
 
     Books.associate = (models) => {

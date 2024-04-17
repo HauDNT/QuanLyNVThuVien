@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useParams, Link} from "react-router-dom";
 import axios from "axios";
+import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcViewDetails} from "react-icons/fc";
 import {FaEdit, FaTimesCircle } from "react-icons/fa";
@@ -18,6 +19,21 @@ function Bills() {
             });
     }, [type]);
 
+    const handleDeteleBill = (id) => {
+        axios
+            .delete(`http://${config.URL}/bills/deletebill/${id}`, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            .then((res) => {
+                if (!res.data.error) {
+                    setListBills(listBills.filter((bill) => {
+                        return bill.id !== id;
+                    }));
+                    toast.success(res.data.success);
+                }
+                else
+                    toast.error(res.data.error);
+            })
+    };
+
     return (
         <div className="container-fluid bill-page">
             <Link className="btn btn-primary btn-insert-bill" to="/bills/createbill">Tạo đơn mới</Link>
@@ -33,17 +49,24 @@ function Bills() {
                     </tr>
                 </thead>
                 <tbody>
-                    {listBills.map((bill) => (
+                    {
+                        listBills.length > 0 ?
+                        (listBills.map((bill) => (
                             <tr key={bill.id} className="text-center">
-                                <td className="table-secondary"> {bill.NumberBill} </td>
-                                <td className="table-secondary"> {bill.NameBill} </td>
-                                <td className="table-secondary"> {bill.DateGenerateBill} </td>
-                                <td className="table-secondary"><FcViewDetails className="info-icon"/></td>
-                                <td className="table-secondary"><FaEdit className="edit-icon"/></td>
-                                <td className="table-secondary"><FaTimesCircle  className="delete-icon"/></td>
+                                <td className="table-light"> {bill.NumberBill} </td>
+                                <td className="table-light"> {bill.NameBill} </td>
+                                <td className="table-light"> {bill.DateGenerateBill} </td>
+                                <td className="table-light"><FcViewDetails className="info-icon"/></td>
+                                <td className="table-light"><FaEdit className="edit-icon"/></td>
+                                <td onClick={() => handleDeteleBill(bill.id)} className="table-light"><FaTimesCircle  className="delete-icon"/></td>
                             </tr>
-                        )
-                    )}
+                        ))) : (
+                        <tr>
+                            <td className="table-light text-center" colSpan={6}>
+                                Chưa có hóa đơn nào thuộc loại này được tạo.
+                            </td>
+                        </tr>
+                        )}
                 </tbody>
             </table>
         </div>

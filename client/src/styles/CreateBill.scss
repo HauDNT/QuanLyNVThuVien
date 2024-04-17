@@ -1,9 +1,8 @@
-
 .creatbill-container {
     height: max-content;
-    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
+    overflow: hidden;
     margin: 0 10px;
     
     h1 {
@@ -11,22 +10,26 @@
         padding: 10px 0;
         background-color: #6895D2;
         color: white;
-        border-radius: 5px;
     }
 
-    .input-field {
-        margin-top: 10px;
-    }
+    .createbill-form {
+        padding: 15px;
 
-    .button-container {
-        display: flex;
-        justify-content: right;
-
-        button {
-            width: 8em;
-            height: 90%;
-            font-size: 16px;
-            font-weight: 600;
+        .input-field {
+            margin-top: 10px;
+        }
+    
+        .button-container {
+            display: flex;
+            justify-content: right;
+    
+            button {
+                width: 8em;
+                height: 90%;
+                font-size: 16px;
+                font-weight: 600;
+            }
         }
     }
+
 }

@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const UsersInfo = sequelize.define("UsersInfo", {
         Fullname: {     
             type: DataTypes.STRING,
+            charset: 'utf8mb4',
             allowNull: false,
         },
         Birthday: {     
@@ -14,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         Position: {     // Chức vụ (Trưởng phòng, nhân viên,...)
             type: DataTypes.STRING,
+            charset: 'utf8mb4',
             allowNull: false,
         },
         Avatar: {
@@ -21,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
     });
 
     UsersInfo.associate = (models) => {

@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         NameBill: {
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         DateGenerateBill: {
@@ -14,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         Supplier: {
             type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
             allowNull: false,
         },
         Discount: {
@@ -22,11 +24,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         Notes: {
             type: DataTypes.TEXT('medium'),
+            charset: 'utf8mb4',
             allowNull: false,
         },
     }, {
         freezeTableName: true,
         timestamps: false,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
     });
 
     Bill.associate = (models) => {

@@ -9,6 +9,7 @@ function SideBar() {
                 <SubMenu label="Bổ sung vào đơn">
                     <MenuItem component={<Link to="/bills/1"/>}>Đơn đặt</MenuItem>
                     <MenuItem component={<Link to="/bills/2"/>}>Đơn nhận</MenuItem>
+                    <MenuItem component={<Link to="/bills/3"/>}>Khác</MenuItem>
                 </SubMenu>
                 <MenuItem component={<Link to="/users"/>}>Quản lý tài khoản</MenuItem>
 
