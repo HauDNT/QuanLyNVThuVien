@@ -8,5 +8,6 @@ router.post('/login', UsersController.login);
 router.post('/register', UsersController.register);
 router.post('/createinfo', UsersController.createInfoUser);
 router.delete('/delete/:id', validToken, UsersController.deleteAccount);
+router.get('/trash', UsersController.getAccountSoftDeleted);
 
 module.exports = router;

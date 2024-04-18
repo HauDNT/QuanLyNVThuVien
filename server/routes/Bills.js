@@ -9,5 +9,6 @@ router.get('/gettypes', BillsController.getTypes);
 router.get('/:type', BillsController.getBillOfType);
 router.post('/createbill', validToken, BillsController.createBill);
 router.delete('/deletebill/:id', validToken, BillsController.deleteBill);
+router.get('/trash/:type', BillsController.getBillSoftDeleted);
 
 module.exports = router;

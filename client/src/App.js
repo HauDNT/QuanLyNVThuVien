@@ -11,8 +11,10 @@ import Register from "./views/Authenticate/Register";
 import ForgotPassword from "./views/Authenticate/ForgotPassword"; 
 import UserAccounts from "./views/Users/Accounts";
 import CreateAccountUser from "./views/Users/CreateAccount";
+import AccountsTrash from "./views/Users/AccountsTrash";
 import Bills from "./views/Bills/Bills";
 import CreatBill from "./views/Bills/CreateBill";
+import BillTrash from "./views/Bills/BillTrash";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
@@ -63,8 +65,10 @@ function App() {
             <Route path="/" element={<Home />}>
               <Route path="users/" element={<UserAccounts />} />
               <Route path="users/create" element={<CreateAccountUser />} />
+              <Route path="users/trash" element={<AccountsTrash />} />
               <Route path="bills/createbill" element={<CreatBill/>}/>
               <Route path="bills/:type" element={<Bills />} />
+              <Route path="bills/trash/:type" element={<BillTrash/>}/>
             </Route>
             <Route path="/*" exact element={<PageNotFound />} />
           </Routes>

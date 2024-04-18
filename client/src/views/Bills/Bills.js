@@ -37,6 +37,7 @@ function Bills() {
 
     return (
         <div className="container-fluid bill-page">
+            <Link to={`/bills/trash/${type}`}>Đơn đã xóa (...)</Link>
             <Link className="btn btn-primary btn-insert-bill" to="/bills/createbill">Tạo đơn mới</Link>
             <table className="table table-dark">
                 <thead className="thead-dark">

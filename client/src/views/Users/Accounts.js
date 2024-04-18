@@ -8,18 +8,15 @@ import {FaEdit, FaTimesCircle } from "react-icons/fa";
 import "../../styles/Users.scss";
 
 function Users() {
-    const [deleteStatus, setDeleteStatus] = useState(false);
     const [listUsers, setListUsers] = useState([]);
 
     useEffect(() => {
         axios.get(`http://${config.URL}/users/`).then((res) => {
             setListUsers(res.data.allUsers);
         });
-    }, [deleteStatus]);
+    }, []);
 
     const handleDeleteAccount = (id) => {
-        setDeleteStatus(!deleteStatus);
-
         axios
         .delete(`http://${config.URL}/users/delete/${id}`, 
                 {headers: {authenToken: localStorage.getItem('authenToken')}})
@@ -37,6 +34,7 @@ function Users() {
 
     return (
         <div className="container-fluid user-page">
+            <Link to={`/users/trash`}>Tài khoản đã xóa (...)</Link>
             <Link className="btn btn-primary btn-insert-user" to="/users/create">Tạo tài khoản mới</Link>
             <table className="table table-dark">
                 <thead className="thead-dark">

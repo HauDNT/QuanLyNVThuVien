@@ -1,6 +1,7 @@
 const {Users, UsersInfo} = require('../models');       
 const bcrypt = require('bcrypt');           // Using Bcrypt to hash and check password
 const {sign} = require('jsonwebtoken');     // Using Json Web Token
+const { Op } = require('sequelize');
 
 class UsersController {
     async findAllUsers(req, res) {
@@ -83,8 +84,9 @@ class UsersController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
-    }
+    };
 
+    // Xóa tài khoản (xóa mềm):
     async deleteAccount(req, res) {
         try {
             const accountId = req.params.id;
@@ -96,6 +98,32 @@ class UsersController {
             return res.json({success: 'Xóa tài khoản thành công!'});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
+        }
+    };
+
+    // Lọc ra tài khoản bị xóa mềm:
+    async getAccountSoftDeleted(req, res) {
+        try {
+            const accountDeleted = await Users
+                .findAll({
+                    attributes: [
+                        'id',
+                        'Username',
+                        'Password',
+                        'createdAt',
+                        'deletedAt',
+                    ],
+                    where: {
+                        deletedAt: {
+                            [Op.ne]: null,
+                        }
+                    },
+                    paranoid: false,
+                });
+            
+            return res.json({accountDeleted});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     }
 }

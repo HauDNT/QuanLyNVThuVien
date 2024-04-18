@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const {Bills, BillToType, BillTypes, sequelize} = require('../models');
 
 class BillsController {
@@ -18,7 +19,7 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
-    }
+    };
 
     // Lấy hóa đơn mua / tặng:
     async getBillOfType(req, res) {
@@ -30,7 +31,7 @@ class BillsController {
                     include: [
                         {
                             model: BillToType,
-                            require: true,
+                            required: true,
                         }
                     ],
                     where: {
@@ -64,23 +65,6 @@ class BillsController {
             return res.json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
         }
     };
-    
-    // Xóa một đơn theo id (Xóa mềm):
-    async deleteBill(req, res) {
-        try {
-            const billId = req.params.id;
-    
-            await Bills.destroy({
-                where: {
-                    id: billId,
-                }
-            });
-
-            return res.json({success: 'Xóa đơn thành công!'});
-        } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
-        }
-    }
 
     // Tạo đơn mới:
     async createBill(req, res) {
@@ -133,6 +117,50 @@ class BillsController {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
         }
     }
+    
+    // Xóa một đơn theo id (Xóa mềm):
+    async deleteBill(req, res) {
+        try {
+            const billId = req.params.id;
+    
+            await Bills.destroy({
+                where: {
+                    id: billId,
+                }
+            });
+
+            return res.json({success: 'Xóa đơn thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
+        }
+    };
+
+    // Lấy danh sách đơn đã bị xóa mềm:
+    async getBillSoftDeleted(req, res) {
+        try {
+            const billDeleted = await Bills
+                .findAll({
+                    attributes: [
+                        'id', 
+                        'NumberBill', 
+                        'NameBill',
+                        'DateGenerateBill', 
+                        'Supplier', 
+                        'deletedAt',
+                    ],
+                    where: {
+                        deletedAt: {
+                            [Op.ne]: null,
+                        }
+                    },
+                    paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
+                });
+
+                return res.json({ billDeleted });
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    };
 }
 
 module.exports = new BillsController();
