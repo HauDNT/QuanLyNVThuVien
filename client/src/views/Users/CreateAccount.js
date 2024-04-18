@@ -5,8 +5,34 @@ import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreateAccountUser() {
+    const [status, setStatus] = useState(false);
     const [listRooms, setListRooms] = useState([]);
     const [listPositions, setListPositions] = useState([]);
+    const [inputValues, setInputValues] = useState({
+        username: '',
+        password: '',
+        repassword: '',
+        fullname: '',
+        email: '',
+        birthday: '',   // Chú ý chỗ này
+        position: 1,
+        room: 1,
+        avatar: null,
+    });
+
+    const handleClearInput = () => {
+        setInputValues({
+            username: '',
+            password: '',
+            repassword: '',
+            fullname: '',
+            email: '',
+            birthday: '',   // Chú ý chỗ này
+            position: 1,
+            room: 1,
+            avatar: '',
+        });
+    };
 
     useEffect(() => {
         axios
@@ -20,12 +46,54 @@ function CreateAccountUser() {
             .then((res) => {
                 setListPositions(res.data.positions);
             });
-    }, []);
+    }, [status]);
+
+    const handleCreateAccount = (e) => {
+        setStatus(true);
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const {username, password, repassword, fullname, email, birthday, position, room, avatar} = data;
+            const account = {username, password, repassword};
+            const information = {username, fullname, email, birthday, position, room, avatar};
+            
+            if (!account || !information) {
+                toast.warning('Thông tin không đầy đủ!');
+                return;
+            };
+
+            if (account.password !== account.repassword) {
+                toast.warning('Mật khẩu không trùng khớp, hãy kiểm tra lại!');
+                return;
+            };
+
+            axios
+                .post(`http://${config.URL}/users/register`, account)
+                .then(() => {
+                    axios
+                        .post(`http://${config.URL}/users/createinfo`, information)
+                        .then((res) => {
+                            if (res.data.success) {
+                                setStatus(false);
+                                handleClearInput();
+                                toast.success(res.data.success);
+                            }
+                            else
+                                toast.error(res.data.error);
+                        })
+                })
+        } catch (error) {
+            toast.error('Không thể tạo tài khoản. Hãy kiểm tra thông tin và thử lại!');
+        }
+    }
 
     return (
         <div className="creatpage-container">
             <h1 className="col-12 creatpage-heading">Tạo tài khoản mới</h1>
-            <form method="POST" className="row createpage-form">        {/*onSubmit={handleCreateBill}*/}
+            <form method="POST" className="row createpage-form" onSubmit={handleCreateAccount}>
                 <div className="col-12 label-info">
                     <h5>Thông tin tài khoản</h5>
                 </div>
@@ -36,6 +104,8 @@ function CreateAccountUser() {
                         type="text" 
                         id="input--username" 
                         className="form-control"
+                        value={inputValues.username}
+                        onChange={(e) => setInputValues({...inputValues, username: e.target.value})}
                         required/>
                 </div>
                 <div className="col-4 input-field">
@@ -45,6 +115,8 @@ function CreateAccountUser() {
                         type="text" 
                         id="input--password" 
                         className="form-control"
+                        value={inputValues.password}
+                        onChange={(e) => setInputValues({...inputValues, password: e.target.value})}
                         required
                         />
                 </div>
@@ -55,6 +127,8 @@ function CreateAccountUser() {
                         type="text" 
                         id="input--re-password" 
                         className="form-control"
+                        value={inputValues.repassword}
+                        onChange={(e) => setInputValues({...inputValues, repassword: e.target.value})}
                         required
                         />
                 </div>
@@ -69,6 +143,8 @@ function CreateAccountUser() {
                         type="text" 
                         id="input--fullname" 
                         className="form-control"
+                        value={inputValues.fullname}
+                        onChange={(e) => setInputValues({...inputValues, fullname: e.target.value})}
                         required
                         />
                 </div>
@@ -79,6 +155,8 @@ function CreateAccountUser() {
                         type="text" 
                         id="input--email" 
                         className="form-control"
+                        value={inputValues.email}
+                        onChange={(e) => setInputValues({...inputValues, email: e.target.value})}
                         required
                         />
                 </div>
@@ -90,6 +168,8 @@ function CreateAccountUser() {
                         id="input--birthday" 
                         className="form-control"
                         placeholder="dd-mm-yyyy"
+                        value={inputValues.birthday}
+                        onChange={(e) => setInputValues({...inputValues, birthday: e.target.value})}
                         required
                         />
                 </div>
@@ -100,6 +180,8 @@ function CreateAccountUser() {
                         class="form-select" 
                         id="select--position" 
                         title="Chức vụ"
+                        value={inputValues.position}
+                        onChange={(e) => setInputValues({...inputValues, position: e.target.value})}
                         required
                         >
                         {listPositions.map((position) => (
@@ -114,6 +196,8 @@ function CreateAccountUser() {
                         class="form-select" 
                         id="select--room" 
                         title="Phòng"
+                        value={inputValues.room}
+                        onChange={(e) => setInputValues({...inputValues, room: e.target.value})}
                         required
                         >
                         {listRooms.map((room) => (
@@ -128,6 +212,8 @@ function CreateAccountUser() {
                         type="file" 
                         id="input--avatar" 
                         className="form-control"
+                        value={inputValues.avatar}
+                        onChange={(e) => setInputValues({...inputValues, avatar: e.target.value})}
                         required/>
                 </div>
                 <div className="col-12 mt-3 button-container">

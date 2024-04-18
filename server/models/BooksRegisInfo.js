@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     }, {
         freezeTableName: true,
+        paranoid: true,
     });
 
     BooksRegisInfo.associate = (models) => {

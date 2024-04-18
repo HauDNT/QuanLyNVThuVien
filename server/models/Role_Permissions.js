@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const RolePer = sequelize.define("Role_Permissions", {
     }, {
         freezeTableName: true,
-        timestamps: false,
+        paranoid: true,
     });
 
     RolePer.associate = (models) => {

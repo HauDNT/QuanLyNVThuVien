@@ -1,4 +1,4 @@
-const {Users} = require('../models');       
+const {Users, UsersInfo} = require('../models');       
 const bcrypt = require('bcrypt');           // Using Bcrypt to hash and check password
 const {sign} = require('jsonwebtoken');     // Using Json Web Token
 
@@ -56,9 +56,48 @@ class UsersController {
                                 authenToken: authenToken,
                             });
         } catch (errorMessage) {
-            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'})
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     };
+
+    async createInfoUser(req, res) {
+        try {
+            // Lấy id người dùng trước:
+            const {username, fullname, email, birthday, position, room, avatar} = req.body;
+            const getUserId = await Users.findOne({
+                attributes: ['id'],
+                where: {Username: username}
+            });
+
+            await UsersInfo.create({
+                Fullname: fullname,
+                Birthday: birthday,
+                Email: email,
+                Avatar: avatar,
+                PositionId: position,
+                RoomId: room,
+                UserId: getUserId.id,
+            });
+
+            return res.json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    }
+
+    async deleteAccount(req, res) {
+        try {
+            const accountId = req.params.id;
+            await Users.destroy({
+                where: {
+                    id: accountId,
+                }
+            });
+            return res.json({success: 'Xóa tài khoản thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
+        }
+    }
 }
 
 module.exports = new UsersController();

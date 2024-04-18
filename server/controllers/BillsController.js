@@ -65,7 +65,7 @@ class BillsController {
         }
     };
     
-    // Xóa một đơn theo id:
+    // Xóa một đơn theo id (Xóa mềm):
     async deleteBill(req, res) {
         try {
             const billId = req.params.id;

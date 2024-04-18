@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        paranoid: true,
     });
 
     Users.associate = (models) => {

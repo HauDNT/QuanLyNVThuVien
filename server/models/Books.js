@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         charset: 'utf8mb4',
         collate: 'utf8mb4_unicode_ci',
+        paranoid: true,
     });
 
     Books.associate = (models) => {

@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const BillToType = sequelize.define("BillToType", {}, {
         freezeTableName: true,
-        timestamps: false,
+        paranoid: true,
     }); 
 
     BillToType.associate = (models) => {

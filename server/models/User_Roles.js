@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const UserRole = sequelize.define("User_Roles", {
     }, {
-        timestamps: false,
+        paranoid: true,
     });
 
     UserRole.associate = (models) => {

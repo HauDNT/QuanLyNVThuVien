@@ -21,7 +21,8 @@ function Bills() {
 
     const handleDeteleBill = (id) => {
         axios
-            .delete(`http://${config.URL}/bills/deletebill/${id}`, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            .delete(`http://${config.URL}/bills/deletebill/${id}`, 
+                    {headers: {authenToken: localStorage.getItem('authenToken')}})
             .then((res) => {
                 if (!res.data.error) {
                     setListBills(listBills.filter((bill) => {

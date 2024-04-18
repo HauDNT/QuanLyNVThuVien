@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import {toast} from 'react-toastify';
 import {Link} from "react-router-dom";
 import config from '../../constance.js';
 import {FcInfo} from "react-icons/fc";
@@ -7,13 +8,32 @@ import {FaEdit, FaTimesCircle } from "react-icons/fa";
 import "../../styles/Users.scss";
 
 function Users() {
+    const [deleteStatus, setDeleteStatus] = useState(false);
     const [listUsers, setListUsers] = useState([]);
 
     useEffect(() => {
         axios.get(`http://${config.URL}/users/`).then((res) => {
             setListUsers(res.data.allUsers);
         });
-    }, []);
+    }, [deleteStatus]);
+
+    const handleDeleteAccount = (id) => {
+        setDeleteStatus(!deleteStatus);
+
+        axios
+        .delete(`http://${config.URL}/users/delete/${id}`, 
+                {headers: {authenToken: localStorage.getItem('authenToken')}})
+        .then((res) => {
+            if (res.data.success) {
+                toast.success(res.data.success);
+                setListUsers(listUsers.filter((account) => {
+                    return account.id !== id;
+                }));
+            }
+            else
+                toast.error(res.data.error);
+        })
+    }
 
     return (
         <div className="container-fluid user-page">
@@ -30,22 +50,31 @@ function Users() {
                     </tr>
                 </thead>
                 <tbody>
-                    {listUsers.map((user) => (
-                        <tr key={user.id} className="text-center">
-                            <td className="table-light">{user.Username}</td>
-                            <td className="table-light">{user.Password}</td>
-                            <td className="table-light">Thư viện viên</td>
-                            <td className="table-light">
-                                <FcInfo className="info-icon table-icon"/>
-                            </td>
-                            <td className="table-light">
-                                <FaEdit className="edit-icon table-icon"/>
-                            </td>
-                            <td className="table-light">
-                                <FaTimesCircle  className="delete-icon table-icon"/>
-                            </td>
-                        </tr>
-                    ))}
+                    {
+                        listUsers.length > 0 ? (
+                            listUsers.map((account) => (
+                            <tr key={account.id} className="text-center">
+                                <td className="table-light">{account.Username}</td>
+                                <td className="table-light">{account.Password}</td>
+                                <td className="table-light">Thư viện viên</td>
+                                <td className="table-light">
+                                    <FcInfo className="info-icon table-icon"/>
+                                </td>
+                                <td className="table-light">
+                                    <FaEdit className="edit-icon table-icon"/>
+                                </td>
+                                <td onClick={() => handleDeleteAccount(account.id)} className="table-light">
+                                    <FaTimesCircle  className="delete-icon table-icon"/>
+                                </td>
+                            </tr>
+                        ))) : (
+                            <tr>
+                                <td className="table-light text-center" colSpan={6}>
+                                    Chưa có tài khoản nào được tạo
+                                </td>
+                            </tr>
+                        )
+                    }
                 </tbody>
             </table>
         </div>
