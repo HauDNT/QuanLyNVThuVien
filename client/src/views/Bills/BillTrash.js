@@ -4,7 +4,7 @@ import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcSynchronize} from "react-icons/fc";
-import {FaEdit, FaTimesCircle } from "react-icons/fa";
+import {FaTimesCircle } from "react-icons/fa";
 import "../../styles/Bills.scss";
 
 function BillTrash() {
@@ -27,6 +27,58 @@ function BillTrash() {
                 ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}
             `;
         return dateString;
+    };
+
+    const handleRestore = (id) => {
+        axios
+            .patch(
+                `http://${config.URL}/bills/trash/restore/${id}`,
+                null,
+                {
+                    headers: {
+                        authenToken: localStorage.getItem('authenToken')
+                    }
+                }
+            )
+            .then((res) => {
+                if (!res.data.error) {
+                    toast.success(res.data.success);
+                    setListBillDeleted(listBillDeleted.filter((bill) => {
+                        return bill.id !== id;
+                    }));
+                }
+                else 
+                    toast.error(res.data.error);
+            })
+            .catch((error) => {
+                toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
+            });
+    };
+
+    const handleForceDelete = (id) => {
+        axios
+            .delete(
+                `http://${config.URL}/bills/trash/delete/${id}`,
+                null,
+                {
+                    headers: {
+                        authenToken: localStorage.getItem('authenToken')
+                    }
+                }
+            )
+            .then((res) => {
+                if (!res.data.error) {
+                    toast.success(res.data.success);
+                    setListBillDeleted(listBillDeleted.filter((bill) => {
+                        return bill.id !== id;
+                    }));
+                }
+                else 
+                    toast.error(res.data.error);
+            })
+            .catch((error) => {
+                toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
+            });
     };
 
     return (
@@ -54,10 +106,10 @@ function BillTrash() {
                                 <td className="table-light"> {formatAndDisplayDatetime(bill.deletedAt)} </td>
                                 <td className="table-light"> {bill.Supplier} </td>
                                 <td className="table-light">
-                                    <FcSynchronize className="info-icon table-icon"/>
+                                    <FcSynchronize onClick={() => handleRestore(bill.id)} className="info-icon table-icon"/>
                                 </td>
                                 <td className="table-light">
-                                    <FaTimesCircle  className="delete-icon table-icon"/>
+                                    <FaTimesCircle onClick={() => handleForceDelete(bill.id)} className="delete-icon table-icon"/>
                                 </td>
                             </tr>
                         ))) : (

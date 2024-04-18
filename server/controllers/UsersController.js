@@ -125,7 +125,39 @@ class UsersController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
-    }
+    };
+
+    // Khôi phục tài khoản bị xóa mềm:
+    async restoreEachAccount(req, res) {
+        const {id} = req.params;
+        try {
+            await Users.restore (
+                {where: {id: +id}},
+            );
+    
+            return res.json({success: 'Đã khôi phục thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
+        }
+    };
+
+    // Xóa cứng tài khoản (Force delete):
+    async forceDeleteAccount(req, res) {
+        try {
+            const accountId = req.params.id;
+    
+            await Users.destroy({
+                where: {
+                    id: accountId,
+                },
+                force: true,
+            });
+
+            return res.json({success: 'Xóa tài khoản thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
+        }
+    };
 }
 
 module.exports = new UsersController();

@@ -57,6 +57,7 @@ class BillsController {
                     [sequelize.fn('COUNT', sequelize.col('id')), 'billCount']
                 ],
                 raw: true,
+                paranoid: false,
             });
     
             return res.json(amountBills[0].billCount);  // Trả về số lượng đơn
@@ -116,7 +117,7 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
         }
-    }
+    };
     
     // Xóa một đơn theo id (Xóa mềm):
     async deleteBill(req, res) {
@@ -137,6 +138,8 @@ class BillsController {
 
     // Lấy danh sách đơn đã bị xóa mềm:
     async getBillSoftDeleted(req, res) {
+        const type = req.params.type;
+
         try {
             const billDeleted = await Bills
                 .findAll({
@@ -148,10 +151,17 @@ class BillsController {
                         'Supplier', 
                         'deletedAt',
                     ],
+                    include: [
+                        {
+                            model: BillToType,
+                            required: true,
+                        }
+                    ],
                     where: {
                         deletedAt: {
                             [Op.ne]: null,
-                        }
+                        },
+                        '$BillToType.BillTypeId$': type,
                     },
                     paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
                 });
@@ -159,6 +169,38 @@ class BillsController {
                 return res.json({ billDeleted });
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    // Khôi phục lại hóa đơn đã bị xóa mềm:
+    async restoreReachBill(req, res) {
+        const {id} = req.params;
+        try {
+            await Bills.restore (
+                {where: {id: +id}},
+            );
+    
+            return res.json({success: 'Đã khôi phục thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
+        }
+    };
+
+    // Xóa cứng hóa đơn (Force delete):
+    async forceDeleteBill(req, res) {
+        try {
+            const billId = req.params.id;
+    
+            await Bills.destroy({
+                where: {
+                    id: billId,
+                },
+                force: true,
+            });
+
+            return res.json({success: 'Xóa đơn thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
         }
     };
 }

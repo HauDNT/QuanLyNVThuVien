@@ -11,7 +11,12 @@ function Users() {
     const [listUsers, setListUsers] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://${config.URL}/users/`).then((res) => {
+        axios
+            .get(
+                `http://${config.URL}/users/`,
+                null,
+            )
+            .then((res) => {
             setListUsers(res.data.allUsers);
         });
     }, []);
@@ -39,6 +44,7 @@ function Users() {
             <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
+                        <th scope="col" className="table-dark text-center"> Mã tài khoản </th>
                         <th scope="col" className="table-dark text-center"> Tên tài khoản </th>
                         <th scope="col" className="table-dark text-center">Mật khẩu</th>
                         <th scope="col" className="table-dark text-center">Vai trò</th>
@@ -52,6 +58,7 @@ function Users() {
                         listUsers.length > 0 ? (
                             listUsers.map((account) => (
                             <tr key={account.id} className="text-center">
+                                <td className="table-light">{account.id}</td>
                                 <td className="table-light">{account.Username}</td>
                                 <td className="table-light">{account.Password}</td>
                                 <td className="table-light">Thư viện viên</td>

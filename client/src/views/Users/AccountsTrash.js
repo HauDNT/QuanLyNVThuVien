@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcSynchronize} from "react-icons/fc";
-import {FaEdit, FaTimesCircle } from "react-icons/fa";
+import {FaTimesCircle } from "react-icons/fa";
 import "../../styles/Users.scss";
 
 function AccountTrash() {
@@ -26,6 +25,58 @@ function AccountTrash() {
                 ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}
             `;
         return dateString;
+    };
+
+    const handleRestore = (id) => {
+        axios
+            .patch(
+                `http://${config.URL}/users/trash/restore/${id}`,
+                null,
+                {
+                    headers: {
+                        authenToken: localStorage.getItem('authenToken')
+                    }
+                }
+            )
+            .then((res) => {
+                if (!res.data.error) {
+                    toast.success(res.data.success);
+                    setListAccountDeleted(listAccountDeleted.filter((account) => {
+                        return account.id !== id;
+                    }));
+                }
+                else 
+                    toast.error(res.data.error);
+            })
+            .catch((error) => {
+                toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
+            });
+    };
+
+    const handleForceDelete = (id) => {
+        axios
+            .delete(
+                `http://${config.URL}/users/trash/delete/${id}`,
+                null,
+                {
+                    headers: {
+                        authenToken: localStorage.getItem('authenToken')
+                    }
+                }
+            )
+            .then((res) => {
+                if (!res.data.error) {
+                    toast.success(res.data.success);
+                    setListAccountDeleted(listAccountDeleted.filter((account) => {
+                        return account.id !== id;
+                    }));
+                }
+                else 
+                    toast.error(res.data.error);
+            })
+            .catch((error) => {
+                toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
+            });
     };
 
     return (
@@ -53,10 +104,10 @@ function AccountTrash() {
                                 <td className="table-light"> {formatAndDisplayDatetime(account.createdAt)} </td>
                                 <td className="table-light"> {formatAndDisplayDatetime(account.deletedAt)} </td>
                                 <td className="table-light">
-                                    <FcSynchronize className="info-icon table-icon"/>
+                                    <FcSynchronize onClick={() => handleRestore(account.id)} className="info-icon table-icon"/>
                                 </td>
                                 <td className="table-light">
-                                    <FaTimesCircle  className="delete-icon table-icon"/>
+                                    <FaTimesCircle onClick={() => handleForceDelete(account.id)} className="delete-icon table-icon"/>
                                 </td>
                             </tr>
                         ))) : (

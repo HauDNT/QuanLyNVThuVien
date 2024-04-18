@@ -71,10 +71,12 @@ function CreateAccountUser() {
             };
 
             axios
-                .post(`http://${config.URL}/users/register`, account)
+                .post(`http://${config.URL}/users/register`, account,)
                 .then(() => {
                     axios
-                        .post(`http://${config.URL}/users/createinfo`, information)
+                        .post(`http://${config.URL}/users/createinfo`, 
+                                information,
+                                {headers: {authenToken: localStorage.getItem('authenToken')}})
                         .then((res) => {
                             if (res.data.success) {
                                 setStatus(false);
