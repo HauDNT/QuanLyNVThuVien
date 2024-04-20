@@ -4,15 +4,71 @@ const {sign} = require('jsonwebtoken');     // Using Json Web Token
 const { Op } = require('sequelize');
 
 class UsersController {
+    // Tìm tất cả tài khoản người dùng (username, password):
     async findAllUsers(req, res) {
         try {
             const allUsers = await Users.findAll();
-            res.json({allUsers: allUsers});
+            res.status(200).json({allUsers: allUsers});
         } catch (errorMessage) {
-            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    };
+    
+    // Tìm thông tin người dùng (tài khoản & thông tin cá nhân):
+    async findInfoUser(req, res) {
+        const id = req.params.id;
+
+        try {
+            const userInfo = await Users
+                .findOne(
+                    {
+                        where: {id: +id},
+                        include: [{
+                            model: UsersInfo, 
+                            required: true,
+                            where: {UserId: +id},
+                        }],
+                    }
+                );
+
+            if (!userInfo) {
+                return res.status(404).json({error: 'Không tìm thấy thông tin người dùng'});
+            }
+
+            return res.status(200).json({userInfo});
+        } catch (error) {
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
+    // Đăng nhập:
+    async login(req, res) {
+        try {
+            const {username, password} = req.body;
+            const getUser = await Users.findOne({where: {Username: username}});
+            if (!getUser) {
+                return res.status(400).json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
+            }
+            
+            const match = await bcrypt.compare(password, getUser.Password);
+            if (!match) {
+                return res.status(400).json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
+            }
+
+            const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
+            return res.status(200).json({
+                                success: 'Đăng nhập thành công',
+                                id: getUser.id,
+                                username: getUser.Username,
+                                status: true,
+                                authenToken: authenToken,
+                            });
+        } catch (errorMessage) {
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    // Tạo tài khoản người dùng:
     async register(req, res) {
         try {
             const {username, password} = req.body;
@@ -25,42 +81,17 @@ class UsersController {
                     Password: hash,
                 });
     
-                return res.json({success: 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.'})
+                return res.status(201).json({success: 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.'})
             }
             else {
-                return res.json({error: 'Tên người dùng đã tồn tại. Hãy chọn tên khác.'})
+                return res.status(400).json({error: 'Tên người dùng đã tồn tại. Hãy chọn tên khác.'})
             }
         } catch (errorMessage) {
-            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau.'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau.'});
         }
     };
 
-    async login(req, res) {
-        try {
-            const {username, password} = req.body;
-            const getUser = await Users.findOne({where: {Username: username}});
-            if (!getUser) {
-                return res.json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
-            }
-            
-            const match = await bcrypt.compare(password, getUser.Password);
-            if (!match) {
-                return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
-            }
-
-            const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
-            return res.json({
-                                success: 'Đăng nhập thành công',
-                                id: getUser.id,
-                                username: getUser.Username,
-                                status: true,
-                                authenToken: authenToken,
-                            });
-        } catch (errorMessage) {
-            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
-        }
-    };
-
+    // Tạo thông tin người dùng (Được thực hiện sau khi thêm tài khoản thành công):
     async createInfoUser(req, res) {
         try {
             // Lấy id người dùng trước:
@@ -80,9 +111,9 @@ class UsersController {
                 UserId: getUserId.id,
             });
 
-            return res.json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
+            return res.status(201).json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -95,9 +126,9 @@ class UsersController {
                     id: accountId,
                 }
             });
-            return res.json({success: 'Xóa tài khoản thành công!'});
+            return res.status(200).json({success: 'Xóa tài khoản thành công!'});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
         }
     };
 
@@ -121,9 +152,9 @@ class UsersController {
                     paranoid: false,
                 });
             
-            return res.json({accountDeleted});
+            return res.status(200).json({accountDeleted});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -135,9 +166,9 @@ class UsersController {
                 {where: {id: +id}},
             );
     
-            return res.json({success: 'Đã khôi phục thành công!'});
+            return res.status(200).json({success: 'Đã khôi phục thành công!'});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
         }
     };
 
@@ -153,9 +184,9 @@ class UsersController {
                 force: true,
             });
 
-            return res.json({success: 'Xóa tài khoản thành công!'});
+            return res.status(200).json({success: 'Xóa tài khoản thành công!'});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
+            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
         }
     };
 }

@@ -6,9 +6,9 @@ class RoomsController {
             const rooms = await Rooms.findAll({
                 attributes: ['id', 'RoomName']
             });
-            return res.json({rooms});
+            return res.status(200).json({rooms});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 }

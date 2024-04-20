@@ -1,19 +1,21 @@
 import React, {useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
-import {FcSynchronize} from "react-icons/fc";
-import {FaTimesCircle } from "react-icons/fa";
+import {FcUndo} from "react-icons/fc";
 import "../../styles/Users.scss";
 
 function AccountTrash() {
-    const [listAccountDeleted, setListAccountDeleted] = useState([]);
+    const [listAccount, setListAccount] = useState([]);
+    const [userSelected, setUserSelected] = useState([]);
+    const [checkAll, setCheckAll] = useState(false);
 
     useEffect(() => {
         axios
             .get(`http://${config.URL}/users/trash/`)
             .then((res) => {
-                setListAccountDeleted(res.data.accountDeleted)
+                setListAccount(res.data.accountDeleted)
             });
     }, []);
 
@@ -27,52 +29,92 @@ function AccountTrash() {
         return dateString;
     };
 
-    const handleRestore = (id) => {
-        axios
-            .patch(
-                `http://${config.URL}/users/trash/restore/${id}`,
-                null,
-                {
-                    headers: {
-                        authenToken: localStorage.getItem('authenToken')
-                    }
+    // Hàm xử lý khi check chọn 1 user:
+    const handleCheck = (event) => {
+        const {checked, value} = event.target;
+        if (checked) {
+            setUserSelected([...userSelected, +value]);
+        }
+        else {            
+            setUserSelected(userSelected.filter(accountId => accountId !== +value));
+            setCheckAll(checked);
+        };
+    };
+
+    // Hàm xử lý khi check chọn tất cả user:
+    const handleCheckAll = (event) => {
+        const {checked} = event.target;
+        setCheckAll(checked);
+
+        const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
+        const selectedAccounts = [];
+
+        allChildCheckboxes.forEach(eachCheckbox => {
+            eachCheckbox.checked = checked;
+                if (checked) {
+                    selectedAccounts.push(+eachCheckbox.value);
                 }
-            )
+                else {
+                    setUserSelected(userSelected.filter(accountId => accountId !== +eachCheckbox.value));
+                }
+            });
+        
+        setUserSelected(selectedAccounts);
+    };
+
+    const handleRestore = () => {
+        const restorePromises = userSelected.map((userIdSelected) => {
+            return axios
+                .patch(`http://${config.URL}/users/trash/restore/${userIdSelected}`);
+        });
+
+        Promise
+            .all(restorePromises)
             .then((res) => {
-                if (!res.data.error) {
-                    toast.success(res.data.success);
-                    setListAccountDeleted(listAccountDeleted.filter((account) => {
-                        return account.id !== id;
-                    }));
-                }
+                let status = false;
+                res.forEach((res, index) => {
+                    const eachUserSelected = userSelected[index];
+                    if (!res.data.error) {
+                        setListAccount((oldList) => oldList.filter((bill) => bill.id !== eachUserSelected));
+                        status = true;
+                    }
+                });
+
+                if (status)
+                    toast.success('Khôi phục tài khoản thành công!');
                 else 
-                    toast.error(res.data.error);
+                    toast.error('Khôi phục tài khoản không thành công!');
             })
             .catch((error) => {
                 toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
             });
     };
 
-    const handleForceDelete = (id) => {
-        axios
-            .delete(
-                `http://${config.URL}/users/trash/delete/${id}`,
-                null,
+    const handleDeleteAccount = () => {
+        const deletePromises = userSelected.map((userIdSelected) => {
+            return axios
+                .delete(`http://${config.URL}/users/trash/delete/${userIdSelected}`,
                 {
-                    headers: {
-                        authenToken: localStorage.getItem('authenToken')
-                    }
-                }
-            )
+                    headers: {'authenToken': localStorage.getItem('authenToken')}
+                });
+        });
+
+        Promise
+            .all(deletePromises)
             .then((res) => {
-                if (!res.data.error) {
-                    toast.success(res.data.success);
-                    setListAccountDeleted(listAccountDeleted.filter((account) => {
-                        return account.id !== id;
-                    }));
-                }
+                let status = false;
+                res.forEach((res, index) => {
+                    const eachUserSelected = userSelected[index];
+                    if (!res.data.error) {
+                        setListAccount((oldList) => oldList.filter((bill) => bill.id !== eachUserSelected));
+                        status = true;
+                    }
+                });
+
+                if (status)
+                    toast.success('Xóa tài khoản thành công!');
                 else 
-                    toast.error(res.data.error);
+                    toast.error('Xóa tài khoản không thành công!');
             })
             .catch((error) => {
                 toast.error("Đã xảy ra lỗi khi gọi API đến Server...");
@@ -80,35 +122,38 @@ function AccountTrash() {
     };
 
     return (
-        <div className="container-fluid bill-page">
+        <div className="container-fluid user-page">
+            <Link className="btn btn-outline-secondary btn-trash" to={`/users/`}>
+                <FcUndo className="trash-icon"/> Quay lại
+            </Link>
+            <button className="btn btn-danger btn--account-page" onClick={() => handleDeleteAccount()}>Xóa vĩnh viễn</button>
+            <button className="btn btn-primary btn--account-page" onClick={() => handleRestore()}>Khôi phục</button>
             <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
+                        <th scope="col" className="table-dark text-center"> 
+                            <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
+                        </th>
                         <th scope="col" className="table-dark text-center">Mã tài khoản</th>
                         <th scope="col" className="table-dark text-center">Tên tài khoản</th>
                         <th scope="col" className="table-dark text-center">Mật khẩu</th>
                         <th scope="col" className="table-dark text-center">Thời gian tạo</th>
                         <th scope="col" className="table-dark text-center">Thời gian xóa</th>
-                        <th scope="col" className="table-dark text-center">Khôi phục</th>
-                        <th scope="col" className="table-dark text-center">Xóa</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        listAccountDeleted.length > 0 ?
-                        (listAccountDeleted.map((account) => (
+                        listAccount.length > 0 ?
+                        (listAccount.map((account) => (
                             <tr key={account.id} className="text-center">
+                                <td className="table-light">
+                                    <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={account.id} onClick={(e) => handleCheck(e)}/>
+                                </td>
                                 <td className="table-light"> {account.id} </td>
                                 <td className="table-light"> {account.Username} </td>
                                 <td className="table-light"> {account.Password} </td>
                                 <td className="table-light"> {formatAndDisplayDatetime(account.createdAt)} </td>
                                 <td className="table-light"> {formatAndDisplayDatetime(account.deletedAt)} </td>
-                                <td className="table-light">
-                                    <FcSynchronize onClick={() => handleRestore(account.id)} className="info-icon table-icon"/>
-                                </td>
-                                <td className="table-light">
-                                    <FaTimesCircle onClick={() => handleForceDelete(account.id)} className="delete-icon table-icon"/>
-                                </td>
                             </tr>
                         ))) : (
                         <tr>

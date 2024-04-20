@@ -7,11 +7,12 @@ import { AuthenContext } from "./helper/AuthenContext";
 import config from "../src/constance.js";
 import Home from "./views/Home";
 import Login from "./views/Authenticate/Login";
-import Register from "./views/Authenticate/Register";
+// import Register from "./views/Authenticate/Register";
 import ForgotPassword from "./views/Authenticate/ForgotPassword"; 
 import UserAccounts from "./views/Users/Accounts";
 import CreateAccountUser from "./views/Users/CreateAccount";
 import AccountsTrash from "./views/Users/AccountsTrash";
+import EditUser from "./views/Users/EditUser.js";
 import Bills from "./views/Bills/Bills";
 import CreatBill from "./views/Bills/CreateBill";
 import BillTrash from "./views/Bills/BillTrash";
@@ -60,11 +61,12 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" exact element={<Login />} />
-            <Route path="/register" exact element={<Register />} />
+            {/* <Route path="/register" exact element={<Register />} /> */}
             <Route path="/forgotpassword" exact element={<ForgotPassword />} />
             <Route path="/" element={<Home />}>
               <Route path="users/" element={<UserAccounts />} />
               <Route path="users/create" element={<CreateAccountUser />} />
+              <Route path="users/edit/:id" element={<EditUser />} />
               <Route path="users/trash" element={<AccountsTrash />} />
               <Route path="bills/createbill" element={<CreatBill/>}/>
               <Route path="bills/:type" element={<Bills />} />

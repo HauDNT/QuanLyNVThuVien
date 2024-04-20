@@ -19,7 +19,6 @@ const createNewPassRouter = require('./routes/CreateNewPassword');
 const roomsRouter = require('./routes/Rooms');
 const positionsRouter = require('./routes/Positions');
 
-
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
 app.use('/authen', authenRouter);

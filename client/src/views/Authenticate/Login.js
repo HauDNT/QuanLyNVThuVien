@@ -120,9 +120,9 @@ function Login() {
             <button className="btn btn-primary btn-login" type="submit">
               Đăng nhập
             </button>
-            <Link to='/register' className="btn btn-light btn-to-register" >
+            {/* <Link to='/register' className="btn btn-light btn-to-register" >
               Đăng ký
-            </Link>
+            </Link> */}
           </Form>
         )}
       </Formik>

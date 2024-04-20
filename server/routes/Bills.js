@@ -10,7 +10,7 @@ router.get('/:type', BillsController.getBillOfType);
 router.post('/createbill', validToken, BillsController.createBill);
 router.delete('/deletebill/:id', validToken, BillsController.deleteBill);
 router.get('/trash/:type', BillsController.getBillSoftDeleted);
-router.patch('/trash/restore/:id', validToken, BillsController.restoreReachBill);
+router.patch('/trash/restore/:id', BillsController.restoreReachBill);
 router.delete('/trash/delete/:id', validToken, BillsController.forceDeleteBill);
 
 module.exports = router;

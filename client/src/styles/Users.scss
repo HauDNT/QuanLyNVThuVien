@@ -1,6 +1,11 @@
 .user-page {
-    .btn-insert-user {
+    .btn--account-page {
         float: right;
         margin-bottom: 0.75em;
+        margin-left: 10px;
+    }
+
+    .row-span-2 {
+        grid-row: span 2;
     }
 }

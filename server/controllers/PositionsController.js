@@ -6,9 +6,9 @@ class PositionsController {
             const positions = await Positions.findAll({
                 attributes: ['id', 'PositionName']
             });
-            return res.json({positions});
+            return res.status(200).json({positions});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     }
 }

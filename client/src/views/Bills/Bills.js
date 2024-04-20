@@ -4,12 +4,14 @@ import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcViewDetails} from "react-icons/fc";
-import {FaEdit, FaTimesCircle } from "react-icons/fa";
+import {FaEdit, FaTimesCircle, FaTrash } from "react-icons/fa";
 import "../../styles/Bills.scss";
 
 function Bills() {
-    let {type} = useParams();
+    const {type} = useParams();
     const [listBills, setListBills] = useState([]);
+    const [billSelected, setBillSelected] = useState([]);
+    const [checkAll, setCheckAll] = useState(false);
 
     useEffect(() => {
         axios
@@ -19,35 +21,87 @@ function Bills() {
             });
     }, [type]);
 
-    const handleDeteleBill = (id) => {
-        axios
-            .delete(`http://${config.URL}/bills/deletebill/${id}`, 
-                    {headers: {authenToken: localStorage.getItem('authenToken')}})
+    // Hàm xóa từng đơn:
+    const handleDeteleBill = () => {
+        const deletePromises = billSelected.map((billIdSeleted) => {
+            return axios
+                .delete(
+                    `http://${config.URL}/bills/deletebill/${billIdSeleted}`,
+                    {
+                        headers: {authenToken: localStorage.getItem('authenToken')}
+                    });
+                });
+
+        Promise
+            .all(deletePromises)
             .then((res) => {
-                if (!res.data.error) {
-                    setListBills(listBills.filter((bill) => {
-                        return bill.id !== id;
-                    }));
-                    toast.success(res.data.success);
+                let status = false;
+                res.forEach((res, index) => {
+                    const eachBillSelected = billSelected[index];
+                    if (!res.data.error) {
+                        setListBills((oldList) => oldList.filter((bill) => bill.id !== eachBillSelected));
+                        status = true;
+                    }
+                });
+
+            if (status)
+                toast.success('Xóa đơn thành công');
+            else 
+                toast.error('Xóa đơn không thành công!');
+        });
+    };
+
+    // Hàm xử lý khi check chọn 1 đơn:
+    const handleCheck = (event) => {
+        const {checked, value} = event.target;
+        if (checked) {
+            setBillSelected([...billSelected, +value]);
+        }
+        else {            
+            setBillSelected(billSelected.filter(billId => billId !== +value));
+            setCheckAll(checked);
+        };
+    };
+
+    // Hàm xử lý khi check chọn tất cả đơn:
+    const handleCheckAll = (event) => {
+        const {checked} = event.target;
+        setCheckAll(checked);
+
+        const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
+        const selectedBills = [];
+
+        allChildCheckboxes.forEach(eachCheckbox => {
+            eachCheckbox.checked = checked;
+                if (checked) {
+                    selectedBills.push(+eachCheckbox.value);
                 }
-                else
-                    toast.error(res.data.error);
-            })
+                else {
+                    setBillSelected(billSelected.filter(billId => billId !== +eachCheckbox.value));
+                }
+            });
+        
+        setBillSelected(selectedBills);
     };
 
     return (
         <div className="container-fluid bill-page">
-            <Link to={`/bills/trash/${type}`}>Đơn đã xóa (...)</Link>
-            <Link className="btn btn-primary btn-insert-bill" to="/bills/createbill">Tạo đơn mới</Link>
+            <Link className="btn btn-outline-secondary btn-trash" to={`/bills/trash/${type}`}>
+                <FaTrash className="trash-icon"/> Đơn đã xóa
+            </Link>
+            <button className="btn btn-danger btn--bill-page" onClick={() => handleDeteleBill()}>Xóa</button>
+            <Link className="btn btn-primary btn--bill-page" to="/bills/">Sửa</Link>
+            <Link className="btn btn-success btn--bill-page" to="/bills/createbill">Tạo đơn mới</Link>
             <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
+                        <th scope="col" className="table-dark text-center"> 
+                            <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
+                        </th>
                         <th scope="col" className="table-dark text-center"> Mã đơn </th>
                         <th scope="col" className="table-dark text-center"> Tên đơn </th>
                         <th scope="col" className="table-dark text-center"> Thời gian tạo </th>
                         <th scope="col" className="table-dark text-center"> Xem danh sách </th>
-                        <th scope="col" className="table-dark text-center">Sửa</th>
-                        <th scope="col" className="table-dark text-center">Xóa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,17 +109,14 @@ function Bills() {
                         listBills.length > 0 ?
                         (listBills.map((bill) => (
                             <tr key={bill.id} className="text-center">
-                                <td className="table-light"> {bill.NumberBill} </td>
+                                <td className="table-light">
+                                    <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
+                                </td>
+                                <td className="table-light"> {bill.id} </td>
                                 <td className="table-light"> {bill.NameBill} </td>
                                 <td className="table-light"> {bill.DateGenerateBill} </td>
                                 <td className="table-light">
                                     <FcViewDetails className="info-icon table-icon"/>
-                                </td>
-                                <td className="table-light">
-                                    <FaEdit className="edit-icon table-icon"/>
-                                </td>
-                                <td onClick={() => handleDeteleBill(bill.id)} className="table-light">
-                                    <FaTimesCircle  className="delete-icon table-icon"/>
                                 </td>
                             </tr>
                         ))) : (
