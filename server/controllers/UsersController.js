@@ -8,9 +8,9 @@ class UsersController {
     async findAllUsers(req, res) {
         try {
             const allUsers = await Users.findAll();
-            res.status(200).json({allUsers: allUsers});
+            res.json({allUsers: allUsers});
         } catch (errorMessage) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
     
@@ -32,12 +32,12 @@ class UsersController {
                 );
 
             if (!userInfo) {
-                return res.status(404).json({error: 'Không tìm thấy thông tin người dùng'});
+                return res.json({error: 'Không tìm thấy thông tin người dùng'});
             }
 
-            return res.status(200).json({userInfo});
+            return res.json({userInfo});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -60,12 +60,12 @@ class UsersController {
                 );
 
             if (!fullname) {
-                return res.status(404).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+                return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
             }
 
-            return res.status(200).json({userInfo: fullname});
+            return res.json({userInfo: fullname});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     }
 
@@ -75,16 +75,16 @@ class UsersController {
             const {username, password} = req.body;
             const getUser = await Users.findOne({where: {Username: username}});
             if (!getUser) {
-                return res.status(400).json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
+                return res.json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
             }
             
             const match = await bcrypt.compare(password, getUser.Password);
             if (!match) {
-                return res.status(400).json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
+                return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
             }
 
             const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
-            return res.status(200).json({
+            return res.json({
                                 success: 'Đăng nhập thành công',
                                 id: getUser.id,
                                 username: getUser.Username,
@@ -92,7 +92,7 @@ class UsersController {
                                 authenToken: authenToken,
                             });
         } catch (errorMessage) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -109,13 +109,13 @@ class UsersController {
                     Password: hash,
                 });
     
-                return res.status(201).json({success: 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.'})
+                return res.json({success: 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.'})
             }
             else {
-                return res.status(400).json({error: 'Tên người dùng đã tồn tại. Hãy chọn tên khác.'})
+                return res.json({error: 'Tên người dùng đã tồn tại. Hãy chọn tên khác.'})
             }
         } catch (errorMessage) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau.'});
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau.'});
         }
     };
 
@@ -139,9 +139,9 @@ class UsersController {
                 UserId: getUserId ? getUserId.id : 1,
             });
 
-            return res.status(201).json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
+            return res.json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -154,9 +154,9 @@ class UsersController {
                     id: accountId,
                 }
             });
-            return res.status(200).json({success: 'Xóa tài khoản thành công!'});
+            return res.json({success: 'Xóa tài khoản thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
+            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'});
         }
     };
 
@@ -180,9 +180,9 @@ class UsersController {
                     paranoid: false,
                 });
             
-            return res.status(200).json({accountDeleted});
+            return res.json({accountDeleted});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -194,9 +194,9 @@ class UsersController {
                 {where: {id: +id}},
             );
     
-            return res.status(200).json({success: 'Đã khôi phục thành công!'});
+            return res.json({success: 'Đã khôi phục thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
         }
     };
 
@@ -212,9 +212,9 @@ class UsersController {
                 force: true,
             });
 
-            return res.status(200).json({success: 'Xóa tài khoản thành công!'});
+            return res.json({success: 'Xóa tài khoản thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
+            return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
         }
     };
 }

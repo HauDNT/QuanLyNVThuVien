@@ -13,20 +13,37 @@ class BooksController {
                         'MainTitle',
                         'SubTitle',
                         'Author',
-                        'ManyAuthors',
+                        'OrtherAuthors',
+                        'Editors',
                         'Publisher',
                         'PubPlace',
-                        'PubYear'
+                        'PubYear',
+                        'Types',
+                        'Status',
                     ]
             });
 
 
             if (!allCatalogings)
-                return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+                return res.json({error: 'Không tìm thấy thông tin biên mục!'});
 
-            return res.status(200).json({allCatalogings});
+            return res.json({allCatalogings});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    async getInfoCataloging(req, res) {
+        try {
+            const catalogId = +req.params.id;
+            const catalogInfo = await Books.findByPk(catalogId);
+
+            if (!catalogInfo)
+                return res.json({error: 'Không tìm thấy thông tin biên mục!'});
+
+            return res.json({catalogInfo});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     }
 
@@ -35,7 +52,7 @@ class BooksController {
             const catalogingInfo = req.body;
 
             if (!catalogingInfo) {
-                res.status(400).json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+                res.json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
                 return;
             }
             
@@ -43,7 +60,7 @@ class BooksController {
                 ...catalogingInfo
             });
 
-            res.status(200).json({success: 'Tạo biên mục thành công!'});
+            res.json({success: 'Tạo biên mục thành công!'});
 
             // await Books.create({
             //     ISBN: catalogingInfo.ISBN,
@@ -52,7 +69,7 @@ class BooksController {
             //     MainTitle: catalogingInfo.MainTitle,
             //     SubTitle: catalogingInfo.SubTitle,
             //     Author: catalogingInfo.Author,
-            //     ManyAuthors: catalogingInfo.ManyAuthors,
+            //     OrtherAuthors: catalogingInfo.OrtherAuthors,
             //     Topic: catalogingInfo.Topic,
             //     Publisher: catalogingInfo.Publisher,
             //     PubPlace: catalogingInfo.PubPlace,
@@ -63,7 +80,7 @@ class BooksController {
             //     NumPages: catalogingInfo.NumPages,
             // });
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
     };
 }

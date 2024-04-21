@@ -42,7 +42,10 @@ function Login() {
         data
       )
       .then((res) => {
-        if (res.data && res.data.success) {
+        if (res.data && res.data.error) {
+          toast.error(res.data.error);
+        } 
+        else {
           localStorage.setItem('id', res.data.id);
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
@@ -56,8 +59,6 @@ function Login() {
           });
 
           navigator("/");
-        } else {
-          toast.error(res.data.error);
         }
       })
       .catch(() => {

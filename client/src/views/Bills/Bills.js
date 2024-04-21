@@ -21,6 +21,13 @@ function Bills() {
             });
     }, [type]);
 
+    const formatAndDisplayDatetime = (dateString) => {
+        const date = new Date(dateString);
+        dateString = 
+            `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        return dateString;
+    };
+
     // Hàm xóa từng đơn:
     const handleDeteleBill = () => {
         const deletePromises = billSelected.map((billIdSeleted) => {
@@ -114,7 +121,7 @@ function Bills() {
                                 </td>
                                 <td className="table-light"> {bill.id} </td>
                                 <td className="table-light"> {bill.NameBill} </td>
-                                <td className="table-light"> {bill.DateGenerateBill} </td>
+                                <td className="table-light"> {formatAndDisplayDatetime(bill.DateGenerateBill)} </td>
                                 <td className="table-light">
                                     <FcViewDetails className="info-icon table-icon"/>
                                 </td>

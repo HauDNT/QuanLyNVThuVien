@@ -18,16 +18,31 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         SubTitle: {     // Tiêu đề phụ
+            type: DataTypes.STRING(300),
+            charset: 'utf8mb4',
+            allowNull: true,
+        },
+        Types: {        // Tiêu đề phụ
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: true,
         },
-        Author: {       // Tác giả
+        Author: {       // Tác giả duy nhất
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: true,
         },
-        ManyAuthors: { // Nhiều tác giả
+        OrtherAuthors: { // Nhiều tác giả
+            type: DataTypes.STRING(1000),
+            charset: 'utf8mb4',
+            allowNull: true,
+        },
+        Editors: { // Nhiều tác giả
+            type: DataTypes.STRING(1000),
+            charset: 'utf8mb4',
+            allowNull: true,
+        },
+        Synopsis: {     // Tóm tắt nội dung
             type: DataTypes.STRING(1000),
             charset: 'utf8mb4',
             allowNull: true,
@@ -52,10 +67,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         QuantityCopies: {   // Số bản in
-            type: DataTypes.SMALLINT,
+            type: DataTypes.INTEGER,
             allowNull: true,
         },
-        Size: {     // Kích thước/khổ
+        Size: {         // Kích thước/khổ
             type: DataTypes.STRING(6),
             allowNull: true,
         },
@@ -67,6 +82,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             allowNull: true,
         },
+        Status: {       // Duyệt/Chưa duyệt
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        }
     }, {
         freezeTableName: true,
         charset: 'utf8mb4',
@@ -76,6 +96,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Books.associate = (models) => {
         Books.hasMany(models.BooksRegisInfo, {
+            onDelete: 'cascade',
+        });
+        Books.hasMany(models.Users, {
             onDelete: 'cascade',
         });
     };

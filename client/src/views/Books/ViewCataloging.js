@@ -10,7 +10,7 @@ function ViewCataloging() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3002/books/someInfo`, {
+            .get(`http://${config.URL}/books/someInfo`, {
                 headers: { authenToken: localStorage.getItem('authenToken') }
             })
             .then((res) => {
@@ -48,32 +48,37 @@ function ViewCataloging() {
                             <div className="row div-list-item">
                                 <div className="col-lg-2 col-md-2">
                                     <div className="row area-1">
-                                        <div className="text-center order-number">{book.id}</div>
-                                        <div className="text-center classification">{book.DDC}</div>
-                                        <div className="text-center encrypt-name">{book.EncryptName}</div>
+                                        <div className="text-center order-number">{book.id ? book.id : ''}</div>
+                                        <div className="text-center classification">{book.DDC ? book.DDC : ''}</div>
+                                        <div className="text-center encrypt-name">{book.EncryptName ? book.EncryptName : ''}</div>
                                     </div>
                                 </div>
                                 <div className="col-lg-10 col-lg-10">
                                     <div className="row">
                                         <div className="col-md-12 col-lg-12"></div>
                                         <div className="col-md-8 col-lg-8 area-2">
-                                            <Link to="/book/cataloging/all" className="book-name">
+                                            <Link to={`/book/cataloging/edit/${book.id}`} className="book-name">
                                                 {book.MainTitle}
                                                 {book.Author ? (' - ' + book.Author) : ''}
-                                                {book.ManyAuthors ? (', ' + book.ManyAuthors) : ''}
+                                                {book.OrtherAuthors ? (', ' + book.OrtherAuthors) : ''}
                                             </Link>
-                                            <p className="publisher">Nhà xuất bản: {book.Publisher}</p>
-                                            <p className="publish-year">Năm xuất bản: {book.PubYear}</p>
+                                            <p className="publisher">Chịu trách nhiệm: {book.Editors ? (book.Editors) : ''}</p>
+                                            <p className="publisher">Nhà xuất bản: {book.Publisher ? book.Publisher : ''}</p>
+                                            <p className="publish-year">Năm xuất bản: {book.PubYear ? book.PubYear : ''}</p>
                                         </div>
                                         <div className="col-md-3 col-lg-3 area-3">
                                             <div className="row">
                                                 <div className="type">
                                                     <span>Thể loại:</span>&nbsp;
-                                                    <span>Sách</span>
+                                                    <span>{book.Types}</span>
                                                 </div>
                                                 <div className="status">
                                                     <span>Trạng thái:</span>&nbsp;
-                                                    <span>Chưa duyệt</span>
+                                                    {+book.Status === 0 ? (
+                                                        <span className="span--status status-0">Chưa duyệt</span>
+                                                    ) : (
+                                                        <span className="span--status status-1">Đã duyệt</span>
+                                                    )}
                                                 </div>
                                             </div>
                                             <div className="row">

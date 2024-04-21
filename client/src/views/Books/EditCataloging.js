@@ -1,64 +1,58 @@
 import React, {useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
 import '../../styles/CreateCataloging.scss';
 
-function CreateCataloging() {
-    const idUserCataloging = localStorage.getItem('id');
-    const [fullnameUser, setFullname] = useState('');
-    const [inputValues, setInputValues] = useState({
-        ISBN: '',
-        DDC: '',
-        EncryptName: '',
-        MainTitle: '',
-        SubTitle: '',
-        Types: '',
-        Author: '',
-        OrtherAuthors: '',
-        Editors: '',
-        Synopsis: '',
-        Topic: '',
-        Publisher: '',
-        PubPlace: '',
-        PubYear: '',
-        QuantityCopies: '',
-        Size: '',
-        UnitPrice: '',
-        NumPages: '',
-        UserName: {fullnameUser},
-    });
+function EditCataloging() {
+    const {id} = useParams();
+    const [fullname, setFullname] = useState('');
+    const [infoCataloging, setInfoCataloging] = useState([]);
 
-    const handleClearInput = () => {
-        setInputValues({
-            ISBN: '',
-            DDC: '',
-            EncryptName: '',
-            MainTitle: '',
-            SubTitle: '',
-            Types: '',
-            Author: '',
-            OrtherAuthors: '',
-            Editors: '',
-            Synopsis: '',
-            Topic: '',
-            Publisher: '',
-            PubPlace: '',
-            PubYear: '',
-            QuantityCopies: '',
-            Size: '',
-            NumPages: '',
-            UnitPrice: '',
-        });
+    useEffect(() => {
+        try {
+            axios
+            .get(`http://${config.URL}/books/getInfoCatalog/${id}`,
+                    {headers: {authenToken: localStorage.getItem('authenToken')}}
+                )
+            .then((res) => {
+                if (!res.data && !res.data.catalogInfo) {
+                    toast.error(res.data.error);
+                    return;
+                }
+
+                setInfoCataloging(res.data.catalogInfo);
+            });
+        } catch (error) {
+            toast.error('Đã xảy ra lỗi tại máy chủ! Hãy thử lại sau ít phút...');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (infoCataloging && infoCataloging.id) {
+            axios
+            .get(`http://${config.URL}/users/fullname/${infoCataloging.id}`)
+            .then((res) => {
+                if (res.data?.userInfo?.Fullname) {
+                    setFullname(res.data.userInfo.Fullname);
+                }                    
+            });
+        }
+    }, [infoCataloging]);
+
+    const formatAndDisplayDatetime = (dateString) => {
+        const date = new Date(dateString);
+        dateString = 
+            `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}
+            ${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        return dateString;
     };
 
     const handleCreateCataloging = (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target);
-        formData.delete('UserName');
-        formData.append('UserId', idUserCataloging);
         const data = Object.fromEntries(formData.entries());
 
         if (!data) {
@@ -74,34 +68,14 @@ function CreateCataloging() {
                 toast.error(res.data.error);
             }
             else {
-                handleClearInput();
                 toast.success(res.data.success);
             }
         });
     };
 
-
-
-
-
-    
-    useEffect(() => {
-        try {
-            axios
-                .get(`http://${config.URL}/users/fullname/${idUserCataloging}`)
-                .then((res) => {
-                    if (res.data?.userInfo?.Fullname) {
-                        setFullname(res.data.userInfo.Fullname);
-                    }                    
-                })
-        } catch (error) {
-            toast.error('Đã xảy ra lỗi tại máy chủ! Hãy thử lại sau ít phút...');
-        }
-    }, [idUserCataloging]);
-
     return (
         <div className="createCataloging-container">
-        <h3 className="col-12 createCataloging-heading">Tạo biên mục mới</h3>
+        <h3 className="col-12 createCataloging-heading">Biên mục</h3>
         <form method="POST" className="row createCataloging-form" onSubmit={handleCreateCataloging}>
             <label>Mã sách</label>
             <div class="input-group">
@@ -109,8 +83,8 @@ function CreateCataloging() {
                 <input 
                     name="ISBN"
                     id=""
-                    value={inputValues.ISBN}
-                    onChange={(e) => setInputValues({...inputValues, ISBN: e.target.value})}
+                    value={infoCataloging.ISBN}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, ISBN: e.target.value})}
                     type="number"
                     className="form-control"
                     required
@@ -121,8 +95,8 @@ function CreateCataloging() {
                 <input 
                     name="DDC"
                     id=""
-                    value={inputValues.DDC}
-                    onChange={(e) => setInputValues({...inputValues, DDC: e.target.value})}
+                    value={infoCataloging.DDC}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, DDC: e.target.value})}
                     type="number"
                     className="form-control"
                     required
@@ -133,8 +107,8 @@ function CreateCataloging() {
                 <input 
                     name="EncryptName"
                     id=""
-                    value={inputValues.EncryptName}
-                    onChange={(e) => setInputValues({...inputValues, EncryptName: e.target.value})}
+                    value={infoCataloging.EncryptName}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, EncryptName: e.target.value})}
                     type="text"
                     className="form-control"
                     placeholder="Tên mã hóa của nhan đề chính"
@@ -147,8 +121,8 @@ function CreateCataloging() {
                 <input 
                     name="MainTitle"
                     id=""
-                    value={inputValues.MainTitle}
-                    onChange={(e) => setInputValues({...inputValues, MainTitle: e.target.value})}
+                    value={infoCataloging.MainTitle}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, MainTitle: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -159,8 +133,8 @@ function CreateCataloging() {
                 <input 
                     name="SubTitle"
                     id=""
-                    value={inputValues.SubTitle}
-                    onChange={(e) => setInputValues({...inputValues, SubTitle: e.target.value})}
+                    value={infoCataloging.SubTitle}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, SubTitle: e.target.value})}
                     type="text"
                     className="form-control"
                 />
@@ -170,8 +144,8 @@ function CreateCataloging() {
                 <input 
                     name="Types"
                     id=""
-                    value={inputValues.Types}
-                    onChange={(e) => setInputValues({...inputValues, Types: e.target.value})}
+                    value={infoCataloging.Types}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Types: e.target.value})}
                     type="text"
                     className="form-control"
                 />
@@ -181,8 +155,8 @@ function CreateCataloging() {
                 <input 
                     name="Author"
                     id=""
-                    value={inputValues.Author}
-                    onChange={(e) => setInputValues({...inputValues, Author: e.target.value})}
+                    value={infoCataloging.Author}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Author: e.target.value})}
                     type="text"
                     className="form-control"
                     placeholder="Đối với tác phẩm chỉ có duy nhất một tác giả"
@@ -194,8 +168,8 @@ function CreateCataloging() {
                 <input 
                     name="OrtherAuthors"
                     id=""
-                    value={inputValues.OrtherAuthors}
-                    onChange={(e) => setInputValues({...inputValues, OrtherAuthors: e.target.value})}
+                    value={infoCataloging.OrtherAuthors}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, OrtherAuthors: e.target.value})}
                     type="text"
                     className="form-control"
                     placeholder="Đối với tác phẩm có hai tác giả trở lên"
@@ -206,8 +180,8 @@ function CreateCataloging() {
                 <input 
                     name="Editors"
                     id=""
-                    value={inputValues.Editors}
-                    onChange={(e) => setInputValues({...inputValues, Editors: e.target.value})}
+                    value={infoCataloging.Editors}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Editors: e.target.value})}
                     type="text"
                     className="form-control"
                     placeholder="Dịch, biên tập, in ấn,..."
@@ -218,8 +192,8 @@ function CreateCataloging() {
                 <input 
                     name="Topic"
                     id=""
-                    value={inputValues.Topic}
-                    onChange={(e) => setInputValues({...inputValues, Topic: e.target.value})}
+                    value={infoCataloging.Topic}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Topic: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -230,6 +204,8 @@ function CreateCataloging() {
                 <textarea 
                     name="Synopsis"
                     class="form-control" 
+                    value={infoCataloging.Synopsis}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Synopsis: e.target.value})}
                     rows="3"/>
             </div>
             <label>Thông tin xuất bản</label>
@@ -238,8 +214,8 @@ function CreateCataloging() {
                 <input 
                     name="Publisher"
                     id=""
-                    value={inputValues.Publisher}
-                    onChange={(e) => setInputValues({...inputValues, Publisher: e.target.value})}
+                    value={infoCataloging.Publisher}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Publisher: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -250,8 +226,8 @@ function CreateCataloging() {
                 <input 
                     name="PubPlace"
                     id=""
-                    value={inputValues.PubPlace}
-                    onChange={(e) => setInputValues({...inputValues, PubPlace: e.target.value})}
+                    value={infoCataloging.PubPlace}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, PubPlace: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -262,8 +238,8 @@ function CreateCataloging() {
                 <input 
                     name="PubYear"
                     id=""
-                    value={inputValues.PubYear}
-                    onChange={(e) => setInputValues({...inputValues, PubYear: e.target.value})}
+                    value={infoCataloging.PubYear}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, PubYear: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -274,8 +250,8 @@ function CreateCataloging() {
                 <input 
                     name="QuantityCopies"
                     id=""
-                    value={inputValues.QuantityCopies}
-                    onChange={(e) => setInputValues({...inputValues, QuantityCopies: e.target.value})}
+                    value={infoCataloging.QuantityCopies}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, QuantityCopies: e.target.value})}
                     type="number"
                     className="form-control"
                     required
@@ -287,8 +263,8 @@ function CreateCataloging() {
                 <input 
                     name="Size"
                     id=""
-                    value={inputValues.Size}
-                    onChange={(e) => setInputValues({...inputValues, Size: e.target.value})}
+                    value={infoCataloging.Size}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, Size: e.target.value})}
                     type="text"
                     className="form-control"
                     required
@@ -299,8 +275,8 @@ function CreateCataloging() {
                 <input 
                     name="NumPages"
                     id=""
-                    value={inputValues.NumPages}
-                    onChange={(e) => setInputValues({...inputValues, NumPages: e.target.value})}
+                    value={infoCataloging.NumPages}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, NumPages: e.target.value})}
                     type="number"
                     className="form-control"
                     required
@@ -311,8 +287,8 @@ function CreateCataloging() {
                 <input 
                     name="UnitPrice"
                     id=""
-                    value={inputValues.UnitPrice}
-                    onChange={(e) => setInputValues({...inputValues, UnitPrice: e.target.value})}
+                    value={infoCataloging.UnitPrice}
+                    onChange={(e) => setInfoCataloging({...infoCataloging, UnitPrice: e.target.value})}
                     type="number"
                     className="form-control"
                     required
@@ -322,24 +298,37 @@ function CreateCataloging() {
             <div class="input-group">
                 <span class="input-group-text">Người biên mục</span>
                 <input 
-                    name="UserName"
+                    name="UserId"
                     id=""
                     type="text"
                     className="form-control"
                     placeholder="Load họ tên user vào trường input này"
-                    value={fullnameUser}
+                    value={fullname}
+                    readOnly
+                    required
+                />
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Thời điểm biên mục</span>
+                <input 
+                    name="UserId"
+                    id=""
+                    type="text"
+                    className="form-control"
+                    placeholder="Load họ tên user vào trường input này"
+                    value={formatAndDisplayDatetime(infoCataloging.createdAt)}
                     readOnly
                     required
                 />
             </div>
 
             <div className="col-12 mt-3 button-container">
-                <button type="submit" className="btn btn-primary mb-3">Tạo</button>
                 <button type="button" className="btn btn-success mb-3">Duyệt</button>
+                <button type="submit" className="btn btn-primary mb-3">Cập nhật</button>
             </div>
         </form>
     </div>
     )
 }
 
-export default CreateCataloging;
+export default EditCataloging;

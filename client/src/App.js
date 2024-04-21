@@ -18,6 +18,7 @@ import CreatBill from "./views/Bills/CreateBill.js";
 import BillTrash from "./views/Bills/BillTrash.js";
 import ViewCataloging from "./views/Books/ViewCataloging.js";
 import CreateCataloging from "./views/Books/CreateCataloging.js";
+import EditCataloging from "./views/Books/EditCataloging.js";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
@@ -76,6 +77,7 @@ function App() {
               <Route path="bills/trash/:type" element={<BillTrash/>}/>
               <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
               <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
+              <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
             </Route>
             <Route path="/*" exact element={<PageNotFound/>} />
           </Routes>

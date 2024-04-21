@@ -38,8 +38,8 @@
             border-bottom: 1px solid rgb(203, 203, 203);
 
             .area-1 {
-                margin-top: 20px;
-                margin-bottom: 10px;
+                margin-top: 5px;
+                margin-bottom: 15px;
 
                 font-weight: 700;
                 .order-number {
@@ -79,6 +79,27 @@
             .area-3 {
                 margin-left: 10px;
                 margin-bottom: 10px;
+
+                .status {
+                    margin: 5px 0;
+
+                    .span--status {
+                        padding: 2px 5px 5px 5px;
+                        border-radius: 3px;
+                        font-weight: 500;
+                    }
+                    
+                    .status-0 {
+                        // border: 2px solid #FF8080;
+                        color: #F46060;
+                    }
+
+                    .status-1 {
+                        // border: 2px solid #60f095;
+                        color: rgb(0, 102, 255);
+                    }
+                }
+
             }
         }
 
