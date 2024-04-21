@@ -41,6 +41,34 @@ class UsersController {
         }
     };
 
+    // Lấy tên người dùng:
+    async getFullname(req, res) {
+        const id = req.params.id;
+
+        try {
+            const fullname = await UsersInfo
+                .findOne(
+                    {
+                        attributes: ['Fullname'],
+                        where: {UserId: +id},
+                        // include: [{
+                        //     model: UsersInfo, 
+                        //     required: true,
+                        //     where: {UserId: +id},
+                        // }],
+                    }
+                );
+
+            if (!fullname) {
+                return res.status(404).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            }
+
+            return res.status(200).json({userInfo: fullname});
+        } catch (error) {
+            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    }
+
     // Đăng nhập:
     async login(req, res) {
         try {
@@ -108,7 +136,7 @@ class UsersController {
                 Avatar: avatar,
                 PositionId: position,
                 RoomId: room,
-                UserId: getUserId.id,
+                UserId: getUserId ? getUserId.id : 1,
             });
 
             return res.status(201).json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});

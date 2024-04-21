@@ -5,17 +5,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenContext } from "./helper/AuthenContext";
 import config from "../src/constance.js";
-import Home from "./views/Home";
-import Login from "./views/Authenticate/Login";
+import Home from "./views/Home.js";
+import Login from "./views/Authenticate/Login.js";
 // import Register from "./views/Authenticate/Register";
-import ForgotPassword from "./views/Authenticate/ForgotPassword"; 
-import UserAccounts from "./views/Users/Accounts";
-import CreateAccountUser from "./views/Users/CreateAccount";
-import AccountsTrash from "./views/Users/AccountsTrash";
+import ForgotPassword from "./views/Authenticate/ForgotPassword.js"; 
+import UserAccounts from "./views/Users/Accounts.js";
+import CreateAccountUser from "./views/Users/CreateAccount.js";
+import AccountsTrash from "./views/Users/AccountsTrash.js";
 import EditUser from "./views/Users/EditUser.js";
-import Bills from "./views/Bills/Bills";
-import CreatBill from "./views/Bills/CreateBill";
-import BillTrash from "./views/Bills/BillTrash";
+import Bills from "./views/Bills/Bills.js";
+import CreatBill from "./views/Bills/CreateBill.js";
+import BillTrash from "./views/Bills/BillTrash.js";
+import ViewCataloging from "./views/Books/ViewCataloging.js";
+import CreateCataloging from "./views/Books/CreateCataloging.js";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/App.scss";
 
@@ -60,19 +62,22 @@ function App() {
       <AuthenContext.Provider value={{ authenData, setAuthenData }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" exact element={<Login />} />
+            <Route path="/login" exact element={<Login/>} />
             {/* <Route path="/register" exact element={<Register />} /> */}
-            <Route path="/forgotpassword" exact element={<ForgotPassword />} />
-            <Route path="/" element={<Home />}>
-              <Route path="users/" element={<UserAccounts />} />
-              <Route path="users/create" element={<CreateAccountUser />} />
-              <Route path="users/edit/:id" element={<EditUser />} />
-              <Route path="users/trash" element={<AccountsTrash />} />
+            <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
+            <Route path="/" element={<Home/>}>
+              <Route path="users/" element={<UserAccounts/>} />
+              <Route path="users/create" element={<CreateAccountUser/>} />
+              <Route path="users/edit/:id" element={<EditUser/>} />
+              <Route path="users/trash" element={<AccountsTrash/>} />
               <Route path="bills/createbill" element={<CreatBill/>}/>
-              <Route path="bills/:type" element={<Bills />} />
+              <Route path="bills/:type" element={<Bills/>} />
               <Route path="bills/trash/:type" element={<BillTrash/>}/>
+              <Route path="bills/trash/:type" element={<BillTrash/>}/>
+              <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
+              <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
             </Route>
-            <Route path="/*" exact element={<PageNotFound />} />
+            <Route path="/*" exact element={<PageNotFound/>} />
           </Routes>
         </BrowserRouter>
       </AuthenContext.Provider>

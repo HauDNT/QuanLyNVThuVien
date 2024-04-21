@@ -48,7 +48,7 @@ function CreatBill() {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
-        if (!data || !data.numberBill || !data.nameBill) {
+        if (!data || !data.id || !data.nameBill) {
             toast.warning("Bạn phải điền đầy đủ thông tin!");
             return;
         };
@@ -75,7 +75,7 @@ function CreatBill() {
                 <div className="col-4 input-field">
                     <label for="input--bookcode" className="form-label">Mã đơn</label>
                     <input 
-                        name="numberBill" 
+                        name="id" 
                         type="text" 
                         id="input--bookcode" 
                         className="form-control" 

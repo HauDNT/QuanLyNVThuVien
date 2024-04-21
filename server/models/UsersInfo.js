@@ -7,15 +7,19 @@ module.exports = (sequelize, DataTypes) => {
         },
         Birthday: {     
             type: DataTypes.DATEONLY,
-            allowNull: false,
+            allowNull: true,
         },
         Email: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+        },
+        PhoneNumber: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         Avatar: {
             type: DataTypes.BLOB('medium'),
-            allowNull: false,
+            allowNull: true,
         },
     }, {
         freezeTableName: true,

@@ -2,52 +2,66 @@ module.exports = (sequelize, DataTypes) => {
     const Books = sequelize.define("Books", {
         ISBN: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true,
         },
         DDC: {      // Mã phân loại DDC
-            type: DataTypes.STRING(6),
-            allowNull: false,
+            type: DataTypes.STRING(50),
+            allowNull: true,
+        },
+        EncryptName: {      // Tên mã hóa
+            type: DataTypes.STRING(50),
+            allowNull: true,
         },
         MainTitle: {    // Tiêu đề chính
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
-            allowNull: false,
+            allowNull: true,
         },
         SubTitle: {     // Tiêu đề phụ
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
-            allowNull: false,
+            allowNull: true,
         },
         Author: {       // Tác giả
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
-            allowNull: false,
+            allowNull: true,
+        },
+        ManyAuthors: { // Nhiều tác giả
+            type: DataTypes.STRING(1000),
+            charset: 'utf8mb4',
+            allowNull: true,
+        },
+        Topic: {       // Chủ đề
+            type: DataTypes.STRING(100),
+            charset: 'utf8mb4',
+            allowNull: true,
         },
         Publisher: {    // Nhà xuất bản
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
-            allowNull: false,
+            allowNull: true,
         },
         PubPlace: {     // Nơi xuất bản
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
-            allowNull: false,
+            allowNull: true,
         },
         PubYear: {      // Năm xuất bản
             type: DataTypes.CHAR(4),
-            allowNull: false,
+            allowNull: true,
         },
         QuantityCopies: {   // Số bản in
             type: DataTypes.SMALLINT,
-            allowNull: false,
+            allowNull: true,
         },
         Size: {     // Kích thước/khổ
             type: DataTypes.STRING(6),
-            allowNull: false,
+            allowNull: true,
         },
         NumPages: {     // Số trang sách
             type: DataTypes.SMALLINT,
-            allowNull: false,
+            allowNull: true,
         },
         UnitPrice: {    // Đơn giá
             type: DataTypes.FLOAT,

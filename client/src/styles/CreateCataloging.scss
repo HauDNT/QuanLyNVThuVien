@@ -1,0 +1,32 @@
+.createCataloging-container {
+    height: max-content;
+    margin: 0 10px;
+    border: 1px solid #C7C8CC;
+    border-radius: 10px;
+    background-color: #fcfbf7;
+    overflow: hidden;
+
+    .createCataloging-heading {
+        text-align: center;
+        padding: 10px 0 10px 0;
+        background-color: #0E46A3;
+        color: white;
+    }
+    .createCataloging-form {
+        padding: 0 15px 0 15px;
+
+        label {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 5px 0 10px 0;
+        }
+
+        .input-group {
+            margin: 0 0 10px 0;
+
+            span {
+                width: 11.3em;
+            }
+        }
+    }
+}

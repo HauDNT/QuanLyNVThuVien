@@ -1,9 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
     const BooksRegisInfo = sequelize.define("BooksRegisInfo", {
-        RegisCode: {    // Mã đăng ký
-            type: DataTypes.STRING(20),
-            allowNull: false,
-        },
         Status: {      // Duyệt/Chưa duyệt
             type: DataTypes.STRING(20),
             allowNull: false,

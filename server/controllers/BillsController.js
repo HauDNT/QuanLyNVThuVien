@@ -51,7 +51,9 @@ class BillsController {
     // Lấy số lượng đơn hiện tại:
     async countAmountOfBills(req, res) {
         try {
-            const amountBills = await Bills.max('id', {paranoid: false});
+            let amountBills = await Bills.max('id', {paranoid: false});
+            if (!amountBills)
+                amountBills = 0;
             return res.status(200).json(amountBills);
         } catch (error) {
             return res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
@@ -69,7 +71,7 @@ class BillsController {
             };
 
             // Kiểm tra mã đơn hàng có bị trùng không?
-            const checkNumberBill = await Bills.findAll({where: {NumberBill: billInfo.numberBill}});
+            const checkNumberBill = await Bills.findAll({where: {id: billInfo.id}});
 
             if (checkNumberBill.length > 0) {
                 return res.status(409).json({error: 'Đã tồn tại mã đơn này!'});
@@ -78,7 +80,7 @@ class BillsController {
             // Insert to table 'Bills':
             await Bills.create (
                 {
-                    NumberBill: billInfo.numberBill,
+                    id: billInfo.id,
                     NameBill: billInfo.nameBill,
                     Supplier: billInfo.supplierBill,
                     Discount: billInfo.discountBill,
@@ -90,7 +92,7 @@ class BillsController {
             let getThisBill = await Bills.findOne (
                 {
                     attributes: ['id'],
-                    where: {NumberBill: billInfo.numberBill},
+                    where: {id: billInfo.id},
                 }
             );
             // Trả về một object chứa id nên ta phải gọi getThisBill.id để lấy giá trị id ra

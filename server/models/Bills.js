@@ -1,9 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
     const Bill = sequelize.define("Bills", {
-        NumberBill: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         NameBill: {
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',

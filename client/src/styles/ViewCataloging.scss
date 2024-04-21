@@ -1,0 +1,92 @@
+.view-cataloging--search {
+    margin: 0 10px;
+    display: flex;
+    align-items: flex-start;
+
+    select {
+        text-align: center;
+        border: 1px solid #ccc;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        cursor: pointer;
+        width: 10em;
+    }
+
+    button {
+        margin-right: 20px;
+    }
+}
+
+.view-cataloging--container {
+    height: max-content;
+    margin: 0 10px;
+    border: 1px solid #C7C8CC;
+    border-radius: 10px;
+    background-color: #fcfbf7;
+    overflow: hidden;
+
+    .view-cataloging--header {
+        text-align: center;
+        padding: 10px 0;
+        background-color: #0E46A3;
+        color: white;
+    }
+
+    .div-list {
+        .div-list-item {
+            padding: 10px 0 10px 0;
+            border-bottom: 1px solid rgb(203, 203, 203);
+
+            .area-1 {
+                margin-top: 20px;
+                margin-bottom: 10px;
+
+                font-weight: 700;
+                .order-number {
+                                         
+                }
+                .classification {
+                    color: green
+                }
+                .encrypt-name {
+                    color: blue
+                }
+            }
+
+            .area-2 {
+                margin-left: 10px;
+
+                p {
+                    margin: 7px 0;
+                }
+                .book-name {
+                    text-decoration: none;
+                    color: black;
+                    margin-top: 0;
+                    font-weight: 600;
+
+                    &:hover {
+                        color: blue;
+                        text-decoration: underline;
+                    }
+                }
+
+                .publisher, .publish-year {
+                    font-style: italic;
+                }
+            }
+
+            .area-3 {
+                margin-left: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        .div-none-item {
+            justify-content: center;
+            font-size: 17px;
+            font-style: italic;
+            padding-bottom: 20px;
+        }
+    }
+}
