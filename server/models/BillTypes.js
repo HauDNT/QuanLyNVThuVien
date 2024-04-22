@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             charset: 'utf8mb4',
             allowNull: false,
+            defaultValue: '',
         },
     }, {
         freezeTableName: true,
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     BillTypes.associate = (models) => {
-        BillTypes.hasMany(models.BillToType, {
+        BillTypes.hasMany(models.Bills, {
             onDelete: 'cascade',
         });
     };

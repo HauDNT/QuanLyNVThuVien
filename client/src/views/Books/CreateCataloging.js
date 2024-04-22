@@ -229,7 +229,9 @@ function CreateCataloging() {
                 <p class="form-label">Tóm tắt nội dung</p>
                 <textarea 
                     name="Synopsis"
-                    class="form-control" 
+                    class="form-control"
+                    value={inputValues.Synopsis}
+                    onChange={(e) => setInputValues({...inputValues, Synopsis: e.target.value})}
                     rows="3"/>
             </div>
             <label>Thông tin xuất bản</label>
@@ -335,7 +337,6 @@ function CreateCataloging() {
 
             <div className="col-12 mt-3 button-container">
                 <button type="submit" className="btn btn-primary mb-3">Tạo</button>
-                <button type="button" className="btn btn-success mb-3">Duyệt</button>
             </div>
         </form>
     </div>

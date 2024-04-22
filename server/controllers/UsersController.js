@@ -51,11 +51,6 @@ class UsersController {
                     {
                         attributes: ['Fullname'],
                         where: {UserId: +id},
-                        // include: [{
-                        //     model: UsersInfo, 
-                        //     required: true,
-                        //     where: {UserId: +id},
-                        // }],
                     }
                 );
 

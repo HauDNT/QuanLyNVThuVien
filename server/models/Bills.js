@@ -4,15 +4,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: false,
+            defaultValue: '',
         },
         DateGenerateBill: {
             type: DataTypes.DATEONLY,
             allowNull: false,
+            defaultValue: DataTypes.NOW,
         },
         Supplier: {
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: false,
+            defaultValue: '',
         },
         Discount: {
             type: DataTypes.INTEGER,
@@ -33,10 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     Bill.associate = (models) => {
         Bill.hasMany(models.BooksRegisInfo, {
             foreignKey: {
-                allowNull: false,
+                allowNull: true,
             }
         });
-        Bill.hasOne(models.BillToType, {
+        Bill.belongsTo(models.BillTypes, {
             onDelete: 'cascade',
         });
     };

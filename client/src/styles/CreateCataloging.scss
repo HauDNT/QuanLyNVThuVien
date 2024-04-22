@@ -28,5 +28,15 @@
                 width: 11.3em;
             }
         }
+
+        .button-container {
+            .btn--catalog {
+                font-weight: 600;
+                font-size: 17px;
+                float: right;
+                margin-left: 10px;
+                min-width: 7em;
+            }
+        }
     }
 }

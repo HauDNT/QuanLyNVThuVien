@@ -1,6 +1,7 @@
-const {Books, BooksRegisInfo} = require('../models');
+const {Books, BooksRegisInfo, Sequelize} = require('../models');
 
 class BooksController {
+    // Lấy một số thông tin biên mục để hiển thị trên trang danh sách:
     async getSomeInfo(req, res) {
         try {
             const allCatalogings = await Books.findAll({
@@ -19,10 +20,15 @@ class BooksController {
                         'PubPlace',
                         'PubYear',
                         'Types',
-                        'Status',
-                    ]
+                    ],
+                include: [
+                    {
+                        model: BooksRegisInfo,
+                        required: true,
+                        where: { id: Sequelize.col('Books.id') }
+                    }
+                ],
             });
-
 
             if (!allCatalogings)
                 return res.json({error: 'Không tìm thấy thông tin biên mục!'});
@@ -33,10 +39,20 @@ class BooksController {
         }
     };
 
+    // Lấy thông tin biên mục:
     async getInfoCataloging(req, res) {
         try {
             const catalogId = +req.params.id;
-            const catalogInfo = await Books.findByPk(catalogId);
+            const catalogInfo = await Books.findByPk(
+                    catalogId,
+                    {include: [
+                        {
+                            model: BooksRegisInfo,
+                            required: true,
+                            where: { id: Sequelize.col('Books.id') }
+                        }
+                    ],}
+                );
 
             if (!catalogInfo)
                 return res.json({error: 'Không tìm thấy thông tin biên mục!'});
@@ -45,40 +61,54 @@ class BooksController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
-    }
+    };
 
+    // Tạo một biên mục mới:
     async createCataloging(req, res) {
-        try {
-            const catalogingInfo = req.body;
+        const catalogingInfo = req.body;
 
-            if (!catalogingInfo) {
-                res.json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
-                return;
-            }
-            
-            await Books.create({
+        if (!catalogingInfo) {
+            res.json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+            return;
+        }
+
+        try {    
+            const newCatalog = await Books.create({
                 ...catalogingInfo
             });
 
-            res.json({success: 'Tạo biên mục thành công!'});
+            await BooksRegisInfo.create({
+                BookId: +newCatalog.id
+            });
 
-            // await Books.create({
-            //     ISBN: catalogingInfo.ISBN,
-            //     DDC: catalogingInfo.DDC,
-            //     EncryptName: catalogingInfo.EncryptName,
-            //     MainTitle: catalogingInfo.MainTitle,
-            //     SubTitle: catalogingInfo.SubTitle,
-            //     Author: catalogingInfo.Author,
-            //     OrtherAuthors: catalogingInfo.OrtherAuthors,
-            //     Topic: catalogingInfo.Topic,
-            //     Publisher: catalogingInfo.Publisher,
-            //     PubPlace: catalogingInfo.PubPlace,
-            //     PubYear: catalogingInfo.PubYear,
-            //     QuantityCopies: catalogingInfo.QuantityCopies,
-            //     Size: catalogingInfo.Size,
-            //     UnitPrice: catalogingInfo.UnitPrice,
-            //     NumPages: catalogingInfo.NumPages,
-            // });
+            res.json({success: 'Tạo biên mục thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    // Cập nhật thông tin cho biên mục dựa theo các trường thay đổi bất kỳ:
+    async updateCataloging(req, res) {
+        const idCatalog = req.params.id;
+        const catalogingInfo = req.body;
+
+        if (!catalogingInfo) {
+            res.json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+            return;
+        }
+
+        try {    
+            const fieldsChange = Object.keys(catalogingInfo);
+            const valuesChange = Object.values(catalogingInfo);
+
+            for (let i = 0; i < fieldsChange.length; i++) {
+                let attributesUpdating = {};
+                attributesUpdating[fieldsChange[i]] = valuesChange[i];
+
+                Books.update(attributesUpdating, {where: {id: idCatalog}});
+            };
+
+            return res.json({success: 'Đã cập nhật thông tin thành công!'});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }

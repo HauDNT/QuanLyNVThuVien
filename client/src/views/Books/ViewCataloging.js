@@ -16,8 +16,6 @@ function ViewCataloging() {
             .then((res) => {
                 if (res.data && res.data.allCatalogings) {
                     setListCataloging(res.data.allCatalogings);
-                } else {
-                    toast.error('Không có dữ liệu sách!');
                 }
             })
             .catch((error) => {
@@ -73,8 +71,8 @@ function ViewCataloging() {
                                                     <span>{book.Types}</span>
                                                 </div>
                                                 <div className="status">
-                                                    <span>Trạng thái:</span>&nbsp;
-                                                    {+book.Status === 0 ? (
+                                                    <span>Trạng thái: </span>&nbsp;
+                                                    {book.BooksRegisInfos[0].Status === false ? (
                                                         <span className="span--status status-0">Chưa duyệt</span>
                                                     ) : (
                                                         <span className="span--status status-1">Đã duyệt</span>

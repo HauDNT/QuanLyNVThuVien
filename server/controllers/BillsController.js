@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const {Bills, BillToType, BillTypes, sequelize} = require('../models');
+const {Bills, BillTypes, sequelize} = require('../models');
 
 class BillsController {
     // Lấy toàn bộ hóa đơn:
@@ -31,9 +31,9 @@ class BillsController {
                 .findAll({
                     include: [
                         {
-                            model: BillToType,
+                            model: BillTypes,
                             required: true,
-                            where: {BillTypeId: type}
+                            where: {id: type}
                         }
                     ],
                 });
@@ -86,22 +86,7 @@ class BillsController {
                     Discount: billInfo.discountBill,
                     DateGenerateBill: billInfo.dateGenerate,
                     Notes: billInfo.notes,
-                }
-            );
-
-            let getThisBill = await Bills.findOne (
-                {
-                    attributes: ['id'],
-                    where: {id: billInfo.id},
-                }
-            );
-            // Trả về một object chứa id nên ta phải gọi getThisBill.id để lấy giá trị id ra
-
-            // // Insert to table 'BillToType':
-            await BillToType.create (
-                {
-                    BillId: getThisBill.id,
-                    BillTypeId: +billInfo.typeBill, // Giá trị lấy từ select trong Client là chuỗi, thêm dấu + để chuyển nó về số
+                    BillTypeId: billInfo.typeBill,
                 }
             );
 

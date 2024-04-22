@@ -4,11 +4,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             charset: 'utf8mb4',
             allowNull: false,
+            defaultValue: '',
         },
         Description: {
             type: DataTypes.STRING,
             charset: 'utf8mb4',
             allowNull: true,
+            defaultValue: '',
         }
     }, {
         freezeTableName: true,

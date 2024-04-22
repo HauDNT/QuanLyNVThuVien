@@ -4,18 +4,22 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             charset: 'utf8mb4',
             allowNull: false,
+            defaultValue: '',
         },
         Birthday: {     
             type: DataTypes.DATEONLY,
             allowNull: true,
+            defaultValue: DataTypes.NOW,
         },
         Email: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue: '',
         },
         PhoneNumber: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue: '',
         },
         Avatar: {
             type: DataTypes.BLOB('medium'),
