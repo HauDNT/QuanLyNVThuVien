@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             defaultValue: false,
         },
+        Notes: {
+            type: DataTypes.TEXT('medium'),
+            charset: 'utf8mb4',
+            allowNull: true,
+        },
     }, {
         freezeTableName: true,
         paranoid: true,
@@ -36,11 +41,9 @@ module.exports = (sequelize, DataTypes) => {
                 name: 'RoomId',
             }
         });
-        BooksRegisInfo.belongsTo(models.Bills, {
-            foreignKey: {
-                name: 'Bill_Id',
-            }
-        });
+        BooksRegisInfo.belongsTo(models.Bills, {});
+        BooksRegisInfo.belongsTo(models.StoreTypes, {});
+        BooksRegisInfo.belongsTo(models.StatusDoc, {});
     };
 
     return BooksRegisInfo;

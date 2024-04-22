@@ -6,9 +6,9 @@ class BillsController {
     async getAllBills(req, res) {
         try {
             const getBills = await Bills.findAll();
-            return res.status(200).json({bills: getBills});
+            return res.json({bills: getBills});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -16,9 +16,9 @@ class BillsController {
     async getTypes(req, res) {
         try {
             const types = await BillTypes.findAll();
-            return res.status(200).json({listTypes: types});
+            return res.json({listTypes: types});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -39,12 +39,12 @@ class BillsController {
                 });
 
                 if (!receiveBills) {
-                    return res.status(404).json({ error: 'Không tìm thấy hóa đơn.' });
+                    return res.json({ error: 'Không tìm thấy hóa đơn.' });
                 }
 
-                return res.status(200).json({ receiveBills });
+                return res.json({ receiveBills });
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -54,9 +54,9 @@ class BillsController {
             let amountBills = await Bills.max('id', {paranoid: false});
             if (!amountBills)
                 amountBills = 0;
-            return res.status(200).json(amountBills);
+            return res.json(amountBills);
         } catch (error) {
-            return res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
+            return res.json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
         }
     };
 
@@ -67,14 +67,14 @@ class BillsController {
         try {
             // Kiểm tra data được gửi qua có hợp lệ không?
             if (!billInfo || Object.keys(billInfo).length === 0) {
-                return res.status(400).json({error: 'Không thể tạo đơn!'});
+                return res.json({error: 'Không thể tạo đơn!'});
             };
 
             // Kiểm tra mã đơn hàng có bị trùng không?
             const checkNumberBill = await Bills.findAll({where: {id: billInfo.id}});
 
             if (checkNumberBill.length > 0) {
-                return res.status(409).json({error: 'Đã tồn tại mã đơn này!'});
+                return res.json({error: 'Đã tồn tại mã đơn này!'});
             };
             
             // Insert to table 'Bills':
@@ -90,9 +90,9 @@ class BillsController {
                 }
             );
 
-            return res.status(200).json({success: 'Tạo hóa đơn mới thành công!'});
+            return res.json({success: 'Tạo hóa đơn mới thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
         }
     };
     
@@ -107,9 +107,9 @@ class BillsController {
                 }
             });
 
-            return res.status(200).json({success: 'Xóa đơn thành công!'});
+            return res.json({success: 'Xóa đơn thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
+            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
         }
     };
 
@@ -143,9 +143,9 @@ class BillsController {
                     paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
                 });
 
-                return res.status(200).json({ billDeleted });
+                return res.json({ billDeleted });
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
 
@@ -157,9 +157,9 @@ class BillsController {
                 {where: {id: +id}},
             );
     
-            return res.status(200).json({success: 'Đã khôi phục thành công!'});
+            return res.json({success: 'Đã khôi phục thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình khôi phục. Hãy thử lại sau!'});
         }
     };
 
@@ -175,9 +175,9 @@ class BillsController {
                 force: true,
             });
 
-            return res.status(200).json({success: 'Xóa đơn thành công!'});
+            return res.json({success: 'Xóa đơn thành công!'});
         } catch (error) {
-            return res.status(500).json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
+            return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
         }
     };
 }

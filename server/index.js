@@ -19,6 +19,9 @@ const createNewPassRouter = require('./routes/CreateNewPassword');
 const roomsRouter = require('./routes/Rooms');
 const positionsRouter = require('./routes/Positions');
 const booksRouter = require('./routes/Books');
+const approveRouter = require('./routes/Approve');
+const storetypesRouter = require('./routes/Storetypes');
+const statusdocRouter = require('./routes/Statusdoc');
 
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
@@ -27,6 +30,9 @@ app.use('/newpassword', createNewPassRouter);
 app.use('/rooms', roomsRouter);
 app.use('/positions', positionsRouter);
 app.use('/books', booksRouter);
+app.use('/approve', approveRouter);
+app.use('/storetypes', storetypesRouter);
+app.use('/statusdoc', statusdocRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {

@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     Bill.associate = (models) => {
         Bill.hasMany(models.BooksRegisInfo, {
             foreignKey: {
-                allowNull: true,
+                onDelete: 'cascade',
             }
         });
         Bill.belongsTo(models.BillTypes, {
