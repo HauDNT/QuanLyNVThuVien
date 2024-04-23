@@ -20,7 +20,7 @@ function Nav() {
 
   return (
     <div className="navbar navbar-dark bg-dark">
-      <NavLink className="nav-link navbar-brand">QUẢN TRỊ THƯ VIỆN</NavLink>
+      <NavLink className="nav-link navbar-brand">QUẢN LÝ NGHIỆP VỤ SÁCH</NavLink>
       <NavLink className="nav-link nav-link-item" to="/">
         Home
       </NavLink>

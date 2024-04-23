@@ -11,6 +11,20 @@ function ApproveCreate() {
     const [storeTypes, setStoreTypes] = useState([]);
     const [listRoom, setListRoom] = useState([]);
     const [listBills, setListBills] = useState([]);
+    const [initValues, setInitValues] = useState({
+        Heading: '',        // Phần đầu của mã. VD: PM23
+        NumberSeries: '',   // Phần số của mã. VD: 85643
+        NumberLength: '',   // Độ dài dãy số. VD: 6 => 085643
+        RegisCode: '',      // Mã đăng ký cá biệt. VD: được ghép lại thành PM23.085643
+        AmountRegis: '',     // Số lượng đăng ký
+        StoreTypes: '',      // Thể loại lưu trữ
+        StorePlace: '',      // Nơi lưu trữ (phòng)
+        TempStore: '',       // Nơi lưu trữ tạm thời
+        StatusDoc: '',       // Trạng thái của tài liệu
+        BillId: '',          // Mã đơn thuộc về
+        Notes: '',          // Ghi chú
+        AllRegisCode: [],   // Các mã đăng ký cá biệt sẽ được đăng ký
+    });
 
     useEffect(() => {
         try {
@@ -45,19 +59,42 @@ function ApproveCreate() {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, [])
+    }, []);
 
-    
-    // Hàm này sẽ trả về một mã đăng ký, đồng thời tạo thêm một numberCode tăng 1 đơn vị
-    const GenerateCode = (headerCode, numberCode, lengthNeed) => {
-        const resisCode = headerCode + "." + numberCode;    // Return regis code present
-        let newNumberCode = +numberCode + 1;
+    // Tạo mã mới nếu có thay đổi thông tin về: Mã đầu, dãy số đăng ký, độ dài dãy số, số lượng
+    useEffect(() => {
+        const {Heading, NumberSeries, NumberLength, AmountRegis} = initValues;
+        if (Heading && NumberLength && NumberSeries && AmountRegis) {
+            const generateRegisCode = `${Heading}.${NumberSeries}`;
+            setInitValues(prevValues => ({...prevValues, RegisCode: generateRegisCode}));
+            formatAndCreateRegisCodes();
+        }
+    }, [initValues.Heading, initValues.NumberSeries, initValues.NumberLength, initValues.AmountRegis]);
 
-        let str = '';
-        for (let i = 1; i <= lengthNeed; i++)
-            str = str.concat('0');              // Tạo ra 1 dãy số 0 để đưa vào tạo mã mới
+    // Cập nhật giá trị mới cho input thay đổi tương ứng:
+    const changeToGenerateRegisCode = (e) => {
+        const {name, value} = e.target;
+        setInitValues(prevValues => ({...prevValues, [name]: value}))
+    };
 
-        newNumberCode = (str + newNumberCode).slice(-lengthNeed);
+    // Hàm format lại dãy số đăng ký và độ dài dãy số cho phù hợp
+    // Sau đó tạo ra một loạt dãy số đăng ký cá biệt tương ứng với số lượng mong muốn
+    const formatAndCreateRegisCodes = () => {
+        // Tạo ra 1 dãy số 0 để đưa vào tạo mã mới
+        let strZero = '';
+        for (let i = 1; i <= initValues.NumberLength; i++)
+            strZero = strZero.concat('0');
+
+        let numberSeries = +initValues.NumberSeries;
+
+        if (initValues.AllRegisCode.length > initValues.AmountRegis)
+            initValues.AllRegisCode = [];
+
+        for (let i = 0; i < initValues.AmountRegis; i++) {
+            numberSeries = (strZero + (numberSeries)).slice(-initValues.NumberLength);
+            initValues.AllRegisCode[i] = initValues.Heading + '.' + numberSeries;
+            numberSeries++;
+        }
     };
 
     // Hàm hiển thị định đạng: ngày/tháng/năm
@@ -76,19 +113,65 @@ function ApproveCreate() {
                 <h3 className="approve-header">Phân phối tài liệu</h3>
             </div>
             <div className="row">
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Mã vạch</span>
-                    <input type="text" class="form-control" placeholder="VD: PM23.086594" required/>
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Phần đầu</span>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        name="Heading"
+                        value={initValues.Heading}
+                        onChange={(e) => changeToGenerateRegisCode(e)}
+                        placeholder="VD: PM23" 
+                        required/>
                 </div>
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Số đăng ký cá biệt</span>
-                    <input type="text" class="form-control" placeholder="VD: PM23.086594" readOnly/>
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Dãy số đăng ký</span>
+                    <input 
+                        name="NumberSeries"
+                        value={initValues.NumberSeries}
+                        onChange={(e) => changeToGenerateRegisCode(e)}
+                        type="number" 
+                        className="form-control" 
+                        placeholder="VD: 86594" required/>
+                </div>
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
+                    <input 
+                        type="number"
+                        name="NumberLength"
+                        value={initValues.NumberLength}
+                        onChange={(e) => changeToGenerateRegisCode(e)}
+                        className="form-control" 
+                        placeholder="Khuyến nghị: 6" 
+                        required/>
                 </div>
             </div>
             <div className="row">
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
-                    <select class="form-select">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Mã vạch</span>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        name="RegisCode"
+                        value={initValues.RegisCode}
+                        placeholder="VD: PM23.086594"
+                        readOnly/>
+                </div>
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Số ĐKCB</span>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        name="RegisCode"
+                        value={initValues.RegisCode}
+                        placeholder="VD: PM23.086594" 
+                        readOnly/>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})}>
                         {storeTypes.length > 0 ? (
                             storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
                         ) : (
@@ -96,15 +179,21 @@ function ApproveCreate() {
                         )}
                     </select>
                 </div>
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Số lượng</span>
-                    <input type="number" class="form-control" required/>
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Số lượng</span>
+                    <input 
+                        type="number" 
+                        name="AmountRegis"
+                        value={initValues.AmountRegis}
+                        onChange={(e) => changeToGenerateRegisCode(e)}
+                        className="form-control" 
+                        required/>
                 </div>
             </div>
             <div className="row">
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
-                    <select class="form-select">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
+                    <select className="form-select">
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -112,9 +201,9 @@ function ApproveCreate() {
                         )}
                     </select>
                 </div>
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Vị trí tạm thời</span>
-                    <select class="form-select">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Vị trí tạm thời</span>
+                    <select className="form-select">
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -124,9 +213,9 @@ function ApproveCreate() {
                 </div>
             </div>
             <div className="row">
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Trạng thái</span>
-                    <select class="form-select">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Trạng thái</span>
+                    <select className="form-select">
                         {statusDoc.length > 0 ? (
                                 statusDoc.map((status) => (<option value={status.id}>{status.Status}</option>))
                             ) : (
@@ -135,9 +224,9 @@ function ApproveCreate() {
                         }
                     </select>
                 </div>
-                <div class="col input-group">
-                    <span class="input-group-text" id="basic-addon1">Mã đơn hàng</span>
-                    <select class="form-select">
+                <div className="col input-group">
+                    <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
+                    <select className="form-select">
                         {listBills.length > 0 ? (
                                 listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
                             ) : (
@@ -148,13 +237,26 @@ function ApproveCreate() {
                 </div>
             </div>
             <div className="row">
-                <div class="input-group">
-                    <span class="input-group-text">Ghi chú</span>
-                    <textarea class="form-control"></textarea>
+                <div className="input-group">
+                    <span className="input-group-text">Ghi chú</span>
+                    <textarea className="form-control"></textarea>
+                </div>
+            </div>
+            <div className="row mb-3">
+                <div className="col">
+                    <label className="form-label">Dãy số đăng ký cá biệt sẽ được tạo:</label>
+                    <textarea 
+                        className="form-control"
+                        rows="5"
+                        value=  {
+                                initValues.AllRegisCode.map(regisCode => regisCode).join(' - ')}
+                        readOnly
+                    >
+                    </textarea>
                 </div>
             </div>
             <div className="row">
-                <div class="button-container">
+                <div className="button-container">
                     <button type="submit" className="btn btn-primary mb-3">Phân phối</button>
                 </div>
             </div>
