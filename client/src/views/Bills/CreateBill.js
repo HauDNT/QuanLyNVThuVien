@@ -40,11 +40,11 @@ function CreatBill() {
     }, [status]);
 
     const handleCreateBill = (e) => {
-        setStatus(true);
-
-        // Get data from form:
         e.preventDefault();
-
+        
+        setStatus(true);
+        
+        // Get data from form:
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 

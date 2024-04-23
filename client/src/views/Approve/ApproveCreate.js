@@ -6,7 +6,7 @@ import config from '../../constance.js';
 import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
-    const {id} = useParams();
+    const {id: bookId} = useParams();
     const [statusDoc, setStatusDoc] = useState([]);
     const [storeTypes, setStoreTypes] = useState([]);
     const [listRoom, setListRoom] = useState([]);
@@ -105,10 +105,35 @@ function ApproveCreate() {
         return dateString;
     };
 
+    const handleCreateApprove = (e) => {
+        e.preventDefault();
 
+        if (!initValues) {
+            toast.warning('Bạn phải điền đầy đủ thông tin!');
+            return;
+        }
+
+        const data = {
+            ...initValues,
+            UserId: +localStorage.getItem('id'),
+            BookId: +bookId,
+        };
+
+        // Send data to Server:
+        axios
+            .post(`http://${config.URL}/approve/create/:${bookId}`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            .then((res) => {
+                if (res.data.error) {
+                    toast.error(res.data.error);
+                }
+                else {
+                    toast.success(res.data.success);
+                }
+            });
+    };
 
     return (
-        <form method="POST" className="container container--approve-create">
+        <form method="POST" className="container container--approve-create" onSubmit={handleCreateApprove}>
             <div className="row">
                 <h3 className="approve-header">Phân phối tài liệu</h3>
             </div>
@@ -193,7 +218,7 @@ function ApproveCreate() {
             <div className="row">
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
-                    <select className="form-select">
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})}>
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -203,7 +228,7 @@ function ApproveCreate() {
                 </div>
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Vị trí tạm thời</span>
-                    <select className="form-select">
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, TempStore: +e.target.value})}>
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -215,7 +240,7 @@ function ApproveCreate() {
             <div className="row">
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Trạng thái</span>
-                    <select className="form-select">
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})}>
                         {statusDoc.length > 0 ? (
                                 statusDoc.map((status) => (<option value={status.id}>{status.Status}</option>))
                             ) : (
@@ -226,7 +251,7 @@ function ApproveCreate() {
                 </div>
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
-                    <select className="form-select">
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})}>
                         {listBills.length > 0 ? (
                                 listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
                             ) : (
@@ -238,7 +263,7 @@ function ApproveCreate() {
             </div>
             <div className="row">
                 <div className="input-group">
-                    <span className="input-group-text">Ghi chú</span>
+                    <span className="input-group-text" onChange={(e) => setInitValues({...initValues, Notes: e.target.value})}>Ghi chú</span>
                     <textarea className="form-control"></textarea>
                 </div>
             </div>
