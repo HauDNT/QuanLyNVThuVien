@@ -370,8 +370,9 @@ function EditCataloging() {
                         type="onclick" 
                         className="btn btn--catalog btn-primary mb-3">Cập nhật</button>
                     <Link
-                        to={`/approve/create/${id}`}
-                        className="btn btn--catalog btn-primary mb-3">Phân phối sách</Link>
+                        // to={`/approve/create/${id}`}
+                        to={`/approve/${id}`}
+                        className="btn btn--catalog btn-primary mb-3">Phân phối</Link>
                 </div>
             </form>
             </div>

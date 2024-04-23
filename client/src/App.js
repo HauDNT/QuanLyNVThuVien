@@ -80,7 +80,7 @@ function App() {
               <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
               <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
               <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
-              <Route path="approve/" element={<ApproveView/>}/>
+              <Route path="approve/:id" element={<ApproveView/>}/>
               <Route path="approve/create/:id" element={<ApproveCreate/>}/>
             </Route>
             <Route path="/*" exact element={<PageNotFound/>} />

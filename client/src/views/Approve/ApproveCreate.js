@@ -26,6 +26,19 @@ function ApproveCreate() {
         AllRegisCode: [],   // Các mã đăng ký cá biệt sẽ được đăng ký
     });
 
+    const handleClearInput = () => {
+        setInitValues({
+            ...initValues,
+            Heading: '',
+            NumberSeries: '',
+            NumberLength: '',
+            RegisCode: '',
+            AmountRegis: '',
+            Notes: '',
+            AllRegisCode: [],
+        })
+    };
+
     useEffect(() => {
         try {
             axios
@@ -66,7 +79,7 @@ function ApproveCreate() {
         const {Heading, NumberSeries, NumberLength, AmountRegis} = initValues;
         if (Heading && NumberLength && NumberSeries && AmountRegis) {
             const generateRegisCode = `${Heading}.${NumberSeries}`;
-            setInitValues(prevValues => ({...prevValues, RegisCode: generateRegisCode}));
+            setInitValues(prevValues => ({...prevValues, RegisCode: prevValues.AllRegisCode[0]}));
             formatAndCreateRegisCodes();
         }
     }, [initValues.Heading, initValues.NumberSeries, initValues.NumberLength, initValues.AmountRegis]);
@@ -119,15 +132,26 @@ function ApproveCreate() {
             BookId: +bookId,
         };
 
-        // Send data to Server:
+        // Kiểm tra trùng:
         axios
-            .post(`http://${config.URL}/approve/create/:${bookId}`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            .post(`http://${config.URL}/approve/findexist/`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
             .then((res) => {
+                if (res.data.success) {
+                    // Send data to Server:
+                    axios
+                        .post(`http://${config.URL}/approve/create/:${bookId}`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+                        .then((res) => {
+                            if (res.data.error) {
+                                toast.error(res.data.error);
+                            }
+                            else {
+                                toast.success(res.data.success);
+                                handleClearInput();
+                            }
+                        });
+                }
                 if (res.data.error) {
                     toast.error(res.data.error);
-                }
-                else {
-                    toast.success(res.data.success);
                 }
             });
     };
@@ -196,7 +220,8 @@ function ApproveCreate() {
             <div className="row">
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})}>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})} required>
+                        <option value="0" selected>Chọn thể loại lưu trữ</option>
                         {storeTypes.length > 0 ? (
                             storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
                         ) : (
@@ -218,7 +243,8 @@ function ApproveCreate() {
             <div className="row">
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})}>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})} required>
+                        <option value="0" selected>Chọn vị trí lưu trữ</option>
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -228,7 +254,8 @@ function ApproveCreate() {
                 </div>
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Vị trí tạm thời</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, TempStore: +e.target.value})}>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, TempStore: +e.target.value})} required>
+                        <option value="0" selected>Chọn vị trí lưu trữ</option>
                         {listRoom.length > 0 ? (
                             listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
                         ) : (
@@ -240,7 +267,8 @@ function ApproveCreate() {
             <div className="row">
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Trạng thái</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})}>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})} required>
+                        <option value="0" selected>Chọn trạng thái tài liệu</option>
                         {statusDoc.length > 0 ? (
                                 statusDoc.map((status) => (<option value={status.id}>{status.Status}</option>))
                             ) : (
@@ -251,7 +279,8 @@ function ApproveCreate() {
                 </div>
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})}>
+                    <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})} required>
+                        <option value="0" selected>Chọn mã đơn hàng</option>
                         {listBills.length > 0 ? (
                                 listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
                             ) : (
