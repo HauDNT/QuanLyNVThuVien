@@ -174,7 +174,7 @@ function ApproveCreate() {
                         required/>
                 </div>
                 <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Dãy số đăng ký</span>
+                    <span className="input-group-text" id="basic-addon1">Mã số đăng ký</span>
                     <input 
                         name="NumberSeries"
                         value={initValues.NumberSeries}

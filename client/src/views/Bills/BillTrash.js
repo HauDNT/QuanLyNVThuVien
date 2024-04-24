@@ -125,9 +125,9 @@ function BillTrash() {
 
     return (
         <div className="container-fluid bill-page">
-            <Link className="btn btn-outline-secondary btn-trash" to={`/bills/${type}`}>
+            <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
                 <FcUndo className="trash-icon"/> Quay lại
-            </Link>
+            </button>
             <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
             <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
             <table className="table table-dark">

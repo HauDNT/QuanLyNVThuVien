@@ -4,6 +4,7 @@ import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
 import '../../styles/CreateCataloging.scss';
+import HandleMarc21Data from "../../helper/HandleMarc21Data.js";
 
 function CreateCataloging() {
     const idUserCataloging = localStorage.getItem('id');
@@ -80,11 +81,6 @@ function CreateCataloging() {
         });
     };
 
-
-
-
-
-    
     useEffect(() => {
         try {
             axios
@@ -99,10 +95,29 @@ function CreateCataloging() {
         }
     }, [idUserCataloging]);
 
+    const handleMarc = async (e) => {
+        const marcFile = e.target.files[0];
+        const handleMarc21Data = new HandleMarc21Data();
+        const result = await handleMarc21Data.processData(marcFile);
+        toast.info(result);
+    }
+
     return (
         <div className="createCataloging-container">
         <h3 className="col-12 createCataloging-heading">Tạo biên mục mới</h3>
+        <div class="row input-file mb-3">
+        </div>
         <form method="POST" className="row createCataloging-form" onSubmit={handleCreateCataloging}>
+            <label for="formFile" class="form-label">Nhập từ file Marc</label>
+            <div className="input-group">
+                <input 
+                    class="form-control" 
+                    type="file" 
+                    id="formFile"
+                    onChange={(e) => handleMarc(e)}
+                    />
+            </div>
+            
             <label>Mã sách</label>
             <div class="input-group">
                 <span class="input-group-text">ISBN</span>
@@ -113,7 +128,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, ISBN: e.target.value})}
                     type="number"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -125,7 +139,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, DDC: e.target.value})}
                     type="number"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -138,7 +151,6 @@ function CreateCataloging() {
                     type="text"
                     className="form-control"
                     placeholder="Tên mã hóa của nhan đề chính"
-                    required
                 />
             </div>
             <label>Thông tin sách</label>
@@ -151,7 +163,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, MainTitle: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -186,7 +197,6 @@ function CreateCataloging() {
                     type="text"
                     className="form-control"
                     placeholder="Đối với tác phẩm chỉ có duy nhất một tác giả"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -222,7 +232,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, Topic: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="mb-3">
@@ -244,7 +253,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, Publisher: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -256,7 +264,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, PubPlace: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -268,7 +275,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, PubYear: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -280,7 +286,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, QuantityCopies: e.target.value})}
                     type="number"
                     className="form-control"
-                    required
                 />
             </div>
             <label>Mô tả vật lý</label>
@@ -293,7 +298,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, Size: e.target.value})}
                     type="text"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -305,7 +309,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, NumPages: e.target.value})}
                     type="number"
                     className="form-control"
-                    required
                 />
             </div>
             <div class="input-group">
@@ -317,7 +320,6 @@ function CreateCataloging() {
                     onChange={(e) => setInputValues({...inputValues, UnitPrice: e.target.value})}
                     type="number"
                     className="form-control"
-                    required
                 />
             </div>
             <label>Thông tin biên mục</label>
@@ -331,7 +333,6 @@ function CreateCataloging() {
                     placeholder="Load họ tên user vào trường input này"
                     value={fullnameUser}
                     readOnly
-                    required
                 />
             </div>
 

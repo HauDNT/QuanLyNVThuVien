@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const {Bills, BillTypes, sequelize} = require('../models');
+const {Bills, BillTypes, sequelize, Sequelize} = require('../models');
 
 class BillsController {
     // Lấy toàn bộ hóa đơn:
@@ -115,14 +115,13 @@ class BillsController {
 
     // Lấy danh sách đơn đã bị xóa mềm:
     async getBillSoftDeleted(req, res) {
-        const type = req.params.type;
+        const type = +req.params.type;
 
         try {
             const billDeleted = await Bills
                 .findAll({
                     attributes: [
                         'id', 
-                        'NumberBill', 
                         'NameBill',
                         'DateGenerateBill', 
                         'Supplier', 
@@ -130,15 +129,16 @@ class BillsController {
                     ],
                     include: [
                         {
-                            model: BillToType,
+                            model: BillTypes,
                             required: true,
+                            where: {id: Sequelize.col('BillTypeId')}
                         }
                     ],
                     where: {
                         deletedAt: {
                             [Op.ne]: null,
                         },
-                        '$BillToType.BillTypeId$': type,
+                        BillTypeId: type,
                     },
                     paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
                 });

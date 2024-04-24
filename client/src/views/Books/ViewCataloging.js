@@ -82,7 +82,7 @@ function ViewCataloging() {
                                             <div className="row">
                                                 <div className="amount">
                                                     <label>Tổng số:</label>&nbsp;
-                                                    <span>4</span>
+                                                    <span>{book.BooksRegisInfos.length}</span>
                                                 </div>
                                             </div>
                                         </div>

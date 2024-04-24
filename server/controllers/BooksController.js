@@ -25,7 +25,11 @@ class BooksController {
                     {
                         model: BooksRegisInfo,
                         required: true,
-                        where: { id: Sequelize.col('Books.id') }
+                        attributes: ['Status'],
+                        where: { 
+                            id: Sequelize.col('Books.id'),
+                            IndiRegis: 1,
+                        },
                     }
                 ],
             });

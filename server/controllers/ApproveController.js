@@ -21,7 +21,7 @@ class ApproveController {
             });
     
             if (isExist)
-                return res.json({error: `Đã tồn tại mã đăng ký ${allRegisCodes[i]}. Vui lòng thay đổi dãy mã đăng ký khác!`});
+                return res.json({error: `Đã tồn tại mã đăng ký ${allRegisCodes[i]}. Vui lòng thay đổi mã số đăng ký khác!`});
         };
     
         return res.json({success: 'Không có mã nào trùng!'});
@@ -38,17 +38,9 @@ class ApproveController {
         };
 
         try {
-            const resultFind = await BooksRegisInfo.findAll({
-                where: {
-                    IndiRegis: 0,
-                    BookId: dataApprove.BookId,
-                }
-            });
-
-            if (resultFind.length) {
-                // Cập nhật mã đăng ký đầu tiên vào bản ghi trống tìm được
-                await BooksRegisInfo.update({
-                    RegisCode: allRegisCodes[0],
+            for (let i = 0; i < allRegisCodes.length; i++) {
+                await BooksRegisInfo.create({
+                    RegisCode: allRegisCodes[i],
                     Status: 0,
                     IndiRegis: 1,
                     Notes: dataApprove.Notes,
@@ -58,35 +50,8 @@ class ApproveController {
                     RoomId: dataApprove.StorePlace,
                     StoreTypeId: dataApprove.StoreTypes,
                     StatusDocId: dataApprove.StatusDoc,
-                }, {
-                    where: {
-                        IndiRegis: 0,
-                        BookId: dataApprove.BookId,
-                    }
-                });
-
-                // Sau đó loại bỏ mã này ra khỏi dữ liệu
-                allRegisCodes.splice(0, 1);
-            }
-
-            // // Trường hợp 1: Sau khi loại bỏ thì ta tiếp tục insert những phần tử tiếp theo vào:
-            // // Trường hợp 2: Nếu không tìm thấy bản ghi trống thì tiếp tục tạo bản ghi mới:
-            if (allRegisCodes.length > 0) {
-                for (let i = 0; i < allRegisCodes.length; i++) {
-                    await BooksRegisInfo.create({
-                        RegisCode: allRegisCodes[i],
-                        Status: 0,
-                        IndiRegis: 1,
-                        Notes: dataApprove.Notes,
-                        BillId: dataApprove.BillId,
-                        BookId: dataApprove.BookId,
-                        UserId: dataApprove.UserId,
-                        RoomId: dataApprove.StorePlace,
-                        StoreTypeId: dataApprove.StoreTypes,
-                        StatusDocId: dataApprove.StatusDoc,
-                    })
-                };
-            }
+                })
+            };
 
             return res.json({success: 'Phân phối sách thành công!'});
         } catch (error) {
@@ -94,14 +59,19 @@ class ApproveController {
         }
     };
 
+    async getAll(req, res) {
+        const allApp = await BooksRegisInfo.findAll();
+        return res.json({allApp});
+    }
+
     // Xem phân phối của từng biên mục:
     async getApprove(req, res) {
-        const bookId = req.params.id;
+        const bookId = +req.params.bookId;
 
         try {
             const approve = await BooksRegisInfo.findAll({
                 where: {
-                    BookId: bookId
+                    BookId: bookId,
                 },
                 include: [
                     {
@@ -130,6 +100,7 @@ class ApproveController {
                     },
                 ],
                 attributes: [
+                    'id',
                     'RegisCode',
                     'createdAt',
                     'updatedAt',
@@ -141,6 +112,46 @@ class ApproveController {
             return res.json({error: 'Không thể tải lên phân phối!'});
         }
     };
+
+    async deleteApprove(req, res) {
+        try {
+            const approveId = req.params.id;
+
+            await BooksRegisInfo.destroy({
+                where: {
+                    id: approveId,
+                    IndiRegis: 1,
+                },
+                force: true,
+            });
+
+            return res.json({success: 'Xóa phân phối thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình xóa phân phối!'});
+        }
+    };
+
+    async acceptApprove(req, res) {
+        const bookId = +req.params.bookId;
+
+        try {
+            await BooksRegisInfo.update(
+                {Status: 1},
+                {
+                where: 
+                    {
+                        Status: 0,
+                        IndiRegis: 1,
+                        BookId: bookId,
+                    }
+                }
+            )
+    
+            return res.json({success: 'Phê duyệt thành công!'});
+        } catch (error) {
+            return res.json({error: 'Phê duyệt thất bại!'});
+        }
+    }
 }
 
 module.exports = new ApproveController();

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: true,
-            defaultValue: '',
+            defaultValue: null,
         },
     });
 

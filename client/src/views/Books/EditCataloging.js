@@ -93,8 +93,21 @@ function EditCataloging() {
     };
 
     // Hàm phê duyệt biên mục:
-    const approveCatalogItem = () => {
-        toast.info('Chức năng duyệt sẽ được phát triển sau khi hoàn thiện phần phân phối sách!');
+    const approveCatalogItem = (event) => {
+        event.preventDefault();
+
+        try {
+            axios
+                .patch(`http://${config.URL}/approve/accept/${id}`)
+                .then((res) => {
+                    if (res.data.success)
+                        toast.success(res.data.success);
+                    else 
+                        toast.error(res.data.error)
+                })
+        } catch (error) {
+            toast.error('Không thể duyệt biên mục!');
+        }
     };
 
     return (
@@ -362,7 +375,7 @@ function EditCataloging() {
 
                 <div className="col-12 mt-3 button-container">
                     <button 
-                        onClick={() => approveCatalogItem()}
+                        onClick={(e) => approveCatalogItem(e)}
                         type="button" 
                         className="btn btn--catalog btn-success mb-3">Duyệt</button>
                     <button 
@@ -370,7 +383,6 @@ function EditCataloging() {
                         type="onclick" 
                         className="btn btn--catalog btn-primary mb-3">Cập nhật</button>
                     <Link
-                        // to={`/approve/create/${id}`}
                         to={`/approve/${id}`}
                         className="btn btn--catalog btn-primary mb-3">Phân phối</Link>
                 </div>
