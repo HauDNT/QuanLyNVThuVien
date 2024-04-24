@@ -28,7 +28,7 @@ class BooksController {
                         attributes: ['Status'],
                         where: { 
                             id: Sequelize.col('Books.id'),
-                            IndiRegis: 1,
+                            // IndiRegis: 1,
                         },
                     }
                 ],

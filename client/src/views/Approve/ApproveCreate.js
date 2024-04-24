@@ -7,6 +7,7 @@ import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
     const {id: bookId} = useParams();
+    const [maxRegisCode, setMaxRegisCode] = useState();
     const [statusDoc, setStatusDoc] = useState([]);
     const [storeTypes, setStoreTypes] = useState([]);
     const [listRoom, setListRoom] = useState([]);
@@ -68,6 +69,12 @@ function ApproveCreate() {
                     setListBills(res.data.bills)
                 })
                 .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
+            axios
+                .get(`http://${config.URL}/approve/getmaxregiscode`)
+                .then((res) => {
+                    // setMaxRegisCode(res.data.code + 1)
+                    setInitValues({...initValues, NumberSeries: res.data.code + 1})
+                })
         } catch (error) {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;

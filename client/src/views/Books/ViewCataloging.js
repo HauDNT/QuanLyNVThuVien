@@ -72,17 +72,22 @@ function ViewCataloging() {
                                                 </div>
                                                 <div className="status">
                                                     <span>Trạng thái: </span>&nbsp;
-                                                    {book.BooksRegisInfos[0].Status === false ? (
-                                                        <span className="span--status status-0">Chưa duyệt</span>
-                                                    ) : (
-                                                        <span className="span--status status-1">Đã duyệt</span>
-                                                    )}
+                                                    {
+                                                        book.BooksRegisInfos && book.BooksRegisInfos.length > 1 ?
+                                                        (book.BooksRegisInfos[1].Status === false ? 
+                                                            (
+                                                                <span className="span--status status-0">Chưa duyệt</span>
+                                                            ) : (
+                                                                <span className="span--status status-1">Đã duyệt</span>
+                                                            )
+                                                        ) : (<span className="span--status status-0">Chưa duyệt</span>)
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="amount">
                                                     <label>Tổng số:</label>&nbsp;
-                                                    <span>{book.BooksRegisInfos.length}</span>
+                                                    <span>{book.BooksRegisInfos.length - 1}</span>
                                                 </div>
                                             </div>
                                         </div>

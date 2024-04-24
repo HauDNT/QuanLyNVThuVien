@@ -41,6 +41,7 @@ function Login() {
         `http://${config.URL}/users/login`,
         data
       )
+
       .then((res) => {
         if (res.data && res.data.error) {
           toast.error(res.data.error);
@@ -50,13 +51,6 @@ function Login() {
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
           localStorage.setItem('authenToken', res.data.authenToken);
-
-          setAuthenData ({
-            id: localStorage.getItem('id'), 
-            username: localStorage.getItem('username'), 
-            status: localStorage.getItem('status'), 
-            authenToken: localStorage.getItem('authenToken')
-          });
 
           navigator("/");
         }

@@ -3,7 +3,8 @@ const router = express.Router();
 const ApproveController = require('../controllers/ApproveController');
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 
-router.get('/getall', validToken, ApproveController.getAll);
+router.get('/getall', ApproveController.getAll);
+router.get('/getmaxregiscode', ApproveController.getMaxRegisCode);
 router.get('/get/:bookId', validToken, ApproveController.getApprove);
 router.post('/create/:id', validToken, ApproveController.createApprove);
 router.post('/findexist', validToken, ApproveController.findExist);

@@ -7,6 +7,7 @@ import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
     const {id} = useParams();
+    const [status, setStatus] = useState(false);
     const [statusLoadName, setStatusLoadName] = useState(false);
     const [fullname, setFullname] = useState('');
     const [infoCataloging, setInfoCataloging] = useState([]);
@@ -30,7 +31,7 @@ function EditCataloging() {
         } catch (error) {
             toast.error('Đã xảy ra lỗi tại máy chủ! Hãy thử lại sau ít phút...');
         }
-    }, []);
+    }, [status]);
 
     useEffect(() => {
         if (infoCataloging && infoCataloging.UserId && statusLoadName) {
@@ -100,8 +101,10 @@ function EditCataloging() {
             axios
                 .patch(`http://${config.URL}/approve/accept/${id}`)
                 .then((res) => {
-                    if (res.data.success)
+                    if (res.data.success) {
                         toast.success(res.data.success);
+                        setStatus(true);
+                    }
                     else 
                         toast.error(res.data.error)
                 })
@@ -367,17 +370,31 @@ function EditCataloging() {
                         type="text"
                         className="form-control"
                         placeholder="Load họ tên user vào trường input này"
-                        value={infoCataloging.BooksRegisInfos && infoCataloging.BooksRegisInfos.length > 0 ? (infoCataloging.BooksRegisInfos[0].Status === true ? 'Đã duyệt' : 'Chưa duyệt') : ''}
+                        value={infoCataloging.BooksRegisInfos && infoCataloging.BooksRegisInfos.length > 1 ? (infoCataloging.BooksRegisInfos[1].Status === true ? 'Đã duyệt' : 'Chưa duyệt') : 'Chưa duyệt'}
                         readOnly
                         required
                     />
                 </div>
 
                 <div className="col-12 mt-3 button-container">
-                    <button 
-                        onClick={(e) => approveCatalogItem(e)}
-                        type="button" 
-                        className="btn btn--catalog btn-success mb-3">Duyệt</button>
+                {infoCataloging.BooksRegisInfos && infoCataloging.BooksRegisInfos.length > 1 ? 
+                (
+                    infoCataloging.BooksRegisInfos[1].Status === false ? 
+                    (
+                        <button 
+                            onClick={(e) => approveCatalogItem(e)}
+                            type="button" 
+                            className="btn btn--catalog btn-success mb-3">Duyệt
+                        </button>
+                    ) 
+                    : 
+                    ''
+                ) 
+                : 
+                ''
+}
+
+
                     <button 
                         onClick={(e) => handleUpdateCataloging(e, inputChange)}
                         type="onclick" 

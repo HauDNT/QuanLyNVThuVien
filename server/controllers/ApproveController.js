@@ -151,7 +151,18 @@ class ApproveController {
         } catch (error) {
             return res.json({error: 'Phê duyệt thất bại!'});
         }
-    }
+    };
+
+    async getMaxRegisCode(req, res) {
+        try {
+            const maxRegisCode = await BooksRegisInfo.max('RegisCode');
+            const code = +maxRegisCode.slice(5);
+
+            return res.json({code})
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi tìm mã!'});
+        }
+    };
 }
 
 module.exports = new ApproveController();

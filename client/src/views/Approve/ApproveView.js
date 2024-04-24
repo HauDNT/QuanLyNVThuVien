@@ -110,7 +110,7 @@ function ApproveView() {
                         <th scope="col" className="table-dark text-center">STT</th>
                         <th scope="col" className="table-dark text-center">Mã ĐKCB</th>
                         <th scope="col" className="table-dark text-center">Vị trí</th>
-                        <th scope="col" className="table-dark text-center">Thể lại lưu trữ</th>
+                        <th scope="col" className="table-dark text-center">Thể loại lưu trữ</th>
                         <th scope="col" className="table-dark text-center">Trạng thái</th>
                         <th scope="col" className="table-dark text-center">Ngày tạo</th>
                         <th scope="col" className="table-dark text-center">Ngày cập nhật</th>
