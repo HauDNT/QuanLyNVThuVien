@@ -1,17 +1,23 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
+import { RoomContext } from "../../context/RoomContext.js";
+import { BillContext } from "../../context/BillContext.js";
+import { StatusDocContext } from "../../context/StatusDocsContext.js";
+import { StoreTypesContext } from "../../context/StoreTypesContext.js";
 import '../../styles/ApproveCreate.scss';
+
 
 function ApproveCreate() {
     const {id: bookId} = useParams();
     const [maxRegisCode, setMaxRegisCode] = useState();
-    const [statusDoc, setStatusDoc] = useState([]);
-    const [storeTypes, setStoreTypes] = useState([]);
-    const [listRoom, setListRoom] = useState([]);
-    const [listBills, setListBills] = useState([]);
+    const {listRooms} = useContext(RoomContext);
+    const {listBills} = useContext(BillContext);
+    const {statusDocs} = useContext(StatusDocContext);
+    const {storeTypes} = useContext(StoreTypesContext);
+
     const [initValues, setInitValues] = useState({
         Heading: '',        // Phần đầu của mã. VD: PM23
         NumberSeries: '',   // Phần số của mã. VD: 85643
@@ -43,36 +49,8 @@ function ApproveCreate() {
     useEffect(() => {
         try {
             axios
-                .get(`http://${config.URL}/statusdoc`)
-                .then((res) => {
-                    setStatusDoc(res.data.types)
-                })
-                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
-
-            axios
-                .get(`http://${config.URL}/storetypes`)
-                .then((res) => {
-                    setStoreTypes(res.data.types)
-                })
-                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
-
-            axios
-                .get(`http://${config.URL}/rooms/all`)
-                .then((res) => {
-                    setListRoom(res.data.rooms)
-                })
-                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
-
-            axios
-                .get(`http://${config.URL}/bills/all`)
-                .then((res) => {
-                    setListBills(res.data.bills)
-                })
-                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
-            axios
                 .get(`http://${config.URL}/approve/getmaxregiscode`)
                 .then((res) => {
-                    // setMaxRegisCode(res.data.code + 1)
                     setInitValues({...initValues, NumberSeries: res.data.code + 1})
                 })
         } catch (error) {
@@ -229,11 +207,13 @@ function ApproveCreate() {
                     <span className="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
                     <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})} required>
                         <option value="0" selected>Chọn thể loại lưu trữ</option>
-                        {storeTypes.length > 0 ? (
-                            storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
-                        ) : (
-                            <option value="0" selected>Không nhận được dữ liệu</option>
-                        )}
+                        {storeTypes ? 
+                            (
+                                storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
+                            ) : (
+                                <option value="0" selected>Không nhận được dữ liệu</option>
+                            )
+                        }
                     </select>
                 </div>
                 <div className="col input-group">
@@ -252,22 +232,14 @@ function ApproveCreate() {
                     <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
                     <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})} required>
                         <option value="0" selected>Chọn vị trí lưu trữ</option>
-                        {listRoom.length > 0 ? (
-                            listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
-                        ) : (
-                            <option value="0" selected>Không nhận được dữ liệu</option>
-                        )}
-                    </select>
-                </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Vị trí tạm thời</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, TempStore: +e.target.value})} required>
-                        <option value="0" selected>Chọn vị trí lưu trữ</option>
-                        {listRoom.length > 0 ? (
-                            listRoom.map((room) => (<option value={room.id}>{room.RoomName}</option>))
-                        ) : (
-                            <option value="0" selected>Không nhận được dữ liệu</option>
-                        )}
+                        {
+                            listRooms ? 
+                            (
+                                listRooms.map(room => (<option value={room.id}>{room.RoomName}</option>))
+                            ) : (
+                                <option value=''>Không có dữ liệu</option>
+                            )
+                        }
                     </select>
                 </div>
             </div>
@@ -276,8 +248,8 @@ function ApproveCreate() {
                     <span className="input-group-text" id="basic-addon1">Trạng thái</span>
                     <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})} required>
                         <option value="0" selected>Chọn trạng thái tài liệu</option>
-                        {statusDoc.length > 0 ? (
-                                statusDoc.map((status) => (<option value={status.id}>{status.Status}</option>))
+                        {statusDocs.length > 0 ? (
+                                statusDocs.map((status) => (<option value={status.id}>{status.Status}</option>))
                             ) : (
                                 <option value="0" selected>Không nhận được dữ liệu</option>
                             )
@@ -288,7 +260,8 @@ function ApproveCreate() {
                     <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
                     <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})} required>
                         <option value="0" selected>Chọn mã đơn hàng</option>
-                        {listBills.length > 0 ? (
+                        {listBills ? 
+                            (
                                 listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
                             ) : (
                                 <option value="0" selected>Không nhận được dữ liệu</option>

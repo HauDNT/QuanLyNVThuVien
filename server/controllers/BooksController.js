@@ -97,7 +97,7 @@ class BooksController {
         const catalogingInfo = req.body;
 
         if (!catalogingInfo) {
-            res.json({error: 'Không thể tạo biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+            res.json({error: 'Không thể cập nhật biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
             return;
         }
 

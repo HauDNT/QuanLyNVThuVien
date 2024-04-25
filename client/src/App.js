@@ -5,6 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenContext } from "./helper/AuthenContext";
 import config from "../src/constance.js";
+
+// CONTEXTS:  
+import ProviderContext from "./context/ProviderContext.js";
+
+// COMPONENTS:
 import Home from "./views/Home.js";
 import Login from "./views/Authenticate/Login.js";
 // import Register from "./views/Authenticate/Register";
@@ -64,30 +69,32 @@ function App() {
 
 
       <AuthenContext.Provider value={{ authenData, setAuthenData }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" exact element={<Login/>} />
-            {/* <Route path="/register" exact element={<Register />} /> */}
-            <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
-            <Route path="/" element={<Home/>}>
-              <Route path="users/" element={<UserAccounts/>} />
-              <Route path="users/create" element={<CreateAccountUser/>} />
-              <Route path="users/edit/:id" element={<EditUser/>} />
-              <Route path="users/trash" element={<AccountsTrash/>} />
-              <Route path="bills/createbill" element={<CreatBill/>}/>
-              <Route path="bills/:type" element={<Bills/>} />
-              <Route path="bills/trash/:type" element={<BillTrash/>}/>
-              <Route path="bills/trash/:type" element={<BillTrash/>}/>
-              <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
-              <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
-              <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
-              <Route path="approve/:id" element={<ApproveView/>}/>
-              <Route path="approve/create/:id" element={<ApproveCreate/>}/>
-              <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
-            </Route>
-            <Route path="/*" exact element={<PageNotFound/>} />
-          </Routes>
-        </BrowserRouter>
+        <ProviderContext>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" exact element={<Login/>} />
+              {/* <Route path="/register" exact element={<Register />} /> */}
+              <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
+              <Route path="/" element={<Home/>}>
+                <Route path="users/" element={<UserAccounts/>} />
+                <Route path="users/create" element={<CreateAccountUser/>} />
+                <Route path="users/edit/:id" element={<EditUser/>} />
+                <Route path="users/trash" element={<AccountsTrash/>} />
+                <Route path="bills/createbill" element={<CreatBill/>}/>
+                <Route path="bills/:type" element={<Bills/>} />
+                <Route path="bills/trash/:type" element={<BillTrash/>}/>
+                <Route path="bills/trash/:type" element={<BillTrash/>}/>
+                <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
+                <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
+                <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
+                <Route path="approve/:id" element={<ApproveView/>}/>
+                <Route path="approve/create/:id" element={<ApproveCreate/>}/>
+                <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
+              </Route>
+              <Route path="/*" exact element={<PageNotFound/>} />
+            </Routes>
+          </BrowserRouter>
+        </ProviderContext>
       </AuthenContext.Provider>
 
       <ToastContainer

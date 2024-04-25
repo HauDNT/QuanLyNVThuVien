@@ -67,11 +67,14 @@ function EditCataloging() {
 
     // Hàm nhận biết dữ liệu khác với dữ liệu gốc, nếu khác thì cho vào State inputChange để đem đi update:
     const whatIsChanging = (e) => {
+        // Đưa dữ liệu thay đổi vào state để cập nhật lại giao diện:
         const {name, value} = e.target;
         setInfoCataloging({...infoCataloging, [name]: value});
 
+        // Nếu dữ liệu này khác với state gốc thì đưa vô state inputChange để lưu name và value
         if (infoCataloging[name] !== undefined && infoCataloging[name] !== inputChange[name]) 
             setInputChange({...inputChange, [name]: value});
+        // Nếu thay đổi mà không khác gì so với bản gốc thì remove name và value của input ra khỏi state inputChange
         else if (infoCataloging[name] !== undefined) {
             const updateInputChange = {...inputChange};
             delete updateInputChange[name];
@@ -402,7 +405,7 @@ function EditCataloging() {
 
                     <button 
                         onClick={(e) => handleUpdateCataloging(e, inputChange)}
-                        type="onclick" 
+                        type="button" 
                         className="btn btn--catalog btn-primary mb-3">Cập nhật</button>
                     <Link
                         to={`/approve/${id}`}

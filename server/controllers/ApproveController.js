@@ -187,13 +187,53 @@ class ApproveController {
     async getInfoAnApprove(req, res) {
         try {
             const approveId = +req.params.approveId;
-            const info = await BooksRegisInfo.findAll({where: {id: approveId}});
+            const info = await BooksRegisInfo.findOne({where: {id: approveId}});
             
             return res.json({info});
         } catch (error) {
             return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
         }
-    }
+    };
+
+    // Cập nhật thông tin 1 phân phối:
+    async updateApprove(req, res) {
+        const approveId = +req.params.approveId;
+        const approveInfo = req.body;
+
+        if (!approveInfo) {
+            res.json({error: 'Không thể cập nhật biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+            return;
+        }
+        
+        // Kiểm tra mã trùng nếu có sửa mã:
+        if (approveInfo.RegisCode) {
+            const existCode = await BooksRegisInfo.findOne({where: {RegisCode: approveInfo.RegisCode}});
+            if (existCode)
+                return res.json({error: 'Đã tồn tại mã đăng ký này!'});
+        }
+
+        try {
+            const fieldsChange = Object.keys(approveInfo);
+            const valuesChange = Object.values(approveInfo);
+        
+            // Tạo một đối tượng chứa tất cả các trường và giá trị cần cập nhật
+            let attributesUpdating = {};
+            for (let i = 0; i < fieldsChange.length; i++) {
+                attributesUpdating[fieldsChange[i]] = valuesChange[i];
+            }
+
+            // Thêm trường Status = 0 để thiết lập chưa duyệt sau khi cập nhật:
+            attributesUpdating.Status = 0;
+        
+            // Thực hiện cập nhật trong cơ sở dữ liệu
+            await BooksRegisInfo.update(attributesUpdating, { where: { id: approveId } });
+        
+            return res.json({ success: 'Đã cập nhật thông tin thành công!' });
+        } catch (error) {
+            console.error(error);
+            return res.json({ error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!' });
+        }
+    };
 }
 
 module.exports = new ApproveController();

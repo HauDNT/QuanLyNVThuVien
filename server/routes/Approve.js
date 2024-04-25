@@ -10,7 +10,8 @@ router.get('/isnotaccept/:bookId', ApproveController.isNotAccept);
 router.get('/get/:bookId', validToken, ApproveController.getApprove);
 router.post('/create/:id', validToken, ApproveController.createApprove);
 router.post('/findexist', validToken, ApproveController.findExist);
-router.delete('/delete/:id', validToken, ApproveController.deleteApprove);
+router.put('/update/:approveId', validToken, ApproveController.updateApprove);
 router.patch('/accept/:bookId', ApproveController.acceptApprove);
+router.delete('/delete/:id', validToken, ApproveController.deleteApprove);
 
 module.exports = router;
