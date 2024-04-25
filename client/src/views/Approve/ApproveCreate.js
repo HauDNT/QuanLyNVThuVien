@@ -51,19 +51,19 @@ function ApproveCreate() {
             axios
                 .get(`http://${config.URL}/approve/getmaxregiscode`)
                 .then((res) => {
-                    setInitValues({...initValues, NumberSeries: res.data.code + 1})
+                    setMaxRegisCode(res.data.code + 1)
+                    setInitValues({...initValues, NumberSeries: maxRegisCode});
                 })
         } catch (error) {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, []);
+    }, [maxRegisCode]);
 
     // Tạo mã mới nếu có thay đổi thông tin về: Mã đầu, dãy số đăng ký, độ dài dãy số, số lượng
     useEffect(() => {
         const {Heading, NumberSeries, NumberLength, AmountRegis} = initValues;
         if (Heading && NumberLength && NumberSeries && AmountRegis) {
-            const generateRegisCode = `${Heading}.${NumberSeries}`;
             setInitValues(prevValues => ({...prevValues, RegisCode: prevValues.AllRegisCode[0]}));
             formatAndCreateRegisCodes();
         }
@@ -132,6 +132,7 @@ function ApproveCreate() {
                             else {
                                 toast.success(res.data.success);
                                 handleClearInput();
+                                setMaxRegisCode(0);
                             }
                         });
                 }

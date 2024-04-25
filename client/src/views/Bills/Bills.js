@@ -108,7 +108,7 @@ function Bills() {
                         <th scope="col" className="table-dark text-center"> Mã đơn </th>
                         <th scope="col" className="table-dark text-center"> Tên đơn </th>
                         <th scope="col" className="table-dark text-center"> Thời gian tạo </th>
-                        <th scope="col" className="table-dark text-center"> Xem danh sách </th>
+                        <th scope="col" className="table-dark text-center"> Xem chi tiết </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,9 @@ function Bills() {
                                 <td className="table-light"> {bill.NameBill} </td>
                                 <td className="table-light"> {formatAndDisplayDatetime(bill.DateGenerateBill)} </td>
                                 <td className="table-light">
-                                    <FcViewDetails className="info-icon table-icon"/>
+                                    <Link to={`/bills/detail/${bill.id}`}>
+                                        <FcViewDetails className="info-icon table-icon"/>
+                                    </Link>
                                 </td>
                             </tr>
                         ))) : (

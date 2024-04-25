@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const {Bills, BillTypes, sequelize, Sequelize} = require('../models');
+const {Bills, BillTypes, Books, BooksRegisInfo, sequelize, Sequelize} = require('../models');
 
 class BillsController {
     // Lấy toàn bộ hóa đơn:
@@ -179,6 +179,40 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
         }
+    };
+
+    /* Lấy chi tiết thông tin hóa đơn, bao gồm: 
+        + Danh sách các sách thuộc hóa đơn này.
+        + Số lượng mỗi quyển sách.
+        + Đơn giá mỗi quyển sách.
+    */
+    async getBillDetail(req, res) {
+        const billId = req.params.id;
+
+        const detail = await BooksRegisInfo.findAll(
+            {
+                attributes: [
+                    'BookId',
+                    [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
+                ],
+                include: [
+                    {
+                        model: Books,
+                        // attributes: ['MainTitle', 'UnitPrice'],
+                        where: {id: Sequelize.col('BooksRegisInfo.BookId')},
+                    },
+                    {
+                        model: Bills,
+                        // attributes: ['Discount'],
+                        where: {id: Sequelize.col('BooksRegisInfo.BillId')},
+                    }
+                ],
+                where: {BillId: billId, Status: 1},
+                group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
+            }
+        );
+
+        res.json({detail});
     };
 }
 

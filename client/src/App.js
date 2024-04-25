@@ -19,6 +19,7 @@ import CreateAccountUser from "./views/Users/CreateAccount.js";
 import AccountsTrash from "./views/Users/AccountsTrash.js";
 import EditUser from "./views/Users/EditUser.js";
 import Bills from "./views/Bills/Bills.js";
+import BillDetail from "./views/Bills/BillDetail.js";
 import CreatBill from "./views/Bills/CreateBill.js";
 import BillTrash from "./views/Bills/BillTrash.js";
 import ViewCataloging from "./views/Books/ViewCataloging.js";
@@ -81,6 +82,7 @@ function App() {
                 <Route path="users/edit/:id" element={<EditUser/>} />
                 <Route path="users/trash" element={<AccountsTrash/>} />
                 <Route path="bills/createbill" element={<CreatBill/>}/>
+                <Route path="bills/detail/:billId" element={<BillDetail/>}/>
                 <Route path="bills/:type" element={<Bills/>} />
                 <Route path="bills/trash/:type" element={<BillTrash/>}/>
                 <Route path="bills/trash/:type" element={<BillTrash/>}/>

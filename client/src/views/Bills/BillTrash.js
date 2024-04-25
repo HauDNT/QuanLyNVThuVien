@@ -160,7 +160,7 @@ function BillTrash() {
                         ))) : (
                         <tr>
                             <td className="table-light text-center" colSpan={6}>
-                                Chưa có hóa đơn nào thuộc loại này được tạo
+                                Chưa có hóa đơn nào bị xóa gần đây
                             </td>
                         </tr>
                         )}
