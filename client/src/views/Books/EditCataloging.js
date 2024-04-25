@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
-    const {id} = useParams();
-    const [status, setStatus] = useState(false);
-    const [statusLoadName, setStatusLoadName] = useState(false);
-    const [fullname, setFullname] = useState('');
-    const [infoCataloging, setInfoCataloging] = useState([]);
-    const [inputChange, setInputChange] = useState([]);
+    const {id} = useParams();                                       // Id của sách 
+    const [status, setStatus] = useState(false);                    // Dùng để kiểm soát khi false thì hiện nút duyệt, khi true thì ẩn nút duyệt
+    const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại
+    const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
+    const [infoCataloging, setInfoCataloging] = useState([]);       // Lấy thông tin biên mục
+    const [inputChange, setInputChange] = useState([]);             // Ghi nhận sự thay đổi khi thay đổi nội dung ô input bất kỳ.
+    const [isNotAccept, setIsNotAccept] = useState(0);              // Kiểm soát xem biên mục hiện tại có bao nhiêu phân phối chưa được duyệt.
 
     useEffect(() => {
         try {
@@ -44,6 +45,18 @@ function EditCataloging() {
             });
         }
     }, [statusLoadName]);
+
+    useEffect(() => {
+        try {
+            axios
+                .get(`http://${config.URL}/approve/isnotaccept/${id}`)
+                .then((res) => {
+                    setIsNotAccept(res.data.amount);
+                })
+        } catch (error) {
+            toast.error('Số lượng phân mục chưa xác định được!');
+        }
+    });
 
     const formatAndDisplayDatetime = (dateString) => {
         const date = new Date(dateString);
@@ -377,23 +390,15 @@ function EditCataloging() {
                 </div>
 
                 <div className="col-12 mt-3 button-container">
-                {infoCataloging.BooksRegisInfos && infoCataloging.BooksRegisInfos.length > 1 ? 
-                (
-                    infoCataloging.BooksRegisInfos[1].Status === false ? 
-                    (
-                        <button 
-                            onClick={(e) => approveCatalogItem(e)}
-                            type="button" 
-                            className="btn btn--catalog btn-success mb-3">Duyệt
-                        </button>
-                    ) 
-                    : 
-                    ''
-                ) 
-                : 
-                ''
-}
-
+                    {
+                        isNotAccept > 0 ? (
+                            <button 
+                                onClick={(e) => approveCatalogItem(e)}
+                                type="button" 
+                                className="btn btn--catalog btn-success mb-3">Duyệt
+                            </button>
+                        ) : ''
+                    }
 
                     <button 
                         onClick={(e) => handleUpdateCataloging(e, inputChange)}

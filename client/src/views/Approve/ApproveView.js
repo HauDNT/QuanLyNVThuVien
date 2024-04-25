@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
@@ -97,10 +97,10 @@ function ApproveView() {
             <button 
                 className="btn btn-outline-secondary" 
                 onClick={() => window.history.back()}>Quay lại</button>
+            <button className="btn btn-danger btn-delete" onClick={() => handleDeleteApprove()}>Xóa</button>
             <Link 
                 className="btn btn-primary btn-create" 
                 to={`/approve/create/${bookId}`}>Tạo phân phối</Link>
-            <button className="btn btn-danger btn-delete" onClick={() => handleDeleteApprove()}>Xóa</button>
             <table className="table table-dark">
                 <thead className="thead-dark">
                     <tr>
@@ -127,7 +127,9 @@ function ApproveView() {
                                         <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={approve.id} onClick={(e) => handleCheck(e)}/>
                                     </td>
                                     <td className="table-light"></td>
-                                    <td className="table-light">{approve.RegisCode}</td>
+                                    <td className="table-light">
+                                        <Link className="link-update-approve" to={`/approve/update/${approve.id}`}>{approve.RegisCode}</Link>
+                                    </td>
                                     <td className="table-light">{approve.Room.RoomName}</td>
                                     <td className="table-light">{approve.StoreType.NameType}</td>
                                     <td className="table-light">{approve.StatusDoc.Status}</td>

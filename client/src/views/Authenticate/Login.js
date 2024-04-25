@@ -47,10 +47,20 @@ function Login() {
           toast.error(res.data.error);
         } 
         else {
+          // Phải set vào local storage để khi refresh trang thì data không bị mất:
           localStorage.setItem('id', res.data.id);
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
           localStorage.setItem('authenToken', res.data.authenToken);
+
+          // Lưu dữ liệu từ local storage vào trong AuthenContext -> authenData để kiểm soát trạng thái đăng nhập của người dùng
+          // trong toàn ứng dụng:
+          setAuthenData ({
+            id: localStorage.getItem('id'), 
+            username: localStorage.getItem('username'), 
+            status: localStorage.getItem('status'), 
+            authenToken: localStorage.getItem('authenToken')
+          });
 
           navigator("/");
         }

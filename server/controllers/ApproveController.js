@@ -59,10 +59,11 @@ class ApproveController {
         }
     };
 
+    // Lấy toàn bộ phân phối:
     async getAll(req, res) {
         const allApp = await BooksRegisInfo.findAll();
         return res.json({allApp});
-    }
+    };
 
     // Xem phân phối của từng biên mục:
     async getApprove(req, res) {
@@ -113,6 +114,7 @@ class ApproveController {
         }
     };
 
+    // Xóa phân phối:
     async deleteApprove(req, res) {
         try {
             const approveId = req.params.id;
@@ -131,6 +133,7 @@ class ApproveController {
         }
     };
 
+    // Hàm duyệt phân phối:
     async acceptApprove(req, res) {
         const bookId = +req.params.bookId;
 
@@ -153,6 +156,7 @@ class ApproveController {
         }
     };
 
+    // Hàm lấy số đăng ký lớn nhất hiện tại:
     async getMaxRegisCode(req, res) {
         try {
             const maxRegisCode = await BooksRegisInfo.max('RegisCode');
@@ -163,6 +167,33 @@ class ApproveController {
             return res.json({error: 'Đã xảy ra lỗi khi tìm mã!'});
         }
     };
+
+    // Hàm tìm xem có bao nhiêu mã chưa được duyệt trong phân phối của sách có id:
+    async isNotAccept(req, res) {
+        const bookId = +req.params.bookId;
+
+        const isNotAccept = await BooksRegisInfo.findAll({
+            where: {
+                IndiRegis: 1,
+                Status: 0,
+                BookId: bookId,
+            }
+        });
+
+        return res.json({amount: isNotAccept.length});
+    };
+
+    // Lấy thông tin của 1 phân phối:
+    async getInfoAnApprove(req, res) {
+        try {
+            const approveId = +req.params.approveId;
+            const info = await BooksRegisInfo.findAll({where: {id: approveId}});
+            
+            return res.json({info});
+        } catch (error) {
+            return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
+        }
+    }
 }
 
 module.exports = new ApproveController();
