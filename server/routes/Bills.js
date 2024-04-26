@@ -9,6 +9,7 @@ router.get('/gettypes', BillsController.getTypes);
 router.get('/detail/:id', BillsController.getBillDetail);
 router.get('/trash/:type', BillsController.getBillSoftDeleted);
 router.get('/:type', BillsController.getBillOfType);
+router.post('/search', validToken, BillsController.searchBills);
 router.post('/createbill', validToken, BillsController.createBill);
 router.delete('/deletebill/:id', validToken, BillsController.deleteBill);
 router.patch('/trash/restore/:id', BillsController.restoreReachBill);

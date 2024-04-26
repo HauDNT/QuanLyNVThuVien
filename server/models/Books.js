@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             defaultValue: '',
         },
-        Editors: { // Nhiều tác giả
+        Editors: { // Phụ trách biên mục, xuất bản
             type: DataTypes.STRING(1000),
             charset: 'utf8mb4',
             allowNull: true,

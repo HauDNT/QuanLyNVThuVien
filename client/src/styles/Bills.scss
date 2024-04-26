@@ -1,7 +1,10 @@
 .bill-page {
-    .btn--bill-page {
-        float: right;
-        margin-bottom: 0.75em;
-        margin-left: 10px;
+    .btn-container {
+        text-align: right;
+        
+        .btn {
+            margin-left: 10px;
+            min-width: 5em;
+        }
     }
 }

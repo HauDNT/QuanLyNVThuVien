@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
+import Searchbar from "../Components/Searchbar.js";
 import '../../styles/ViewCataloging.scss';
 
 function ViewCataloging() {
@@ -23,21 +24,33 @@ function ViewCataloging() {
             });
     }, []);
 
+    const handleSearchResultChange = (result) => {
+        setListCataloging(result);
+    };
+
     return (
         <>
-            <div className="row">
-                <div class="col-lg-12 view-cataloging--search input-group mb-3">
-                    <select name="" id="">
-                        <option value="">Tiêu đề</option>
-                        <option value="">Mã số đăng ký</option>
-                        <option value="">Mã phân loại</option>
-                    </select>
-                    <input type="text" class="form-control" placeholder="Tìm kiếm..." aria-describedby="button-addon2"/>
-                    <button class="btn btn-primary" type="button" id="button-addon2">Tìm kiếm</button>
-                </div>
-            </div>
+            <Searchbar
+                searchType="books"  // "Books" là model của "Cataloging" (biên mục)
+                placeholder="Chọn hạng mục và nhập để tìm kiếm"
+                categories={[
+                    {value: "*", name: "Tất cả"},
+                    {value: "ISBN", name: "Mã ISBN"},
+                    {value: "EncryptName", name: "Tên mã hóa"},
+                    {value: "DDC", name: "Mã phân loại DDC"},
+                    {value: "MainTitle", name: "Tiêu đề chính"},
+                    {value: "Author", name: "Tác giả"},
+                    {value: "Publisher", name: "Nhà xuất bản"},
+                    {value: "PubPlace", name: "Nơi xuất bản"},
+                    {value: "PubYear", name: "Năm xuất bản"},
+                    {value: "UnitPrice", name: "Đơn giá"},
+                    {value: "True", name: "Đã duyệt"},
+                    {value: "False", name: "Chưa duyệt"},
+                ]}
+                orderChoice=''
+                onSearchResultChange={handleSearchResultChange}     // Gọi một callback function để khi có kết quả tìm kiếm thì cập nhật lại listCataloging
+            />
             <div className="view-cataloging--container">
-                <>
                 <h4 className="col-12 view-cataloging--header">Danh sách biên mục</h4>
                 {listCataloging && listCataloging.length > 0 ? (
                     listCataloging.map((catalog) => 
@@ -113,7 +126,6 @@ function ViewCataloging() {
                         </div>
                     </div>
                 )}
-                </>
             </div>
         </>
     )

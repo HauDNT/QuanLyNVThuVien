@@ -67,6 +67,49 @@ class BooksController {
         }
     };
 
+    // Lấy về các biên mục đã duyệt:
+    async accessCataloging(req, res) {
+        const accessCatalog = await Books.findAll(
+            {
+                include: [
+                    {
+                        model: BooksRegisInfo,
+                        required: true,
+                        attributes: ['Status'],
+                        where: { 
+                            id: Sequelize.col('Books.id'),
+                            Status: 1,
+                        },
+                    }
+                ],
+            }
+        )
+
+        return res.json(accessCatalog);
+    };
+
+    // Lấy về các biên mục chưa duyệt:
+    async notAccessCataloging(req, res) {
+        const accessCatalog = await Books.findAll(
+            {
+                include: [
+                    {
+                        model: BooksRegisInfo,
+                        required: true,
+                        attributes: ['Status'],
+                        where: { 
+                            id: Sequelize.col('Books.id'),
+                            Status: 0,
+                            // IndiRegis: 1,
+                        },
+                    }
+                ],
+            }
+        )
+
+        return res.json(accessCatalog);
+    };
+
     // Tạo một biên mục mới:
     async createCataloging(req, res) {
         const catalogingInfo = req.body;
@@ -115,6 +158,33 @@ class BooksController {
             return res.json({success: 'Đã cập nhật thông tin thành công!'});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    // Tìm kiếm theo hạng mục và giá trị:
+    async searchCataloging(req, res) {
+        const {selectedCategory, searchValue} = req.body;
+
+        try {
+            const result = await Books.findAll(
+                {
+                    where: {[selectedCategory]: searchValue},
+                    include: [
+                        {
+                            model: BooksRegisInfo,
+                            required: true,
+                            attributes: ['Status'],
+                            where: { 
+                                id: Sequelize.col('Books.id'),
+                            },
+                        }
+                    ],
+                }
+            );
+
+            return res.json(result);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
     };
 }

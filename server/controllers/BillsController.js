@@ -198,12 +198,12 @@ class BillsController {
                 include: [
                     {
                         model: Books,
-                        // attributes: ['MainTitle', 'UnitPrice'],
+                        attributes: ['MainTitle', 'UnitPrice', 'Author'],
                         where: {id: Sequelize.col('BooksRegisInfo.BookId')},
                     },
                     {
                         model: Bills,
-                        // attributes: ['Discount'],
+                        attributes: ['Discount'],
                         where: {id: Sequelize.col('BooksRegisInfo.BillId')},
                     }
                 ],
@@ -214,6 +214,22 @@ class BillsController {
 
         res.json({detail});
     };
+
+    async searchBills(req, res) {
+        const {selectedCategory, searchValue, orderChoice} = req.body;
+
+        try {
+            const result = await Bills.findAll(
+                {
+                    where: {[selectedCategory]: searchValue, BillTypeId: orderChoice},
+                }
+            );
+
+            return res.json(result);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
+        }
+    }
 }
 
 module.exports = new BillsController();
