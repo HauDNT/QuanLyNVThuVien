@@ -234,6 +234,204 @@ class ApproveController {
             return res.json({ error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!' });
         }
     };
+
+    // Tìm kiếm trong phân phối (Searchbar):
+    async searchInApprove(req, res) {
+        let result;
+        const {selectedCategory, searchValue, orderChoice} = req.body;
+
+        try {
+            /* 
+            Vì một phân phối chứa nhiều thông tin, bao gồm thông tin của model BookRegisInfo lẫn các models khác
+            nên ta chia ra thành các case khác nhau tương ứng để xử lý nếu cần truy vấn đến model khác, 
+            else cuối cùng là dành cho các dữ liệu có sẵn để truy vấn trong BookRegisInfo
+            */
+
+            if (selectedCategory === "Room") {
+                let roomId = await Rooms.findOne({
+                    attributes: ['id'],
+                    where: {RoomName: searchValue},
+                });
+
+                result = await BooksRegisInfo.findAll({
+                    where: {
+                        RoomId: roomId.id,
+                        IndiRegis: 1,
+                        BookId: orderChoice,
+                    },
+                    include: [
+                        {
+                            model: Users,
+                            require: true,
+                            where: {id: Sequelize.col('UserId')},
+                            attributes: ['username'],
+                        },
+                        {
+                            model: StatusDoc,
+                            require: true,
+                            where: {id: Sequelize.col('StatusDocId')},
+                            attributes: ['Status'],
+                        },
+                        {
+                            model: StoreTypes,
+                            require: true,
+                            where: {id: Sequelize.col('StoreTypeId')},
+                            attributes: ['NameType'],
+                        },
+                        {
+                            model: Rooms,
+                            require: true,
+                            where: {id: Sequelize.col('RoomId')},
+                            attributes: ['RoomName'],
+                        },
+                    ],
+                    attributes: [
+                        'id',
+                        'RegisCode',
+                        'createdAt',
+                        'updatedAt',
+                    ]
+                });
+            }
+            else if (selectedCategory === "StoreType") {
+                let storeTypeId = await StoreTypes.findOne({
+                    attributes: ['id'],
+                    where: {NameType: searchValue}
+                });
+
+                result = await BooksRegisInfo.findAll({
+                    where: {
+                        StoreTypeId: storeTypeId.id,
+                        IndiRegis: 1,
+                        BookId: orderChoice,
+                    },
+                    include: [
+                        {
+                            model: Users,
+                            require: true,
+                            where: {id: Sequelize.col('UserId')},
+                            attributes: ['username'],
+                        },
+                        {
+                            model: StatusDoc,
+                            require: true,
+                            where: {id: Sequelize.col('StatusDocId')},
+                            attributes: ['Status'],
+                        },
+                        {
+                            model: StoreTypes,
+                            require: true,
+                            where: {id: Sequelize.col('StoreTypeId')},
+                            attributes: ['NameType'],
+                        },
+                        {
+                            model: Rooms,
+                            require: true,
+                            where: {id: Sequelize.col('RoomId')},
+                            attributes: ['RoomName'],
+                        },
+                    ],
+                    attributes: [
+                        'id',
+                        'RegisCode',
+                        'createdAt',
+                        'updatedAt',
+                    ]
+                });
+            }
+            else if (selectedCategory === "StatusDoc") {
+                let statusId = await StatusDoc.findOne({
+                    attributes: ['id'],
+                    where: {Status: searchValue}
+                });
+
+                result = await BooksRegisInfo.findAll({
+                    where: {
+                        StatusDocId: statusId.id, 
+                        IndiRegis: 1,
+                        BookId: orderChoice,
+                    },
+                    include: [
+                        {
+                            model: Users,
+                            require: true,
+                            where: {id: Sequelize.col('UserId')},
+                            attributes: ['username'],
+                        },
+                        {
+                            model: StatusDoc,
+                            require: true,
+                            where: {id: Sequelize.col('StatusDocId')},
+                            attributes: ['Status'],
+                        },
+                        {
+                            model: StoreTypes,
+                            require: true,
+                            where: {id: Sequelize.col('StoreTypeId')},
+                            attributes: ['NameType'],
+                        },
+                        {
+                            model: Rooms,
+                            require: true,
+                            where: {id: Sequelize.col('RoomId')},
+                            attributes: ['RoomName'],
+                        },
+                    ],
+                    attributes: [
+                        'id',
+                        'RegisCode',
+                        'createdAt',
+                        'updatedAt',
+                    ]
+                });
+            }
+            else {
+                result = await BooksRegisInfo.findAll({
+                    where: {
+                        [selectedCategory]: searchValue,
+                        BillId: orderChoice,
+                    },
+                    include: [
+                        {
+                            model: Users,
+                            require: true,
+                            where: {id: Sequelize.col('UserId')},
+                            attributes: ['username'],
+                        },
+                        {
+                            model: StatusDoc,
+                            require: true,
+                            where: {id: Sequelize.col('StatusDocId')},
+                            attributes: ['Status'],
+                        },
+                        {
+                            model: StoreTypes,
+                            require: true,
+                            where: {id: Sequelize.col('StoreTypeId')},
+                            attributes: ['NameType'],
+                        },
+                        {
+                            model: Rooms,
+                            require: true,
+                            where: {id: Sequelize.col('RoomId')},
+                            attributes: ['RoomName'],
+                        },
+                    ],
+                    attributes: [
+                        'id',
+                        'RegisCode',
+                        'createdAt',
+                        'updatedAt',
+                    ]
+                })
+            }
+
+            return res.json(result);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
+        }
+
+    };
 }
 
 module.exports = new ApproveController();

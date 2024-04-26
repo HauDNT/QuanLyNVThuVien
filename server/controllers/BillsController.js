@@ -229,7 +229,44 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
-    }
+    };
+
+    // Hàm tìm kiếm thông tin sách trong một hóa đơn:
+    async searchBooksOfBill(req, res) {
+        const {selectedCategory, searchValue, orderChoice} = req.body;
+
+        try {
+            const detail = await BooksRegisInfo.findAll(
+                {
+                    attributes: [
+                        'BookId',
+                        [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
+                    ],
+                    include: [
+                        {
+                            model: Books,
+                            attributes: ['MainTitle', 'UnitPrice', 'Author'],
+                            where: {
+                                id: Sequelize.col('BooksRegisInfo.BookId'),
+                                [selectedCategory]: searchValue,
+                            },
+                        },
+                        {
+                            model: Bills,
+                            attributes: ['Discount'],
+                            where: {id: Sequelize.col('BooksRegisInfo.BillId')},
+                        }
+                    ],
+                    where: {BillId: [orderChoice], Status: 1},
+                    group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
+                }
+            );
+
+            return res.json(detail);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
+        }
+    };
 }
 
 module.exports = new BillsController();

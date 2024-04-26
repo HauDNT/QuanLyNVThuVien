@@ -1,13 +1,47 @@
-const {Users, UsersInfo} = require('../models');       
+const {
+    Users, 
+    UsersInfo,
+    Rooms,
+    Positions,
+    Sequelize,
+} = require('../models');       
 const bcrypt = require('bcrypt');           // Using Bcrypt to hash and check password
 const {sign} = require('jsonwebtoken');     // Using Json Web Token
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 
 class UsersController {
     // Tìm tất cả tài khoản người dùng (username, password):
     async findAllUsers(req, res) {
         try {
-            const allUsers = await Users.findAll();
+            const allUsers = await UsersInfo.findAll({
+                include: [
+                    {
+                        model: Users,
+                        required: true,
+                        where: {id: Sequelize.col('UserId')},
+                        attributes: ['id', 'Username'],
+                    },
+                    {
+                        model: Rooms,
+                        required: true,
+                        where: {id: Sequelize.col('RoomId')},
+                        attributes: ['RoomName'],
+                    },
+                    {
+                        model: Positions,
+                        required: true,
+                        where: {id: Sequelize.col('PositionId')},
+                        attributes: ['PositionName'],
+                    }
+                ],
+                attributes: [
+                    'id',
+                    'Fullname',
+                    'Email',
+                    'PhoneNumber',
+                    'Avatar',
+                ]
+            });
             res.json({allUsers: allUsers});
         } catch (errorMessage) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});

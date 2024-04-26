@@ -3,6 +3,7 @@ import {useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
+import Searchbar from "../Components/Searchbar.js";
 import '../../styles/ApproveView.scss';
 
 function ApproveView() {
@@ -14,7 +15,7 @@ function ApproveView() {
     useEffect(() => {
         try {
             axios
-                .get(`http://${config.URL}/approve/get/${bookId}`, {headers: {authenToken: localStorage.getItem('authenToken')}})
+                .get(`http://${config.URL}/approve/get/${bookId}`)
                 .then((res) => {
                     setListApproveInfo(res.data.approve);
                 });
@@ -92,63 +93,81 @@ function ApproveView() {
         );
     };
 
+    const handleSearchResultChange = (result) => {
+        setListApproveInfo(result);
+    };
+
     return (
-        <div className="container">
-            <button 
-                className="btn btn-outline-secondary" 
-                onClick={() => window.history.back()}>Quay lại</button>
-            <button className="btn btn-danger btn-delete" onClick={() => handleDeleteApprove()}>Xóa</button>
-            <Link 
-                className="btn btn-primary btn-create" 
-                to={`/approve/create/${bookId}`}>Tạo phân phối</Link>
-            <table className="table table-dark">
-                <thead className="thead-dark">
-                    <tr>
-                        <th scope="col" className="table-dark text-center">
-                            <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
-                        </th>
-                        <th scope="col" className="table-dark text-center">STT</th>
-                        <th scope="col" className="table-dark text-center">Mã ĐKCB</th>
-                        <th scope="col" className="table-dark text-center">Vị trí</th>
-                        <th scope="col" className="table-dark text-center">Thể loại lưu trữ</th>
-                        <th scope="col" className="table-dark text-center">Trạng thái</th>
-                        <th scope="col" className="table-dark text-center">Ngày tạo</th>
-                        <th scope="col" className="table-dark text-center">Ngày cập nhật</th>
-                        <th scope="col" className="table-dark text-center">Người thực hiện</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        listApproveInfo.length > 0 ?
-                        (
-                            listApproveInfo.map((approve) => (
-                                <tr key={approve.id} className="text-center">
-                                    <td className="table-light">
-                                        <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={approve.id} onClick={(e) => handleCheck(e)}/>
+        <>
+            <Searchbar
+                searchType="approve"
+                placeholder="Chọn hạng mục và nhập để tìm kiếm"
+                categories={[
+                    // value là cột của model
+                    {value: "*", name: "Tất cả"},
+                    {value: "RegisCode", name: "Mã ĐKCB"},
+                    {value: "Room", name: "Vị trí lưu trữ"},
+                    {value: "StoreType", name: "Thể loại lưu trữ"},
+                    {value: "StatusDoc", name: "Trạng thái tài liệu"},
+                ]}
+                onSearchResultChange={handleSearchResultChange}  
+                orderChoice={bookId}
+            />
+            <div className="approve-page">
+                <button 
+                    className="btn btn-outline-secondary" 
+                    onClick={() => window.history.back()}>Quay lại</button>
+                <button className="btn btn-danger btn-delete" onClick={() => handleDeleteApprove()}>Xóa</button>
+                <Link 
+                    className="btn btn-primary btn-create" 
+                    to={`/approve/create/${bookId}`}>Tạo phân phối</Link>
+                <table className="table table-dark">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th scope="col" className="table-dark text-center">
+                                <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
+                            </th>
+                            <th scope="col" className="table-dark text-center">Mã ĐKCB</th>
+                            <th scope="col" className="table-dark text-center">Vị trí lưu trữ</th>
+                            <th scope="col" className="table-dark text-center">Thể loại lưu trữ</th>
+                            <th scope="col" className="table-dark text-center">Trạng thái tài liệu</th>
+                            <th scope="col" className="table-dark text-center">Ngày tạo</th>
+                            <th scope="col" className="table-dark text-center">Ngày cập nhật</th>
+                            <th scope="col" className="table-dark text-center">Người thực hiện</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            listApproveInfo.length > 0 ?
+                            (
+                                listApproveInfo.map((approve) => (
+                                    <tr key={approve.id} className="text-center">
+                                        <td className="table-light">
+                                            <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={approve.id} onClick={(e) => handleCheck(e)}/>
+                                        </td>
+                                        <td className="table-light">
+                                            <Link className="link-update-approve" to={`/approve/update/${approve.id}`}>{approve.RegisCode}</Link>
+                                        </td>
+                                        <td className="table-light">{approve.Room.RoomName}</td>
+                                        <td className="table-light">{approve.StoreType.NameType}</td>
+                                        <td className="table-light">{approve.StatusDoc.Status}</td>
+                                        <td className="table-light">{formatAndDisplayDatetime(approve.createdAt)}</td>
+                                        <td className="table-light">{formatAndDisplayDatetime(approve.updatedAt)}</td>
+                                        <td className="table-light">{approve.User.username}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td className="table-light text-center" colSpan={8}>
+                                        Chưa có phân phối nào được tạo
                                     </td>
-                                    <td className="table-light"></td>
-                                    <td className="table-light">
-                                        <Link className="link-update-approve" to={`/approve/update/${approve.id}`}>{approve.RegisCode}</Link>
-                                    </td>
-                                    <td className="table-light">{approve.Room.RoomName}</td>
-                                    <td className="table-light">{approve.StoreType.NameType}</td>
-                                    <td className="table-light">{approve.StatusDoc.Status}</td>
-                                    <td className="table-light">{formatAndDisplayDatetime(approve.createdAt)}</td>
-                                    <td className="table-light">{formatAndDisplayDatetime(approve.updatedAt)}</td>
-                                    <td className="table-light">{approve.User.username}</td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td className="table-light text-center" colSpan={8}>
-                                    Chưa có phân phối nào được tạo
-                                </td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </table>
-        </div>
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </>
     );
 };
 
