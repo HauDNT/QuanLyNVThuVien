@@ -23,6 +23,7 @@ const approveRouter = require('./routes/Approve');
 const storetypesRouter = require('./routes/Storetypes');
 const statusdocRouter = require('./routes/Statusdoc');
 const searchRouter = require('./routes/Search');
+const barcodeRouter = require('./routes/Barcode');
 
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
@@ -35,6 +36,7 @@ app.use('/approve', approveRouter);
 app.use('/storetypes', storetypesRouter);
 app.use('/statusdoc', statusdocRouter);
 app.use('/search', searchRouter);
+app.use('/barcode', barcodeRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {

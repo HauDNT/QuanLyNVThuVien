@@ -246,6 +246,74 @@ class UsersController {
             return res.json({error: 'Đã xảy ra lỗi khi xóa tài khoản. Vui lòng thử lại sau.'})
         }
     };
-}
+
+    // Hàm tìm kiếm thông tin trên Searchbar:
+    async searchUser(req, res) {
+        const {selectedCategory, searchValue} = req.body;
+        let includeModels = [
+            {
+                model: Users,
+                require: true,
+                where: {id: Sequelize.col('UserId')},
+                attributes: ['Username'],
+            },
+            {
+                model: Positions,
+                require: true,
+                where: {id: Sequelize.col('PositionId')},
+                attributes: ['PositionName'],
+            },
+            {
+                model: Rooms,
+                require: true,
+                where: {id: Sequelize.col('RoomId')},
+                attributes: ['RoomName'],
+            },
+        ];
+
+        let whereCondition = {};
+
+        try {
+            if (selectedCategory === "Room") {
+                let roomId = await Rooms.findOne({
+                    attributes: ['id'],
+                    where: {RoomName: searchValue},
+                });
+                whereCondition.RoomId = roomId.id;
+            } else if (selectedCategory === "Position") {
+                let positionId = await Positions.findOne({
+                    attributes: ['id'],
+                    where: {PositionName: searchValue}
+                });
+                whereCondition.PositionId = positionId.id;
+            } else if (selectedCategory === "Username") {
+                let userId = await Users.findOne({
+                    attributes: ['id'],
+                    where: {Username: searchValue}
+                });
+                whereCondition.UserId = userId.id;
+            } else {
+                whereCondition[selectedCategory] = searchValue;
+            }
+
+            let result = await UsersInfo.findAll({
+                where: whereCondition,
+                include: includeModels,
+                attributes: [
+                    'id',
+                    'Fullname',
+                    'Birthday',
+                    'Email',
+                    'PhoneNumber',
+                    'Avatar',
+                ]
+            });
+
+            return res.json(result);
+        } catch (error) {
+            return res.json({error: 'Thông tin tìm kiếm không hợp lệ!'});
+        }
+    }
+};
 
 module.exports = new UsersController();

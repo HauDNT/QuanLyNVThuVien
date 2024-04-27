@@ -64,15 +64,17 @@ function ApproveCreate() {
     useEffect(() => {
         const {Heading, NumberSeries, NumberLength, AmountRegis} = initValues;
         if (Heading && NumberLength && NumberSeries && AmountRegis) {
-            setInitValues(prevValues => ({...prevValues, RegisCode: prevValues.AllRegisCode[0]}));
-            formatAndCreateRegisCodes();
+            formatAndCreateRegisCodes();    // Cập nhật lại thông tin vừa thay đổi và tạo một dãy mã mới
+            
+            setInitValues(prevValues => ({...prevValues, RegisCode: prevValues.AllRegisCode[0]}));  
+            // Cập nhật lại biến RegisCode là mã số đầu tiên vừa được tạo mới trong mảng AllRegisCode với mục đích hiển thị mẫu cho người dùng xem
         }
     }, [initValues.Heading, initValues.NumberSeries, initValues.NumberLength, initValues.AmountRegis]);
 
     // Cập nhật giá trị mới cho input thay đổi tương ứng:
     const changeToGenerateRegisCode = (e) => {
         const {name, value} = e.target;
-        setInitValues(prevValues => ({...prevValues, [name]: value}))
+        setInitValues(prevValues => ({...prevValues, [name]: value}));
     };
 
     // Hàm format lại dãy số đăng ký và độ dài dãy số cho phù hợp
@@ -103,6 +105,7 @@ function ApproveCreate() {
         return dateString;
     };
 
+    // Hàm tạo mã đăng ký:
     const handleCreateApprove = (e) => {
         e.preventDefault();
 
