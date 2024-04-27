@@ -31,7 +31,9 @@ function SideBar() {
                     <MenuItem component={<Link to="/book/cataloging/create"/>}>Tạo mới</MenuItem>
                     <MenuItem component={<Link to="/book/cataloging/all"/>}>Danh sách biên mục</MenuItem>
                 </SubMenu>
-                <MenuItem component={<Link to="/"/>}>Item 2</MenuItem>
+                <SubMenu label="Công cụ">
+                    <MenuItem component={<Link to="/barcode"/>}>Tạo mã Barcode 128</MenuItem>
+                </SubMenu>
             </Menu>
         </Sidebar>
     );

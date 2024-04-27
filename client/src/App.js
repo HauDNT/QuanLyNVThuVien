@@ -10,6 +10,7 @@ import config from "../src/constance.js";
 import ProviderContext from "./context/ProviderContext.js";
 
 // COMPONENTS:
+import CreateBarCode from "./views/CreateBarCode.js";
 import Home from "./views/Home.js";
 import Login from "./views/Authenticate/Login.js";
 // import Register from "./views/Authenticate/Register";
@@ -77,13 +78,14 @@ function App() {
               {/* <Route path="/register" exact element={<Register />} /> */}
               <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
               <Route path="/" element={<Home/>}>
-                <Route path="users/" element={<UserAccounts/>} />
-                <Route path="users/create" element={<CreateAccountUser/>} />
-                <Route path="users/edit/:id" element={<EditUser/>} />
-                <Route path="users/trash" element={<AccountsTrash/>} />
+                <Route path="barcode" element={<CreateBarCode/>}/>
+                <Route path="users/" element={<UserAccounts/>}/>
+                <Route path="users/create" element={<CreateAccountUser/>}/>
+                <Route path="users/edit/:id" element={<EditUser/>}/>
+                <Route path="users/trash" element={<AccountsTrash/>}/>
                 <Route path="bills/createbill" element={<CreatBill/>}/>
                 <Route path="bills/detail/:billId" element={<BillDetail/>}/>
-                <Route path="bills/:type" element={<Bills/>} />
+                <Route path="bills/:type" element={<Bills/>}/>
                 <Route path="bills/trash/:type" element={<BillTrash/>}/>
                 <Route path="bills/trash/:type" element={<BillTrash/>}/>
                 <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
@@ -93,7 +95,7 @@ function App() {
                 <Route path="approve/create/:id" element={<ApproveCreate/>}/>
                 <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
               </Route>
-              <Route path="/*" exact element={<PageNotFound/>} />
+              <Route path="/*" exact element={<PageNotFound/>}/>
             </Routes>
           </BrowserRouter>
         </ProviderContext>

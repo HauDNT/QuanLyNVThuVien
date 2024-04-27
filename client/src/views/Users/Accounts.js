@@ -95,17 +95,12 @@ function Users() {
                 placeholder="Chọn hạng mục và nhập để tìm kiếm"
                 categories={[
                     {value: "*", name: "Tất cả"},
-                    {value: "Username", name: "Mã ISBN"},
-                    {value: "EncryptName", name: "Tên mã hóa"},
-                    {value: "DDC", name: "Mã phân loại DDC"},
-                    {value: "MainTitle", name: "Tiêu đề chính"},
-                    {value: "Author", name: "Tác giả"},
-                    {value: "Publisher", name: "Nhà xuất bản"},
-                    {value: "PubPlace", name: "Nơi xuất bản"},
-                    {value: "PubYear", name: "Năm xuất bản"},
-                    {value: "UnitPrice", name: "Đơn giá"},
-                    {value: "True", name: "Đã duyệt"},
-                    {value: "False", name: "Chưa duyệt"},
+                    {value: "Username", name: "Username"},
+                    {value: "Fullname", name: "Họ và tên"},
+                    {value: "Email", name: "Email"},
+                    {value: "PhoneNumber", name: "Số điện thoại"},
+                    {value: "Room", name: "Phòng"},
+                    {value: "Position", name: "Vai trò"},
                 ]}
                 orderChoice=''
                 onSearchResultChange={handleSearchResultChange}
@@ -155,7 +150,7 @@ function Users() {
                                 </tr>
                             ))) : (
                                 <tr>
-                                    <td className="table-light text-center" colSpan={6}>
+                                    <td className="table-light text-center" colSpan={9}>
                                         Chưa có tài khoản nào được tạo
                                     </td>
                                 </tr>

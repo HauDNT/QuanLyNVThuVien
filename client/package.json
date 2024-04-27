@@ -13,6 +13,7 @@
     "lodash.debounce": "^4.0.8",
     "marc4js": "^0.0.10",
     "react": "^18.2.0",
+    "react-barcode": "^1.5.1",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-dropdown": "^1.11.0",
@@ -24,6 +25,7 @@
     "reactstrap": "^9.2.2",
     "sass": "^1.72.0",
     "stream": "^0.0.2",
+    "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
   },

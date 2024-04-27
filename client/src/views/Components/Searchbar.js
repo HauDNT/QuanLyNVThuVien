@@ -40,7 +40,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                     }
                     else if (selectedCategory === "True") {
                         axios
-                            .get(`http://${config.URL}/${searchType}/getAccessCatalog`, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .get(`http://${config.URL}/books/getAccessCatalog`, {headers: { authenToken: localStorage.getItem('authenToken')}})
                             .then((res) => {
                                 if (!res.data.error) {
                                     setResult(res.data);
@@ -54,7 +54,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                     }
                     else if (selectedCategory === "False") {
                         axios
-                            .get(`http://${config.URL}/${searchType}/getNotAccessCatalog`, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .get(`http://${config.URL}/books/getNotAccessCatalog`, {headers: { authenToken: localStorage.getItem('authenToken')}})
                             .then((res) => {
                                 if (!res.data.error) {
                                     const filterData = res.data.filter((result) => result.BooksRegisInfos.length > 1)
@@ -77,7 +77,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                     }
                     else {
                         axios
-                            .post(`http://${config.URL}/${searchType}/search`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .post(`http://${config.URL}/books/search`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
                             .then((res) => {
                                 if (!res.data.error) {
                                     setResult(res.data);
@@ -96,7 +96,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
     
                     if (selectedCategory === "*") {
                         axios
-                            .get(`http://${config.URL}/${searchType}/${orderChoice}`)
+                            .get(`http://${config.URL}/bills/${orderChoice}`)
                             .then((res) => {
                                 if (res.data && res.data.receiveBills) {
                                     setResult(res.data.receiveBills);
@@ -109,7 +109,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                     }
                     else {
                         axios
-                            .post(`http://${config.URL}/${searchType}/searchBills`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .post(`http://${config.URL}/bills/searchBills`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
                             .then((res) => {
                                 if (!res.data.error) {
                                     setResult(res.data);
@@ -161,7 +161,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
 
                     if (selectedCategory === "*") {
                         axios
-                            .get(`http://${config.URL}/${searchType}/get/${orderChoice}`)
+                            .get(`http://${config.URL}/approve/get/${orderChoice}`)
                             .then((res) => {
                                 if (!res.data.error) {
                                     setResult(res.data.approve);
@@ -175,7 +175,42 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                     }
                     else {
                         axios
-                            .post(`http://${config.URL}/${searchType}/searchInApprove`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .post(`http://${config.URL}/approve/searchInApprove`, data, {headers: { authenToken: localStorage.getItem('authenToken')}})
+                            .then((res) => {
+                                if (!res.data.error) {
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
+                                }
+                                else toast.error(res.data.error);
+                            })
+                            .catch((error) => {
+                                toast.error('Không thể tải dữ liệu lên!');
+                            });
+                    }
+                    break;
+                case 'users':
+                    data = {searchValue, selectedCategory};
+
+                    if (selectedCategory === "*") {
+                        axios
+                            .get(`http://${config.URL}/users`)
+                            .then((res) => {
+                                if (!res.data.error) {
+                                    setResult(res.data.allUsers);
+                                    onSearchResultChange(res.data.allUsers);
+                                }
+                                else toast.error(res.data.error);
+                            })
+                            .catch((error) => {
+                                toast.error('Không thể tải dữ liệu lên!');
+                            });
+                    }
+                    else {
+                        axios
+                            .post(`http://${config.URL}/users/search`, 
+                                    data, 
+                                    {headers: { authenToken: localStorage.getItem('authenToken')}}
+                            )
                             .then((res) => {
                                 if (!res.data.error) {
                                     setResult(res.data);
