@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
@@ -6,6 +6,7 @@ import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import {FcViewDetails} from "react-icons/fc";
 import {FaEdit, FaTimesCircle, FaTrash } from "react-icons/fa";
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Bills.scss";
 
 function Bills() {
@@ -13,6 +14,10 @@ function Bills() {
     const [listBills, setListBills] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
+    
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
 
     useEffect(() => {
         axios
@@ -113,18 +118,22 @@ function Bills() {
             />
 
             <div className="bill-page">
-                <div className="row">
-                    <div className="col-3">
-                        <Link className="btn btn-outline-secondary btn-trash" to={`/bills/trash/${type}`}>
-                            <FaTrash className="trash-icon"/> Đơn đã xóa
-                        </Link>
+            {
+                idRole === 1 || idRole === 2 ? (
+                    <div className="row">
+                        <div className="col-3">
+                            <Link className="btn btn-outline-secondary btn-trash" to={`/bills/trash/${type}`}>
+                                <FaTrash className="trash-icon"/> Đơn đã xóa
+                            </Link>
+                        </div>
+                        <div className="col-9 btn-container">
+                            <button className="btn btn-danger btn--bill-page" onClick={() => handleDeteleBill()}>Xóa</button>
+                            <Link className="btn btn-primary btn--bill-page" to="/bills/">Sửa</Link>
+                            <Link className="btn btn-success btn--bill-page" to="/bills/createbill">Tạo đơn mới</Link>
+                        </div>
                     </div>
-                    <div className="col-9 btn-container">
-                        <button className="btn btn-danger btn--bill-page" onClick={() => handleDeteleBill()}>Xóa</button>
-                        <Link className="btn btn-primary btn--bill-page" to="/bills/">Sửa</Link>
-                        <Link className="btn btn-success btn--bill-page" to="/bills/createbill">Tạo đơn mới</Link>
-                    </div>
-                </div>
+                ) : null
+            }
                 <table className="table table-dark">
                     <thead className="thead-dark">
                         <tr>

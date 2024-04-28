@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Bills.scss";
 
 function BillTrash() {
@@ -11,7 +12,11 @@ function BillTrash() {
     const [listBill, setListBill] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
-
+    
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
     useEffect(() => {
         axios
             .get(`http://${config.URL}/bills/trash/${type}`)
@@ -128,7 +133,11 @@ function BillTrash() {
             <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
                 <FcUndo className="trash-icon"/> Quay lại
             </button>
-            <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
+            {
+                idRole === 1 ? (
+                    <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
+                ) : null
+            }
             <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
             <table className="table table-dark">
                 <thead className="thead-dark">

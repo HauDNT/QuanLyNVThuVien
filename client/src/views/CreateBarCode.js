@@ -22,7 +22,7 @@ function CreateBarCode() {
         setInitValues(prevValues => ({...prevValues, [name]: value}));
     };
 
-    // Debouncing cập nhật giá trị firstCode, lastCode sau khi ngưng nhập 1s
+    // Debouncing cập nhật giá trị firstCode, lastCode sau khi ngưng nhập 0.5s
     const debounceUpdateValue = useCallback(debounce((firstCode, lastCode) => findListRegisCodes(firstCode, lastCode), 500), []);   
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function CreateBarCode() {
             for (let codeNumber = firstCodeNumber + 1; codeNumber < lastCodeNumber; codeNumber++) {
                 let newCode = heading + '.' + (strZero + codeNumber).slice(-6);
                 newListCode.push(newCode); // Thêm mã mới vào mảng tạm thời
-            }
+            };
         
             // Sau khi hoàn tất đưa các mã trong phạm vi ta đưa mã cuối cùng vào:
             newListCode.push(lastCode);

@@ -1,14 +1,18 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import {Link} from "react-router-dom";
 import config from '../../constance.js';
-import {FcInfo} from "react-icons/fc";
-import {FaEdit, FaTimesCircle, FaTrash } from "react-icons/fa";
+import {FaEdit, FaTrash } from "react-icons/fa";
 import Searchbar from "../Components/Searchbar.js";
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Users.scss";
 
 function Users() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+
     const [listUsers, setListUsers] = useState([]);
     const [userSelected, setUserSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
@@ -106,10 +110,16 @@ function Users() {
                 onSearchResultChange={handleSearchResultChange}
             />
             <div className="container-fluid user-page">
-                <Link className="btn btn-outline-secondary btn-trash" to={`/users/trash`}>
-                    <FaTrash className="trash-icon"/> Tài khoản đã xóa
-                </Link>
-                <Link className="btn btn-danger btn--account-page" onClick={() => handleDeleteAccount()}>Xóa</Link>
+                {
+                    idRole === 1 ? (
+                        <>
+                            <Link className="btn btn-outline-secondary btn-trash" to={`/users/trash`}>
+                                <FaTrash className="trash-icon"/> Tài khoản đã xóa
+                            </Link>
+                            <Link className="btn btn-danger btn--account-page" onClick={() => handleDeleteAccount()}>Xóa</Link>
+                        </>
+                    ) : null
+                }
                 <Link className="btn btn-success btn--account-page" to="/users/create">Tạo tài khoản mới</Link>
                 <table className="table table-dark">
                     <thead className="thead-dark">

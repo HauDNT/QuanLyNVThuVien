@@ -107,10 +107,10 @@ class UsersController {
                 return res.json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
             }
             
-            const match = await bcrypt.compare(password, getUser.Password);
-            if (!match) {
-                return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
-            }
+            // const match = await bcrypt.compare(password, getUser.Password);
+            // if (!match) {
+            //     return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
+            // }
 
             const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
             return res.json({

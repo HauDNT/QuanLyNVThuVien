@@ -20,10 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Role.associate = (models) => {
-        Role.hasMany(models.Role_Permissions, {
-            onUpdate: 'cascade',
-            onDelete: 'cascade',
-        });
         Role.hasMany(models.User_Roles, {
             onUpdate: 'cascade',
             onDelete: 'cascade',

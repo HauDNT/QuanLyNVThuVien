@@ -8,6 +8,7 @@ import config from "../src/constance.js";
 
 // CONTEXTS:  
 import ProviderContext from "./context/ProviderContext.js";
+import {UserRoleProvider} from "./context/UserRoleContext.js";
 
 // COMPONENTS:
 import CreateBarCode from "./views/CreateBarCode.js";
@@ -30,6 +31,7 @@ import ApproveView from "./views/Approve/ApproveView.js";
 import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
 import PageNotFound from "./views/PageNotFound";
+
 import "./styles/App.scss";
 
 function App() {
@@ -71,34 +73,36 @@ function App() {
 
 
       <AuthenContext.Provider value={{ authenData, setAuthenData }}>
-        <ProviderContext>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" exact element={<Login/>} />
-              {/* <Route path="/register" exact element={<Register />} /> */}
-              <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
-              <Route path="/" element={<Home/>}>
-                <Route path="barcode" element={<CreateBarCode/>}/>
-                <Route path="users/" element={<UserAccounts/>}/>
-                <Route path="users/create" element={<CreateAccountUser/>}/>
-                <Route path="users/edit/:id" element={<EditUser/>}/>
-                <Route path="users/trash" element={<AccountsTrash/>}/>
-                <Route path="bills/createbill" element={<CreatBill/>}/>
-                <Route path="bills/detail/:billId" element={<BillDetail/>}/>
-                <Route path="bills/:type" element={<Bills/>}/>
-                <Route path="bills/trash/:type" element={<BillTrash/>}/>
-                <Route path="bills/trash/:type" element={<BillTrash/>}/>
-                <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
-                <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
-                <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
-                <Route path="approve/:id" element={<ApproveView/>}/>
-                <Route path="approve/create/:id" element={<ApproveCreate/>}/>
-                <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
-              </Route>
-              <Route path="/*" exact element={<PageNotFound/>}/>
-            </Routes>
-          </BrowserRouter>
-        </ProviderContext>
+        <UserRoleProvider>
+          <ProviderContext>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" exact element={<Login/>} />
+                {/* <Route path="/register" exact element={<Register />} /> */}
+                <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
+                <Route path="/" element={<Home/>}>
+                  <Route path="barcode" element={<CreateBarCode/>}/>
+                  <Route path="users/" element={<UserAccounts/>}/>
+                  <Route path="users/create" element={<CreateAccountUser/>}/>
+                  <Route path="users/edit/:id" element={<EditUser/>}/>
+                  <Route path="users/trash" element={<AccountsTrash/>}/>
+                  <Route path="bills/createbill" element={<CreatBill/>}/>
+                  <Route path="bills/detail/:billId" element={<BillDetail/>}/>
+                  <Route path="bills/:type" element={<Bills/>}/>
+                  <Route path="bills/trash/:type" element={<BillTrash/>}/>
+                  <Route path="bills/trash/:type" element={<BillTrash/>}/>
+                  <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
+                  <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
+                  <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
+                  <Route path="approve/:id" element={<ApproveView/>}/>
+                  <Route path="approve/create/:id" element={<ApproveCreate/>}/>
+                  <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
+                </Route>
+                <Route path="/*" exact element={<PageNotFound/>}/>
+              </Routes>
+            </BrowserRouter>
+          </ProviderContext>
+        </UserRoleProvider>
       </AuthenContext.Provider>
 
       <ToastContainer
