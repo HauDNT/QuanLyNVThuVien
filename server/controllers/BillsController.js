@@ -5,8 +5,8 @@ class BillsController {
     // Lấy toàn bộ hóa đơn:
     async getAllBills(req, res) {
         try {
-            const getBills = await Bills.findAll();
-            return res.json({bills: getBills});
+            const bills = await Bills.findAll();
+            return res.json(bills);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -16,7 +16,7 @@ class BillsController {
     async getTypes(req, res) {
         try {
             const types = await BillTypes.findAll();
-            return res.json({listTypes: types});
+            return res.json(types);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -27,7 +27,7 @@ class BillsController {
         const type = req.params.type;
 
         try {
-            const receiveBills = await Bills
+            const bills = await Bills
                 .findAll({
                     include: [
                         {
@@ -38,11 +38,11 @@ class BillsController {
                     ],
                 });
 
-                if (!receiveBills) {
+                if (!bills) {
                     return res.json({ error: 'Không tìm thấy hóa đơn.' });
                 }
 
-                return res.json({ receiveBills });
+                return res.json(bills);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -127,13 +127,7 @@ class BillsController {
                         'Supplier', 
                         'deletedAt',
                     ],
-                    include: [
-                        {
-                            model: BillTypes,
-                            required: true,
-                            where: {id: Sequelize.col('BillTypeId')}
-                        }
-                    ],
+                    include: [{model: BillTypes}],
                     where: {
                         deletedAt: {
                             [Op.ne]: null,
@@ -143,7 +137,7 @@ class BillsController {
                     paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
                 });
 
-                return res.json({ billDeleted });
+                return res.json(billDeleted);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -187,9 +181,9 @@ class BillsController {
         + Đơn giá mỗi quyển sách.
     */
     async getBillDetail(req, res) {
-        const billId = req.params.id;
+        const billId = req.params.billId;
 
-        const detail = await BooksRegisInfo.findAll(
+        const data = await BooksRegisInfo.findAll(
             {
                 attributes: [
                     'BookId',
@@ -212,7 +206,18 @@ class BillsController {
             }
         );
 
-        res.json({detail});
+        const detail = data.map((item) => (
+            {
+                BookId: item.BookId,
+                Amount: item.dataValues.Amount,
+                MainTitle: item.Book.MainTitle,
+                UnitPrice: +item.Book.UnitPrice,
+                Author: item.Book.Author,
+                Discount: +item.Bill.Discount,
+            }
+        ))
+
+        res.json(detail);
     };
 
     async searchBills(req, res) {

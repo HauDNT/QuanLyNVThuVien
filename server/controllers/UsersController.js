@@ -12,10 +12,10 @@ const {sign} = require('jsonwebtoken');     // Using Json Web Token
 const { Op } = require('sequelize');
 
 class UsersController {
-    // Tìm tất cả tài khoản người dùng (username, password):
-    async findAllUsers(req, res) {
+    // Lấy tất cả tài khoản người dùng (username, password):
+    async getAllUsers(req, res) {
         try {
-            const allUsers = await UsersInfo.findAll({
+            const data = await UsersInfo.findAll({
                 include: [
                     {
                         model: Users,
@@ -53,16 +53,29 @@ class UsersController {
                     'Email',
                     'PhoneNumber',
                     'Avatar',
-                ]
+                ],
             });
-            res.json({allUsers: allUsers});
+
+            const allUsers = data.map((item) => ({
+                id: item.id,
+                Fullname: item.Fullname,
+                Email: item.Email,
+                PhoneNumber: item.PhoneNumber,
+                Avatar: item.Avatar,
+                Username: item.User.Username,
+                RoleName: item.User.User_Role.Role.RoleName,
+                RoomName: item.Room.RoomName,
+                PositionName: item.Position.PositionName,
+            }));
+
+            res.json(allUsers);
         } catch (errorMessage) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
     
-    // Tìm thông tin người dùng (tài khoản & thông tin cá nhân):
-    async findInfoUser(req, res) {
+    // Tìm thông tin 1 người dùng (tài khoản & thông tin cá nhân):
+    async getInfoAUser(req, res) {
         const id = req.params.id;
 
         try {
@@ -119,12 +132,12 @@ class UsersController {
         }
     };
 
-    // Lấy tên người dùng:
+    // Lấy họ tên người dùng:
     async getFullname(req, res) {
         const id = req.params.id;
 
         try {
-            const fullname = await UsersInfo
+            const data = await UsersInfo
                 .findOne(
                     {
                         attributes: ['Fullname'],
@@ -132,11 +145,13 @@ class UsersController {
                     }
                 );
 
-            if (!fullname) {
+            if (!data) {
                 return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
-            }
+            };
 
-            return res.json({userInfo: fullname});
+            const fullname = data.Fullname;
+
+            return res.json(fullname);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -288,7 +303,7 @@ class UsersController {
     // Lọc ra tài khoản bị xóa mềm:
     async getAccountSoftDeleted(req, res) {
         try {
-            const accountDeleted = await Users
+            const data = await Users
                 .findAll({
                     attributes: [
                         'id',
@@ -304,8 +319,15 @@ class UsersController {
                     },
                     paranoid: false,
                 });
+
+            const accountDeleted = data.map((item) => ({
+                id: item.id,
+                Username: item.Username,
+                createdAt: item.createdAt,
+                deletedAt: item.deletedAt,
+            }));
             
-            return res.json({accountDeleted});
+            return res.json(accountDeleted);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }

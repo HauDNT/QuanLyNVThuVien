@@ -4,7 +4,7 @@ class BooksController {
     // Lấy một số thông tin biên mục để hiển thị trên trang danh sách:
     async getSomeInfo(req, res) {
         try {
-            const allCatalogings = await Books.findAll({
+            const data = await Books.findAll({
                 attributes:
                     [
                         'id',
@@ -34,10 +34,28 @@ class BooksController {
                 ],
             });
 
-            if (!allCatalogings)
+            if (!data)
                 return res.json({error: 'Không tìm thấy thông tin biên mục!'});
 
-            return res.json({allCatalogings});
+            const allCatalogings = data.map((item) => ({
+                id: item.id,
+                ISBN: item.ISBN,
+                DDC: item.DDC,
+                EncryptName: item.EncryptName,
+                MainTitle: item.MainTitle,
+                SubTitle: item.SubTitle,
+                Types: item.Types,
+                Author: item.Author,
+                OrtherAuthors: item.OrtherAuthors,
+                Editors: item.Editors,
+                Synopsis: item.Synopsis,
+                Publisher: item.Publisher,
+                PubPlace: item.PubPlace,
+                PubYear: item.PubYear,
+                BooksRegisInfos: item.BooksRegisInfos,
+            }))
+
+            return res.json(allCatalogings);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
@@ -47,21 +65,24 @@ class BooksController {
     async getInfoCataloging(req, res) {
         try {
             const catalogId = +req.params.id;
+
             const catalogInfo = await Books.findByPk(
                     catalogId,
-                    {include: [
-                        {
-                            model: BooksRegisInfo,
-                            required: true,
-                            where: { id: Sequelize.col('Books.id') }
-                        }
-                    ],}
+                    {
+                        include: [
+                            {
+                                model: BooksRegisInfo,
+                                required: true,
+                                where: { id: Sequelize.col('Books.id') }
+                            }
+                        ],
+                    }
                 );
 
             if (!catalogInfo)
                 return res.json({error: 'Không tìm thấy thông tin biên mục!'});
 
-            return res.json({catalogInfo});
+            return res.json(catalogInfo);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
         }
@@ -100,7 +121,6 @@ class BooksController {
                         where: { 
                             id: Sequelize.col('Books.id'),
                             Status: 0,
-                            // IndiRegis: 1,
                         },
                     }
                 ],

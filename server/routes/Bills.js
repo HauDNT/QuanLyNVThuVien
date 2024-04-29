@@ -3,10 +3,10 @@ const router = express.Router();
 const BillsController = require('../controllers/BillsController');
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 
-router.get('/all', BillsController.getAllBills);
+router.get('/all', BillsController.getAllBills);    // Lấy toàn bộ hóa đơn
 router.get('/amount', BillsController.countAmountOfBills);
 router.get('/gettypes', BillsController.getTypes);
-router.get('/detail/:id', BillsController.getBillDetail);
+router.get('/detail/:billId', BillsController.getBillDetail);
 router.get('/trash/:type', BillsController.getBillSoftDeleted);
 router.get('/:type', BillsController.getBillOfType);
 router.post('/searchBills', validToken, BillsController.searchBills);

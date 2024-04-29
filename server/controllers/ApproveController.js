@@ -60,17 +60,17 @@ class ApproveController {
     };
 
     // Lấy toàn bộ phân phối:
-    async getAll(req, res) {
+    async getAllApproves(req, res) {
         const allApp = await BooksRegisInfo.findAll();
-        return res.json({allApp});
+        return res.json(allApp);
     };
 
-    // Xem phân phối của từng biên mục:
-    async getApprove(req, res) {
+    // Xem phân phối của từng biên mục sách:
+    async getApproveOfBook(req, res) {
         const bookId = +req.params.bookId;
 
         try {
-            const approve = await BooksRegisInfo.findAll({
+            const data = await BooksRegisInfo.findAll({
                 where: {
                     BookId: bookId,
                 },
@@ -79,7 +79,6 @@ class ApproveController {
                         model: Users,
                         require: true,
                         where: {id: Sequelize.col('UserId')},
-                        attributes: ['username'],
                     },
                     {
                         model: StatusDoc,
@@ -107,8 +106,23 @@ class ApproveController {
                     'updatedAt',
                 ]
             });
+
+            if (!data) {
+                return res.json({error: 'Không tìm thấy phân phối của sách'});
+            };
     
-            return res.json({approve});
+            const approve = data.map((item) => ({
+                id: item.id,
+                RegisCode: item.RegisCode,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+                Username: item.User.Username,
+                Status: item.StatusDoc.Status,
+                NameType: item.StoreType.NameType,
+                RoomName: item.Room.RoomName,
+            }))
+
+            return res.json(approve);
         } catch (error) {
             return res.json({error: 'Không thể tải lên phân phối!'});
         }
@@ -162,7 +176,7 @@ class ApproveController {
             const maxRegisCode = await BooksRegisInfo.max('RegisCode');
             const code = +maxRegisCode.slice(5);
 
-            return res.json({code})
+            return res.json(code)
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi khi tìm mã!'});
         }
@@ -180,7 +194,7 @@ class ApproveController {
             }
         });
 
-        return res.json({amount: isNotAccept.length});
+        return res.json(isNotAccept.length);
     };
 
     // Lấy thông tin của 1 phân phối:
@@ -189,7 +203,7 @@ class ApproveController {
             const approveId = +req.params.approveId;
             const info = await BooksRegisInfo.findOne({where: {id: approveId}});
             
-            return res.json({info});
+            return res.json(info);
         } catch (error) {
             return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
         }

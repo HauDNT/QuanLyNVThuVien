@@ -3,11 +3,11 @@ const router = express.Router();
 const ApproveController = require('../controllers/ApproveController');
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 
-router.get('/getall', ApproveController.getAll);
+router.get('/all', ApproveController.getAllApproves);
 router.get('/getmaxregiscode', ApproveController.getMaxRegisCode);
 router.get('/item/:approveId', ApproveController.getInfoAnApprove);
 router.get('/isnotaccept/:bookId', ApproveController.isNotAccept);
-router.get('/get/:bookId', ApproveController.getApprove);
+router.get('/getApproves/:bookId', ApproveController.getApproveOfBook);
 router.post('/searchInApprove', validToken, ApproveController.searchInApprove);
 router.post('/create/:id', validToken, ApproveController.createApprove);
 router.post('/findexist', validToken, ApproveController.findExist);
