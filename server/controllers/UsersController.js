@@ -3,11 +3,13 @@ const {
     UsersInfo,
     Rooms,
     Positions,
+    User_Roles,
+    Roles,
     Sequelize,
 } = require('../models');       
 const bcrypt = require('bcrypt');           // Using Bcrypt to hash and check password
 const {sign} = require('jsonwebtoken');     // Using Json Web Token
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
 
 class UsersController {
     // Tìm tất cả tài khoản người dùng (username, password):
@@ -17,20 +19,31 @@ class UsersController {
                 include: [
                     {
                         model: Users,
-                        required: true,
                         where: {id: Sequelize.col('UserId')},
                         attributes: ['id', 'Username'],
+                        include:
+                        [
+                            {
+                                model: User_Roles,
+                                attributes: ['RoleId'],
+                                include: [
+                                    {
+                                        model: Roles,
+                                        required: true,
+                                        attributes: ['RoleName']
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         model: Rooms,
                         required: true,
-                        where: {id: Sequelize.col('RoomId')},
                         attributes: ['RoomName'],
                     },
                     {
                         model: Positions,
                         required: true,
-                        where: {id: Sequelize.col('PositionId')},
                         attributes: ['PositionName'],
                     }
                 ],
@@ -53,23 +66,54 @@ class UsersController {
         const id = req.params.id;
 
         try {
-            const userInfo = await Users
+            const data = await Users
                 .findOne(
                     {
                         where: {id: +id},
-                        include: [{
-                            model: UsersInfo, 
-                            required: true,
-                            where: {UserId: +id},
-                        }],
+                        include: [
+                            {
+                                model: UsersInfo, 
+                                where: {UserId: +id},
+                                attributes: 
+                                [
+                                    'Fullname', 
+                                    'Birthday',
+                                    'Email',
+                                    'PhoneNumber',
+                                    'Avatar',
+                                    'PositionId',
+                                    'RoomId'
+                                ]
+                            }, 
+                            {
+                                model: User_Roles,
+                                where: {UserId: +id},
+                                attributes: ['RoleId']
+                            }
+                        ],
+                        attributes: ['id', 'Username']
                     }
                 );
 
-            if (!userInfo) {
+            if (!data) {
                 return res.json({error: 'Không tìm thấy thông tin người dùng'});
-            }
+            };
 
-            return res.json({userInfo});
+            // Format lại dữ liệu về cùng cấp:
+            const userInfo = {
+                id: data.id,
+                Username: data.Username,
+                Fullname: data.UsersInfo.Fullname,
+                Birthday: data.UsersInfo.Birthday,
+                Email: data.UsersInfo.Email,
+                PhoneNumber: data.UsersInfo.PhoneNumber,
+                Avatar: data.UsersInfo.Avatar,
+                RoomId: data.UsersInfo.RoomId,
+                PositionId: data.UsersInfo.PositionId,
+                RoleId: data.User_Role.RoleId,
+            };
+
+            return res.json(userInfo);
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
@@ -96,7 +140,7 @@ class UsersController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
-    }
+    };
 
     // Đăng nhập:
     async login(req, res) {
@@ -107,10 +151,10 @@ class UsersController {
                 return res.json({error: 'Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!'});
             }
             
-            // const match = await bcrypt.compare(password, getUser.Password);
-            // if (!match) {
-            //     return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
-            // }
+            const match = await bcrypt.compare(password, getUser.Password);
+            if (!match) {
+                return res.json({error: 'Mật khẩu không đúng. Hãy kiểm tra và thử lại!'});
+            }
 
             const authenToken = sign({username: getUser.Username, id: getUser.id}, "AuthenticateToken");
             return res.json({
@@ -148,11 +192,11 @@ class UsersController {
         }
     };
 
-    // Tạo thông tin người dùng (Được thực hiện sau khi thêm tài khoản thành công):
+    // Tạo thông tin người dùng và loại tài khoản (Được thực hiện sau khi thêm tài khoản thành công):
     async createInfoUser(req, res) {
         try {
             // Lấy id người dùng trước:
-            const {username, fullname, email, birthday, position, room, avatar} = req.body;
+            const {username, fullname, email, birthday, position, room, avatar, role, phoneNumber} = req.body;
             const getUserId = await Users.findOne({
                 attributes: ['id'],
                 where: {Username: username}
@@ -165,12 +209,64 @@ class UsersController {
                 Avatar: avatar,
                 PositionId: position,
                 RoomId: room,
-                UserId: getUserId ? getUserId.id : 1,
+                PhoneNumber: phoneNumber,
+                UserId: getUserId.id,
+            });
+
+            await User_Roles.create({
+                UserId: getUserId.id,
+                RoleId: role,
             });
 
             return res.json({success: 'Tạo tài khoản mới và thông tin cá nhân thành công!'});
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
+    // Hàm cập nhật thông tin mới cho người dùng:
+    async updateAccount(req, res) {
+        const userId = req.params.id;
+        const data = req.body;
+
+        try {
+            // Nếu có tạo mật khẩu mới thì cập nhật ở model Users:
+            if (data && data.NewPassword && data.NewPassword !== "") {
+                const hash = await bcrypt.hash(data.NewPassword, 10);
+                await Users.update(
+                    {Password: hash},
+                    {
+                        where: {id: userId}
+                    }
+                )
+            }
+    
+            // Cập nhật loại tài khoản ở model User_Roles:
+            if (data && data.RoleId) {
+                await User_Roles.update(
+                    {RoleId: data.RoleId},
+                    {where: {UserId: userId}}
+                )
+            };
+    
+            // Các trường còn lại thì thuộc UsersInfo nên cập nhật sau cùng:
+            const fieldsChange = Object.keys(data);
+            const valuesChange = Object.values(data);
+    
+            for (let i = 0; i < fieldsChange.length; i++) {
+                let attributesUpdating = {};
+                if (fieldsChange[i] !== 'NewPassword' || fieldsChange[i] !== 'RoleId') {
+                    attributesUpdating[fieldsChange[i]] = valuesChange[i];
+                    UsersInfo.update(
+                        attributesUpdating, 
+                        {where: {UserId: userId}}
+                    );
+                }
+            };
+    
+            return res.json({success: 'Đã cập nhật thông tin thành công!'});
+        } catch (error) {
+            res.json({error: 'Không cập nhật được thông tin!'});
         }
     };
 
@@ -313,7 +409,7 @@ class UsersController {
         } catch (error) {
             return res.json({error: 'Thông tin tìm kiếm không hợp lệ!'});
         }
-    }
+    };
 };
 
 module.exports = new UsersController();

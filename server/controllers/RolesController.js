@@ -3,8 +3,6 @@ const {
     UsersInfo,
     User_Roles,
     Roles,
-    Role_Permissions,
-    Permissions,
     Sequelize,
 } = require('../models');
 
@@ -46,7 +44,6 @@ class RolesController {
                 where: {id: userId}
             });
 
-
             if (!data)  
                 return res.json({error: 'Không có dữ liệu phân quyền về người dùng này!'});
 
@@ -60,26 +57,6 @@ class RolesController {
             }));
 
             res.json(formatData);
-            
-            /* Dữ liệu lúc chưa format: 
-            [
-                {
-                    "fullname": "Đặng Nguyễn Tiền Hậu",
-                    "RoleName": "Quản trị viên cấp 0",
-                    "Description": "Quản trị hệ thống và có toàn quyền truy cập",
-                }
-            ]
-            */
-    
-            /* Dữ liệu khi đã format:
-                [
-                    {
-                        "fullname": "Đặng Nguyễn Tiền Hậu",
-                        "RoleName": "Quản trị viên cấp 0",
-                        "Description": "Quản trị hệ thống và có toàn quyền truy cập",
-                    }
-                ]
-            */
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tải lên dữ liệu!'});
         }

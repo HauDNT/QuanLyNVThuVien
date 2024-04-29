@@ -1,4 +1,4 @@
-const {Books, BooksRegisInfo, Sequelize} = require('../models');
+const {Books, BooksRegisInfo, EncryptTitles, Sequelize} = require('../models');
 
 class BooksController {
     // Lấy một số thông tin biên mục để hiển thị trên trang danh sách:
@@ -145,15 +145,7 @@ class BooksController {
         }
 
         try {    
-            const fieldsChange = Object.keys(catalogingInfo);
-            const valuesChange = Object.values(catalogingInfo);
-
-            for (let i = 0; i < fieldsChange.length; i++) {
-                let attributesUpdating = {};
-                attributesUpdating[fieldsChange[i]] = valuesChange[i];
-
-                Books.update(attributesUpdating, {where: {id: idCatalog}});
-            };
+            Books.update(catalogingInfo, {where: {id: idCatalog}});
 
             return res.json({success: 'Đã cập nhật thông tin thành công!'});
         } catch (error) {
@@ -187,6 +179,21 @@ class BooksController {
             return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
     };
+
+    // Lấy bảng mã hóa tên sách:
+    async getEncodeTitles(req, res) {
+        try {
+            const encodeTitles = await EncryptTitles.findAll(
+                {
+                    attributes: ['Character', 'NumberEncrypt']
+                }
+            );
+            res.json(encodeTitles);
+        } catch (error) {
+            res.json({error: 'Không lấy được bảng mã hóa tên sách!'});
+        }
+
+    }
 }
 
 module.exports = new BooksController();

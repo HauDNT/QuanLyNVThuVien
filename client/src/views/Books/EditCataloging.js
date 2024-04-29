@@ -8,10 +8,9 @@ import '../../styles/CreateCataloging.scss';
 function EditCataloging() {
     const {id} = useParams();                                       // Id của sách 
     const [status, setStatus] = useState(false);                    // Dùng để kiểm soát khi false thì hiện nút duyệt, khi true thì ẩn nút duyệt
-    const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại
+    const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại liên tục
     const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
     const [infoCataloging, setInfoCataloging] = useState([]);       // Lấy thông tin biên mục
-    const [inputChange, setInputChange] = useState([]);             // Ghi nhận sự thay đổi khi thay đổi nội dung ô input bất kỳ.
     const [isNotAccept, setIsNotAccept] = useState(0);              // Kiểm soát xem biên mục hiện tại có bao nhiêu phân phối chưa được duyệt.
 
     useEffect(() => {
@@ -65,40 +64,11 @@ function EditCataloging() {
         return dateString;
     };
 
-    // Hàm nhận biết dữ liệu khác với dữ liệu gốc, nếu khác thì cho vào State inputChange để đem đi update:
-    const whatIsChanging = (e) => {
-        // Đưa dữ liệu thay đổi vào state để cập nhật lại giao diện:
-        const {name, value} = e.target;
-        setInfoCataloging({...infoCataloging, [name]: value});
-
-        // Nếu dữ liệu này khác với state gốc thì đưa vô state inputChange để lưu name và value
-        if (infoCataloging[name] !== undefined && infoCataloging[name] !== inputChange[name]) 
-            setInputChange({...inputChange, [name]: value});
-        // Nếu thay đổi mà không khác gì so với bản gốc thì remove name và value của input ra khỏi state inputChange
-        else if (infoCataloging[name] !== undefined) {
-            const updateInputChange = {...inputChange};
-            delete updateInputChange[name];
-            setInputChange(updateInputChange);
-        }
-    };
-
     // Hàm update thông tin mới vào biên mục
-    const handleUpdateCataloging = (event, data) => {
-        event.preventDefault();
-
-        if (!data) {
-            toast.warning("Bạn phải điền đầy đủ thông tin!");
-            return;
-        };
-
-        if (inputChange.length === 0) {
-            toast.info("Không có dữ liệu nào mới để cập nhật!");
-            return;
-        };
-
+    const handleUpdateCataloging = () => {
         // Send info to Server:
         axios
-        .put(`http://${config.URL}/books/updateCataloging/${id}`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+        .put(`http://${config.URL}/books/updateCataloging/${id}`, infoCataloging, {headers: {authenToken: localStorage.getItem('authenToken')}})
         .then((res) => {
             if (res.data.error) {
                 toast.error(res.data.error);
@@ -106,13 +76,12 @@ function EditCataloging() {
             else {
                 toast.success(res.data.success);
             }
-        });
+        })
+        .catch(error => toast.error("Đã xảy ra lỗi khi cập nhật thông tin!"));
     };
 
     // Hàm phê duyệt biên mục:
-    const approveCatalogItem = (event) => {
-        event.preventDefault();
-
+    const approveCatalogItem = () => {
         try {
             axios
                 .patch(`http://${config.URL}/approve/accept/${id}`)
@@ -141,7 +110,7 @@ function EditCataloging() {
                         name="ISBN"
                         id=""
                         value={infoCataloging.ISBN}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, ISBN: e.target.value})}
                         type="number"
                         className="form-control"
                         required
@@ -153,7 +122,7 @@ function EditCataloging() {
                         name="DDC"
                         id=""
                         value={infoCataloging.DDC}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, DDC: e.target.value})}
                         type="number"
                         className="form-control"
                         required
@@ -165,7 +134,7 @@ function EditCataloging() {
                         name="EncryptName"
                         id=""
                         value={infoCataloging.EncryptName}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, EncryptName: e.target.value})}
                         type="text"
                         className="form-control"
                         placeholder="Tên mã hóa của nhan đề chính"
@@ -179,7 +148,7 @@ function EditCataloging() {
                         name="MainTitle"
                         id=""
                         value={infoCataloging.MainTitle}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, MainTitle: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -191,7 +160,7 @@ function EditCataloging() {
                         name="SubTitle"
                         id=""
                         value={infoCataloging.SubTitle}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, SubTitle: e.target.value})}
                         type="text"
                         className="form-control"
                     />
@@ -202,7 +171,7 @@ function EditCataloging() {
                         name="Types"
                         id=""
                         value={infoCataloging.Types}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Types: e.target.value})}
                         type="text"
                         className="form-control"
                     />
@@ -213,7 +182,7 @@ function EditCataloging() {
                         name="Author"
                         id=""
                         value={infoCataloging.Author}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Author: e.target.value})}
                         type="text"
                         className="form-control"
                         placeholder="Đối với tác phẩm chỉ có duy nhất một tác giả"
@@ -226,7 +195,7 @@ function EditCataloging() {
                         name="OrtherAuthors"
                         id=""
                         value={infoCataloging.OrtherAuthors}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, OrtherAuthors: e.target.value})}
                         type="text"
                         className="form-control"
                         placeholder="Đối với tác phẩm có hai tác giả trở lên"
@@ -238,7 +207,7 @@ function EditCataloging() {
                         name="Editors"
                         id=""
                         value={infoCataloging.Editors}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Editors: e.target.value})}
                         type="text"
                         className="form-control"
                         placeholder="Dịch, biên tập, in ấn,..."
@@ -250,7 +219,7 @@ function EditCataloging() {
                         name="Topic"
                         id=""
                         value={infoCataloging.Topic}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Topic: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -262,7 +231,7 @@ function EditCataloging() {
                         name="Synopsis"
                         class="form-control" 
                         value={infoCataloging.Synopsis}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Synopsis: e.target.value})}
                         rows="3"/>
                 </div>
                 <label>Thông tin xuất bản</label>
@@ -272,7 +241,7 @@ function EditCataloging() {
                         name="Publisher"
                         id=""
                         value={infoCataloging.Publisher}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Publisher: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -284,7 +253,7 @@ function EditCataloging() {
                         name="PubPlace"
                         id=""
                         value={infoCataloging.PubPlace}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, PubPlace: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -296,7 +265,7 @@ function EditCataloging() {
                         name="PubYear"
                         id=""
                         value={infoCataloging.PubYear}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, PubYear: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -308,7 +277,7 @@ function EditCataloging() {
                         name="QuantityCopies"
                         id=""
                         value={infoCataloging.QuantityCopies}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, QuantityCopies: e.target.value})}
                         type="number"
                         className="form-control"
                         required
@@ -321,7 +290,7 @@ function EditCataloging() {
                         name="Size"
                         id=""
                         value={infoCataloging.Size}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, Size: e.target.value})}
                         type="text"
                         className="form-control"
                         required
@@ -333,7 +302,7 @@ function EditCataloging() {
                         name="NumPages"
                         id=""
                         value={infoCataloging.NumPages}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, NumPages: e.target.value})}
                         type="number"
                         className="form-control"
                         required
@@ -345,7 +314,7 @@ function EditCataloging() {
                         name="UnitPrice"
                         id=""
                         value={infoCataloging.UnitPrice}
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setInfoCataloging({...infoCataloging, UnitPrice: e.target.value})}
                         type="number"
                         className="form-control"
                         required
@@ -404,7 +373,7 @@ function EditCataloging() {
                     }
 
                     <button 
-                        onClick={(e) => handleUpdateCataloging(e, inputChange)}
+                        onClick={(e) => handleUpdateCataloging()}
                         type="button" 
                         className="btn btn--catalog btn-primary mb-3">Cập nhật</button>
                     <Link

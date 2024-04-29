@@ -30,6 +30,7 @@ import EditCataloging from "./views/Books/EditCataloging.js";
 import ApproveView from "./views/Approve/ApproveView.js";
 import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
+import EncodeTitles from "./views/EncodeTitles.js";
 import PageNotFound from "./views/PageNotFound";
 
 import "./styles/App.scss";
@@ -97,6 +98,7 @@ function App() {
                   <Route path="approve/:id" element={<ApproveView/>}/>
                   <Route path="approve/create/:id" element={<ApproveCreate/>}/>
                   <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
+                  <Route path="encodetitles" element={<EncodeTitles/>}/>
                 </Route>
                 <Route path="/*" exact element={<PageNotFound/>}/>
               </Routes>

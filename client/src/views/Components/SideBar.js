@@ -39,7 +39,7 @@ function SideBar() {
                     <MenuItem component={<Link to="/book/cataloging/all"/>}>Danh sách biên mục</MenuItem>
                 </SubMenu>
                 <SubMenu label="Công cụ">
-                    <MenuItem component={<Link to="/barcode"/>}>Bảng mã hóa tên sách</MenuItem>
+                    <MenuItem component={<Link to="/encodetitles"/>}>Bảng mã hóa tên sách</MenuItem>
                     {
                         idRole === 1 || idRole === 2 ? (
                             <MenuItem component={<Link to="/barcode"/>}>Tạo mã Barcode 128</MenuItem>

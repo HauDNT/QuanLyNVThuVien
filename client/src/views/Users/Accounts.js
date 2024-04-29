@@ -104,7 +104,7 @@ function Users() {
                     {value: "Email", name: "Email"},
                     {value: "PhoneNumber", name: "Số điện thoại"},
                     {value: "Room", name: "Phòng"},
-                    {value: "Position", name: "Vai trò"},
+                    {value: "Position", name: "Chức vụ"},
                 ]}
                 orderChoice=''
                 onSearchResultChange={handleSearchResultChange}
@@ -127,13 +127,13 @@ function Users() {
                             <th scope="col" className="table-dark text-center"> 
                                 <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
                             </th>
-                            <th scope="col" className="table-dark text-center">Mã tài khoản</th>
                             <th scope="col" className="table-dark text-center">Username</th>
                             <th scope="col" className="table-dark text-center">Họ và tên</th>
                             <th scope="col" className="table-dark text-center">Email</th>
                             <th scope="col" className="table-dark text-center">Số điện thoại</th>
                             <th scope="col" className="table-dark text-center">Phòng</th>
-                            <th scope="col" className="table-dark text-center">Vai trò</th>
+                            <th scope="col" className="table-dark text-center">Chức vụ</th>
+                            <th scope="col" className="table-dark text-center">Loại tài khoản</th>
                             <th scope="col" className="table-dark text-center">Sửa thông tin</th>
                         </tr>
                     </thead>
@@ -145,13 +145,13 @@ function Users() {
                                     <td className="table-light">
                                         <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={user.id} onClick={(e) => handleCheck(e)}/>
                                     </td>
-                                    <td className="table-light">{user.id}</td>
                                     <td className="table-light">{user.User.Username}</td>
                                     <td className="table-light">{user.Fullname}</td>
                                     <td className="table-light">{user.Email}</td>
                                     <td className="table-light">{user.PhoneNumber}</td>
                                     <td className="table-light">{user.Room.RoomName}</td>
                                     <td className="table-light">{user.Position.PositionName}</td>
+                                    <td className="table-light">{user.User.User_Role.Role.RoleName}</td>
                                     <td className="table-light">
                                         <Link to={`edit/${user.id}`}>
                                             <FaEdit className="edit-icon table-icon"/>

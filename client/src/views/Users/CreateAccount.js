@@ -1,25 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import config from '../../constance.js';
+import { RoomContext } from "../../context/RoomContext.js";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreateAccountUser() {
     const [status, setStatus] = useState(false);
-    const [listRooms, setListRooms] = useState([]);
+    const {listRooms} = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
+    const [listRoles, setListRoles] = useState([]);
     const [inputValues, setInputValues] = useState({
         username: '',
         password: '',
         repassword: '',
         fullname: '',
         email: '',
-        birthday: '',   // Chú ý chỗ này
+        birthday: '',
+        phoneNumber: '',
         position: 1,
         room: 1,
+        role: 1,
         avatar: null,
     });
-
     const handleClearInput = () => {
         setInputValues({
             username: '',
@@ -27,25 +30,26 @@ function CreateAccountUser() {
             repassword: '',
             fullname: '',
             email: '',
-            birthday: '',   // Chú ý chỗ này
+            birthday: '',
+            phoneNumber: '',
             position: 1,
             room: 1,
+            role: 1,
             avatar: '',
         });
     };
 
     useEffect(() => {
-        axios
-            .get(`http://${config.URL}/rooms/all`)
-            .then((res) => {
-                setListRooms(res.data.rooms);
-            });
-
-        axios
-            .get(`http://${config.URL}/positions/all`)
-            .then((res) => {
-                setListPositions(res.data.positions);
-            });
+        Promise
+            .all([
+                axios.get(`http://${config.URL}/positions/all`),
+                axios.get(`http://${config.URL}/roles/getAllRoles`, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            ])
+            .then(([positionRes, roleRes]) => {
+                setListPositions(positionRes.data.positions)
+                setListRoles(roleRes.data)
+            })
+            .catch(error => toast.error('Error!'));
     }, [status]);
 
     const handleCreateAccount = (e) => {
@@ -56,9 +60,9 @@ function CreateAccountUser() {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const {username, password, repassword, fullname, email, birthday, position, room, avatar} = data;
+            const {username, password, repassword, fullname, email, birthday, position, room, avatar, role, phoneNumber} = data;
             const account = {username, password, repassword};
-            const information = {username, fullname, email, birthday, position, room, avatar};
+            const information = {username, fullname, email, birthday, position, room, avatar, role, phoneNumber};
             
             if (!account || !information) {
                 toast.warning('Thông tin không đầy đủ!');
@@ -71,7 +75,7 @@ function CreateAccountUser() {
             };
 
             axios
-                .post(`http://${config.URL}/users/register`, account,)
+                .post(`http://${config.URL}/users/register`, account, {headers: {authenToken: localStorage.getItem('authenToken')}})
                 .then(() => {
                     axios
                         .post(`http://${config.URL}/users/createinfo`, 
@@ -99,7 +103,7 @@ function CreateAccountUser() {
                 <div className="col-12 label-info">
                     <h5>Thông tin tài khoản</h5>
                 </div>
-                <div className="col-4 input-field">
+                <div className="col-6 input-field">
                     <label for="input--username" className="form-label">Tên tài khoản</label>
                     <input 
                         name="username" 
@@ -110,7 +114,7 @@ function CreateAccountUser() {
                         onChange={(e) => setInputValues({...inputValues, username: e.target.value})}
                         required/>
                 </div>
-                <div className="col-4 input-field">
+                <div className="col-6 input-field">
                     <label for="input--password" className="form-label">Mật khẩu</label>
                     <input 
                         name="password" 
@@ -122,7 +126,22 @@ function CreateAccountUser() {
                         required
                         />
                 </div>
-                <div className="col-4 input-field">
+                <div className="col-6 input-field">
+                    <label for="select--role" className="form-label">Loại tài khoản</label>
+                    <select 
+                        name="role" 
+                        class="form-select" 
+                        id="select--role" 
+                        value={inputValues.role}
+                        onChange={(e) => setInputValues({...inputValues, role: e.target.value})}
+                        required
+                        >
+                        {listRoles.map((role) => (
+                            <option key={role.id} value={role.id}>{role.RoleName}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col-6 input-field">
                     <label for="input--re-password" className="form-label">Nhập lại mật khẩu</label>
                     <input 
                         name="repassword" 
@@ -134,11 +153,10 @@ function CreateAccountUser() {
                         required
                         />
                 </div>
-
                 <div className="col-12 label-info">
                     <h5>Thông tin cá nhân</h5>
                 </div>
-                <div className="col-6 input-field">
+                <div className="col-4 input-field">
                     <label for="input--fullname" className="form-label">Họ và tên</label>
                     <input 
                         name="fullname" 
@@ -150,7 +168,7 @@ function CreateAccountUser() {
                         required
                         />
                 </div>
-                <div className="col-6 input-field">
+                <div className="col-4 input-field">
                     <label for="input--email" className="form-label">Email</label>
                     <input 
                         name="email" 
@@ -159,6 +177,18 @@ function CreateAccountUser() {
                         className="form-control"
                         value={inputValues.email}
                         onChange={(e) => setInputValues({...inputValues, email: e.target.value})}
+                        required
+                        />
+                </div>
+                <div className="col-4 input-field">
+                    <label for="input--phoneNumber" className="form-label">Số điện thoại</label>
+                    <input 
+                        name="phoneNumber" 
+                        type="text" 
+                        id="input--phoneNumber" 
+                        className="form-control"
+                        value={inputValues.phoneNumber}
+                        onChange={(e) => setInputValues({...inputValues, phoneNumber: e.target.value})}
                         required
                         />
                 </div>
