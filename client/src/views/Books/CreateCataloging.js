@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
-import '../../styles/CreateCataloging.scss';
 import HandleMarc21Data from "../../helper/HandleMarc21Data.js";
+import RegexPatterns from "../../helper/RegexPatterns.js";
+import '../../styles/CreateCataloging.scss';
 
 function CreateCataloging() {
     const idUserCataloging = localStorage.getItem('id');
@@ -54,6 +55,28 @@ function CreateCataloging() {
         });
     };
 
+    // Kiểm tra regex input: 
+    const validateData = (data) => {
+        let message = '';
+        switch (true) {
+            case !RegexPatterns.ISBN.test(data.ISBN):
+                message = 'Mã ISBN phải là một dãy số và không có dấu '-'!';
+                break;
+            case !RegexPatterns.DDC.test(data.DDC):
+                message = 'Mã DDC không hợp lệ!';
+                break;
+            // case !RegexPatterns.discountBill.test(data.discountBill):
+            //     message = 'Chiết khấu phải là một số từ 0 - 100!';
+            //     break;
+            // case !RegexPatterns.notes.test(data.notes):
+            //     message = 'Ghi chú của bạn không hợp lệ!';
+            //     break;
+            default:
+                break;
+        }
+        return message;
+    };
+
     const handleCreateCataloging = (e) => {
         e.preventDefault();
 
@@ -67,18 +90,26 @@ function CreateCataloging() {
             return;
         };
 
+        // Kiểm tra regex
+        // if (validateData(data) !== '') {
+        //     toast.warning(validateData(data));
+        //     return;
+        // };
+
+        toast.success("Dữ liệu hợp lệ!");
+
         // Send info to Server:
-        axios
-        .post(`http://${config.URL}/books/createCataloging`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
-        .then((res) => {
-            if (res.data.error) {
-                toast.error(res.data.error);
-            }
-            else {
-                handleClearInput();
-                toast.success(res.data.success);
-            }
-        });
+        // axios
+        // .post(`http://${config.URL}/books/createCataloging`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+        // .then((res) => {
+        //     if (res.data.error) {
+        //         toast.error(res.data.error);
+        //     }
+        //     else {
+        //         handleClearInput();
+        //         toast.success(res.data.success);
+        //     }
+        // });
     };
 
     useEffect(() => {
@@ -86,9 +117,7 @@ function CreateCataloging() {
             axios
                 .get(`http://${config.URL}/users/fullname/${idUserCataloging}`)
                 .then((res) => {
-                    if (res.data?.userInfo?.Fullname) {
-                        setFullname(res.data.userInfo.Fullname);
-                    }                    
+                    setFullname(res.data);                
                 })
         } catch (error) {
             toast.error('Đã xảy ra lỗi tại máy chủ! Hãy thử lại sau ít phút...');
@@ -126,7 +155,7 @@ function CreateCataloging() {
                     id=""
                     value={inputValues.ISBN}
                     onChange={(e) => setInputValues({...inputValues, ISBN: e.target.value})}
-                    type="number"
+                    type="text"
                     className="form-control"
                 />
             </div>
@@ -137,7 +166,7 @@ function CreateCataloging() {
                     id=""
                     value={inputValues.DDC}
                     onChange={(e) => setInputValues({...inputValues, DDC: e.target.value})}
-                    type="number"
+                    type="text"
                     className="form-control"
                 />
             </div>
@@ -284,7 +313,7 @@ function CreateCataloging() {
                     id=""
                     value={inputValues.QuantityCopies}
                     onChange={(e) => setInputValues({...inputValues, QuantityCopies: e.target.value})}
-                    type="number"
+                    type="text"
                     className="form-control"
                 />
             </div>
@@ -307,7 +336,7 @@ function CreateCataloging() {
                     id=""
                     value={inputValues.NumPages}
                     onChange={(e) => setInputValues({...inputValues, NumPages: e.target.value})}
-                    type="number"
+                    type="text"
                     className="form-control"
                 />
             </div>
@@ -318,7 +347,7 @@ function CreateCataloging() {
                     id=""
                     value={inputValues.UnitPrice}
                     onChange={(e) => setInputValues({...inputValues, UnitPrice: e.target.value})}
-                    type="number"
+                    type="text"
                     className="form-control"
                 />
             </div>

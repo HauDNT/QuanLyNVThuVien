@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from '../../constance.js';
+import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
@@ -27,21 +28,43 @@ function CreatBill() {
     };
 
     useEffect(() => {
-        axios
-            .get(`http://${config.URL}/bills/amount`)
-            .then((res) => {
-                setAmountBills(res.data + 1);
-            });
-        axios
-            .get(`http://${config.URL}/bills/gettypes`)
-            .then((res) => {
-                setTypesBill(res.data.listTypes);
-            });
+        const getAmountBills = axios.get(`http://${config.URL}/bills/amount`);
+        const getTypesBill = axios.get(`http://${config.URL}/bills/gettypes`);
+
+        Promise
+            .all([getAmountBills, getTypesBill])
+            .then(([amountBillsRes, typesBillRes]) => {
+                setAmountBills(amountBillsRes.data + 1)
+                setTypesBill(typesBillRes.data)
+            })
+            .catch(error => toast.error("Không tải được loại hóa đơn và số lượng!"));
     }, [status]);
+
+    // Kiểm tra regex input: 
+    const validateData = (data) => {
+        let message = '';
+        switch (true) {
+            case !RegexPatterns.nameBill.test(data.nameBill):
+                message = 'Tên hóa đơn không hợp lệ!';
+                break;
+            case !RegexPatterns.supplierBill.test(data.supplierBill):
+                message = 'Tên nhà cung cấp không hợp lệ!';
+                break;
+            case !RegexPatterns.discountBill.test(data.discountBill):
+                message = 'Chiết khấu phải là một số từ 0 - 100!';
+                break;
+            case !RegexPatterns.notes.test(data.notes):
+                message = 'Ghi chú của bạn không hợp lệ!';
+                break;
+            default:
+                break;
+        }
+        return message;
+    };
 
     const handleCreateBill = (e) => {
         e.preventDefault();
-        
+
         setStatus(true);
         
         // Get data from form:
@@ -52,6 +75,12 @@ function CreatBill() {
             toast.warning("Bạn phải điền đầy đủ thông tin!");
             return;
         };
+
+        // Kiểm tra regex
+        if (validateData(data) !== '') {
+            toast.warning(validateData(data));
+            return;
+        }
 
         // Send info to Server:
         axios

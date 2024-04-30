@@ -7,12 +7,12 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
+import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveUpdate() {
     const {id} = useParams();
     const [approveInfo, setApproveInfo] = useState([]);
-    const [inputChange, setInputChange] = useState([]);
     const {listRooms} = useContext(RoomContext);
     const {listBills} = useContext(BillContext);
     const {statusDocs} = useContext(StatusDocContext);
@@ -23,31 +23,13 @@ function ApproveUpdate() {
             axios
                 .get(`http://${config.URL}/approve/item/${id}`)
                 .then((res) => {
-                    setApproveInfo(res.data.info)
+                    setApproveInfo(res.data)
                 })
         } catch (error) {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
     }, []);
-
-    // Hàm nhận biết dữ liệu khác với dữ liệu gốc, nếu khác thì cho vào State inputChange để đem đi update:
-    const whatIsChanging = (e) => {
-        // Đưa dữ liệu thay đổi vào state để cập nhật lại giao diện:
-        const {name, value} = e.target;
-        setApproveInfo({...approveInfo, [name]: value});
-
-        // Nếu dữ liệu này khác với state gốc thì đưa vô state inputChange để lưu name và value
-        if (approveInfo[name] !== undefined && approveInfo[name] !== inputChange[name]) 
-            setInputChange({...inputChange, [name]: value});
-
-        // Nếu thay đổi mà không khác gì so với bản gốc thì remove name và value của input ra khỏi state inputChange
-        else if (approveInfo[name] !== undefined) {
-            const updateInputChange = {...inputChange};
-            delete updateInputChange[name];
-            setInputChange(updateInputChange);
-        }
-    };
 
     const formatAndDisplayDatetime = (dateString) => {
         const date = new Date(dateString);
@@ -56,16 +38,40 @@ function ApproveUpdate() {
         return dateString;
     };
 
-    const handleUpdateApprove = (data) => {
+    // Kiểm tra regex input: 
+    const validateData = (data) => {
+        toast.info(data.RegisCode);
+        let message = '';
+        switch (true) {
+            // case !RegexPatterns.RegisCode.test(data.RegisCode):
+            //     message = 'Phần đầu mã không hợp lệ!';
+            //     break;
+            case !RegexPatterns.notes.test(data.Notes):
+                message = 'Ghi chú của bạn không hợp lệ!';
+                break;
+            default:
+                break;
+        }
+        return message;
+    };
+
+    const handleUpdateApprove = (e) => {
+        e.preventDefault();
+
+        // Get data from form:
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
         if (!data) {
             toast.warning("Bạn phải điền đầy đủ thông tin!");
             return;
         };
 
-        if (inputChange.length === 0) {
-            toast.info("Không có dữ liệu nào mới để cập nhật!");
+        // Kiểm tra regex
+        if (validateData(data) !== '') {
+            toast.warning(validateData(data));
             return;
-        };
+        }
 
         try {
             axios
@@ -85,7 +91,7 @@ function ApproveUpdate() {
     };
 
     return (
-        <form method="POST" className="container container--approve-create">
+        <form className="container container--approve-create" onSubmit={handleUpdateApprove}>
             <div className="row">
                 <h3 className="approve-header">Chỉnh sửa phân phối</h3>
             </div>
@@ -98,7 +104,7 @@ function ApproveUpdate() {
                         name="RegisCode"
                         value={approveInfo.RegisCode}
                         placeholder="VD: PM23.086594"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, RegisCode: e.target.value})}
                         />
                 </div>
                 <div className="col input-group">
@@ -118,7 +124,7 @@ function ApproveUpdate() {
                     <select 
                         className="form-select" 
                         name="StoreTypeId"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, StoreTypeId: e.target.value})}
                         required>
                         
                         <option value="0" selected>Chọn thể loại lưu trữ</option>
@@ -142,7 +148,7 @@ function ApproveUpdate() {
                     <select 
                         className="form-select" 
                         name="RoomId"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, RoomId: e.target.value})}
                         required>
                         <option value="0" selected>Chọn vị trí lưu trữ</option>
                         {
@@ -165,7 +171,7 @@ function ApproveUpdate() {
                     <select 
                         className="form-select" 
                         name="StatusDocId"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, StatusDocId: e.target.value})}
                         required>
                             <option value="0" selected>Chọn trạng thái tài liệu</option>
                             {
@@ -185,7 +191,7 @@ function ApproveUpdate() {
                     <select 
                         className="form-select"
                         name="BillId"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, BillId: e.target.value})}
                         required>
                             <option value="0" selected>Chọn mã đơn hàng</option>
                             {
@@ -212,7 +218,7 @@ function ApproveUpdate() {
                     <textarea 
                         className="form-control"
                         name="Notes"
-                        onChange={(e) => whatIsChanging(e)}
+                        onChange={(e) => setApproveInfo({...approveInfo, Notes: e.target.value})}
                         value={approveInfo.Notes}
                         ></textarea>
                 </div>
@@ -220,9 +226,8 @@ function ApproveUpdate() {
             <div className="row">
                 <div className="btn-container">
                     <button 
-                        type="button" 
+                        type="submit" 
                         className="btn btn-primary mb-3"
-                        onClick={() => handleUpdateApprove(inputChange)}
                     >Cập nhật</button>
                 </div>
             </div>

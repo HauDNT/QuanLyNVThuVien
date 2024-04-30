@@ -23,6 +23,7 @@ function SideBar() {
             }}
             >
             <Menu>
+                <MenuItem component={<Link to="/"/>}>Trang chủ</MenuItem>
                 <SubMenu label="Quản lý đơn sách">
                     <MenuItem component={<Link to="/bills/1"/>}>Đơn đặt</MenuItem>
                     <MenuItem component={<Link to="/bills/2"/>}>Đơn nhận</MenuItem>

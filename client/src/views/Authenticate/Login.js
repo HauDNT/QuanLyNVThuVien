@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 import * as Yup from "yup";
 import { AuthenContext } from "../../helper/AuthenContext";
+import RegexPatterns from "../../helper/RegexPatterns.js";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -23,11 +24,13 @@ function Login() {
     username: Yup.string()
       .min(5)
       .max(15)
-      .required("Bạn phải nhập vào tên tài khoản!"),
-    password: Yup.string()
+      .required("Bạn phải nhập vào tên tài khoản!")
+      .matches(RegexPatterns.username, "Username không hợp lệ!"),
+      password: Yup.string()
       .min(5)
       .max(15)
-      .required("Bạn phải nhập vào mật khẩu!"),
+      .required("Bạn phải nhập vào mật khẩu!")
+      .matches(RegexPatterns.password, "Password không hợp lệ!"),
   });
 
   const handleLogin = (data) => {

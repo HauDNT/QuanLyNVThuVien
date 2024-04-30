@@ -7,8 +7,8 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
+import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/ApproveCreate.scss';
-
 
 function ApproveCreate() {
     const {id: bookId} = useParams();
@@ -51,7 +51,7 @@ function ApproveCreate() {
             axios
                 .get(`http://${config.URL}/approve/getmaxregiscode`)
                 .then((res) => {
-                    setMaxRegisCode(res.data.code + 1)
+                    setMaxRegisCode(res.data + 1)
                     setInitValues({...initValues, NumberSeries: maxRegisCode});
                 })
         } catch (error) {
@@ -105,6 +105,29 @@ function ApproveCreate() {
         return dateString;
     };
 
+
+    // Kiểm tra regex input: 
+    const validateData = (data) => {
+        let message = '';
+        switch (true) {
+            case !RegexPatterns.Heading.test(data.Heading):
+                message = 'Phần đầu mã không hợp lệ!';
+                break;
+            case !RegexPatterns.NumberLength.test(data.NumberLength):
+                message = 'Độ dài dãy số phải là một số từ 0!';
+                break;
+            case !RegexPatterns.AmountRegis.test(data.AmountRegis):
+                message = 'Số lượng đăng ký phải là một số từ 0!';
+                break;
+            case !RegexPatterns.notes.test(data.notes):
+                message = 'Ghi chú của bạn không hợp lệ!';
+                break;
+            default:
+                break;
+        }
+        return message;
+    };
+
     // Hàm tạo mã đăng ký:
     const handleCreateApprove = (e) => {
         e.preventDefault();
@@ -119,6 +142,12 @@ function ApproveCreate() {
             UserId: +localStorage.getItem('id'),
             BookId: +bookId,
         };
+
+        // Kiểm tra regex: Nếu kiểm tra có message trả về thì có lỗi => Báo lỗi và ngưng thực thi.
+        if (validateData(data) !== '') {
+            toast.warning(validateData(data));
+            return;
+        }
 
         // Kiểm tra trùng:
         axios
@@ -168,14 +197,14 @@ function ApproveCreate() {
                         name="NumberSeries"
                         value={initValues.NumberSeries}
                         onChange={(e) => changeToGenerateRegisCode(e)}
-                        type="number" 
+                        type="text" 
                         className="form-control" 
                         placeholder="VD: 86594" required/>
                 </div>
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
                     <input 
-                        type="number"
+                        type="text"
                         name="NumberLength"
                         value={initValues.NumberLength}
                         onChange={(e) => changeToGenerateRegisCode(e)}
@@ -223,7 +252,7 @@ function ApproveCreate() {
                 <div className="col input-group">
                     <span className="input-group-text" id="basic-addon1">Số lượng</span>
                     <input 
-                        type="number" 
+                        type="text" 
                         name="AmountRegis"
                         value={initValues.AmountRegis}
                         onChange={(e) => changeToGenerateRegisCode(e)}

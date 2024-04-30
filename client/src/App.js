@@ -14,8 +14,6 @@ import {UserRoleProvider} from "./context/UserRoleContext.js";
 import CreateBarCode from "./views/CreateBarCode.js";
 import Home from "./views/Home.js";
 import Login from "./views/Authenticate/Login.js";
-// import Register from "./views/Authenticate/Register";
-import ForgotPassword from "./views/Authenticate/ForgotPassword.js"; 
 import UserAccounts from "./views/Users/Accounts.js";
 import CreateAccountUser from "./views/Users/CreateAccount.js";
 import AccountsTrash from "./views/Users/AccountsTrash.js";
@@ -32,6 +30,7 @@ import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
 import EncodeTitles from "./views/EncodeTitles.js";
 import PageNotFound from "./views/PageNotFound";
+import LoadingWindow from "./views/Components/Loading.js";
 
 import "./styles/App.scss";
 
@@ -78,9 +77,8 @@ function App() {
           <ProviderContext>
             <BrowserRouter>
               <Routes>
+                <Route path="/loading" exact element={<LoadingWindow/>} />
                 <Route path="/login" exact element={<Login/>} />
-                {/* <Route path="/register" exact element={<Register />} /> */}
-                <Route path="/forgotpassword" exact element={<ForgotPassword/>} />
                 <Route path="/" element={<Home/>}>
                   <Route path="barcode" element={<CreateBarCode/>}/>
                   <Route path="users/" element={<UserAccounts/>}/>

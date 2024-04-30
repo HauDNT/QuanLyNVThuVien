@@ -13,7 +13,7 @@ const BillProvider = ({children}) => {
             axios
                 .get(`http://${config.URL}/bills/all`)
                 .then((res) => {
-                    setListBills(res.data.bills)
+                    setListBills(res.data)
                 })
                 .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
         } catch (error) {

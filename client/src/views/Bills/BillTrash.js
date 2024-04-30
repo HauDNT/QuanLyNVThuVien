@@ -4,6 +4,7 @@ import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
+import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Bills.scss";
 
@@ -16,12 +17,20 @@ function BillTrash() {
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
+
+    // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
+    const [isLoading, setLoading] = useState(true);
+    const [showData, setShowData] = useState(false);
     
     useEffect(() => {
         axios
             .get(`http://${config.URL}/bills/trash/${type}`)
             .then((res) => {
-                setListBill(res.data.billDeleted)
+                setTimeout(() => {
+                    setListBill(res.data);
+                    setLoading(false);
+                    setShowData(true);
+                }, 500);
             });
     }, [type]);
 
@@ -129,53 +138,64 @@ function BillTrash() {
     };
 
     return (
-        <div className="container-fluid bill-page">
-            <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
-                <FcUndo className="trash-icon"/> Quay lại
-            </button>
+        <>
             {
-                idRole === 1 ? (
-                    <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
-                ) : null
-            }
-            <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
-            <table className="table table-dark">
-                <thead className="thead-dark">
-                    <tr>
-                        <th scope="col" className="table-dark text-center"> 
-                            <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
-                        </th>
-                        <th scope="col" className="table-dark text-center">Mã đơn</th>
-                        <th scope="col" className="table-dark text-center">Tên đơn</th>
-                        <th scope="col" className="table-dark text-center">Thời gian tạo</th>
-                        <th scope="col" className="table-dark text-center">Thời gian xóa</th>
-                        <th scope="col" className="table-dark text-center">Nhà xuất bản</th>
-                    </tr>
-                </thead>
-                <tbody>
+                isLoading ? 
+                (
+                    <LoadingWindow/>
+                ) 
+                : 
+                (
+                <div className="container-fluid bill-page">
+                    <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
+                        <FcUndo className="trash-icon"/> Quay lại
+                    </button>
                     {
-                        listBill.length > 0 ?
-                        (listBill.map((bill) => (
-                            <tr key={bill.id} className="text-center">
-                                <td className="table-light">
-                                    <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
-                                </td>
-                                <td className="table-light"> {bill.id} </td>
-                                <td className="table-light"> {bill.NameBill} </td>
-                                <td className="table-light"> {bill.DateGenerateBill} </td>
-                                <td className="table-light"> {formatAndDisplayDatetime(bill.deletedAt)} </td>
-                                <td className="table-light"> {bill.Supplier} </td>
+                        idRole === 1 ? (
+                            <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
+                        ) : null
+                    }
+                    <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
+                    <table className="table table-dark">
+                        <thead className="thead-dark">
+                            <tr>
+                                <th scope="col" className="table-dark text-center"> 
+                                    <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
+                                </th>
+                                <th scope="col" className="table-dark text-center">Mã đơn</th>
+                                <th scope="col" className="table-dark text-center">Tên đơn</th>
+                                <th scope="col" className="table-dark text-center">Thời gian tạo</th>
+                                <th scope="col" className="table-dark text-center">Thời gian xóa</th>
+                                <th scope="col" className="table-dark text-center">Nhà xuất bản</th>
                             </tr>
-                        ))) : (
-                        <tr>
-                            <td className="table-light text-center" colSpan={6}>
-                                Chưa có hóa đơn nào bị xóa gần đây
-                            </td>
-                        </tr>
-                        )}
-                </tbody>
-            </table>
-        </div>
+                        </thead>
+                        <tbody>
+                            {
+                                listBill.length > 0 ?
+                                (listBill.map((bill) => (
+                                    <tr key={bill.id} className="text-center">
+                                        <td className="table-light">
+                                            <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
+                                        </td>
+                                        <td className="table-light"> {bill.id} </td>
+                                        <td className="table-light"> {bill.NameBill} </td>
+                                        <td className="table-light"> {bill.DateGenerateBill} </td>
+                                        <td className="table-light"> {formatAndDisplayDatetime(bill.deletedAt)} </td>
+                                        <td className="table-light"> {bill.Supplier} </td>
+                                    </tr>
+                                ))) : (
+                                <tr>
+                                    <td className="table-light text-center" colSpan={6}>
+                                        Chưa có hóa đơn nào bị xóa gần đây
+                                    </td>
+                                </tr>
+                                )}
+                        </tbody>
+                    </table>
+                </div>
+                )
+            }
+        </>
     )
 }
 

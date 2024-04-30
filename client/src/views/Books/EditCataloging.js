@@ -7,7 +7,6 @@ import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
     const {id} = useParams();                                       // Id của sách 
-    const [status, setStatus] = useState(false);                    // Dùng để kiểm soát khi false thì hiện nút duyệt, khi true thì ẩn nút duyệt
     const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại liên tục
     const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
     const [infoCataloging, setInfoCataloging] = useState([]);       // Lấy thông tin biên mục
@@ -16,31 +15,27 @@ function EditCataloging() {
     useEffect(() => {
         try {
             axios
-            .get(`http://${config.URL}/books/getInfoCatalog/${id}`,
-                    {headers: {authenToken: localStorage.getItem('authenToken')}}
-                )
+            .get(`http://${config.URL}/books/getInfoCatalog/${id}`)
             .then((res) => {
-                if (!res.data && !res.data.catalogInfo) {
+                if (res.data.error) {
                     toast.error(res.data.error);
                     return;
                 }
 
-                setInfoCataloging(res.data.catalogInfo);
+                setInfoCataloging(res.data);
                 setStatusLoadName(true);
             });
         } catch (error) {
             toast.error('Đã xảy ra lỗi tại máy chủ! Hãy thử lại sau ít phút...');
         }
-    }, [status]);
+    }, []);
 
     useEffect(() => {
         if (infoCataloging && infoCataloging.UserId && statusLoadName) {
             axios
             .get(`http://${config.URL}/users/fullname/${infoCataloging.UserId}`)
             .then((res) => {
-                if (res.data?.userInfo?.Fullname) {
-                    setFullname(res.data.userInfo.Fullname);
-                }
+                setFullname(res.data);
             });
         }
     }, [statusLoadName]);
@@ -50,12 +45,12 @@ function EditCataloging() {
             axios
                 .get(`http://${config.URL}/approve/isnotaccept/${id}`)
                 .then((res) => {
-                    setIsNotAccept(res.data.amount);
+                    setIsNotAccept(res.data);
                 })
         } catch (error) {
             toast.error('Số lượng phân mục chưa xác định được!');
         }
-    });
+    }, []);
 
     const formatAndDisplayDatetime = (dateString) => {
         const date = new Date(dateString);
@@ -88,7 +83,7 @@ function EditCataloging() {
                 .then((res) => {
                     if (res.data.success) {
                         toast.success(res.data.success);
-                        setStatus(true);
+                        setIsNotAccept(0);
                     }
                     else 
                         toast.error(res.data.error)

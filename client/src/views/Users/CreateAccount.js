@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
+import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
@@ -52,6 +53,33 @@ function CreateAccountUser() {
             .catch(error => toast.error('Error!'));
     }, [status]);
 
+    const validateData = (data) => {
+        let message = '';
+        switch (true) {
+            case !RegexPatterns.username.test(data.username):
+                message = 'Username không hợp lệ!';
+                break;
+            case !RegexPatterns.password.test(data.password):
+                message = 'Mật khẩu không hợp lệ!';
+                break;
+            case !RegexPatterns.repassword.test(data.repassword):
+                message = 'Mật khẩu không hợp lệ!';
+                break;
+            case !RegexPatterns.fullname.test(data.fullname):
+                message = 'Họ và tên không hợp lệ!';
+                break;
+            case !RegexPatterns.email.test(data.email):
+                message = 'Email không hợp lệ!';
+                break;
+            case !RegexPatterns.phoneNumber.test(data.phoneNumber):
+                message = 'Số điện thoại không hợp lệ!';
+                break;
+            default:
+                break;
+        }
+        return message;
+    };
+
     const handleCreateAccount = (e) => {
         setStatus(true);
         e.preventDefault();
@@ -59,11 +87,17 @@ function CreateAccountUser() {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
+        // Kiểm tra regex: Nếu kiểm tra có message trả về thì có lỗi => Báo lỗi và ngưng thực thi.
+        if (validateData(data) !== '') {
+            toast.warning(validateData(data));
+            return;
+        }
+
+        const {username, password, repassword, fullname, email, birthday, position, room, avatar, role, phoneNumber} = data;
+        const account = {username, password, repassword};
+        const information = {username, fullname, email, birthday, position, room, avatar, role, phoneNumber};
+
         try {
-            const {username, password, repassword, fullname, email, birthday, position, room, avatar, role, phoneNumber} = data;
-            const account = {username, password, repassword};
-            const information = {username, fullname, email, birthday, position, room, avatar, role, phoneNumber};
-            
             if (!account || !information) {
                 toast.warning('Thông tin không đầy đủ!');
                 return;
@@ -94,7 +128,7 @@ function CreateAccountUser() {
         } catch (error) {
             toast.error('Không thể tạo tài khoản. Hãy kiểm tra thông tin và thử lại!');
         }
-    }
+    };
 
     return (
         <div className="creatpage-container">
