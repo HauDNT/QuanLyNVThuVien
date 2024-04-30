@@ -22,7 +22,7 @@ function ViewCataloging() {
                         setListCataloging(res.data);
                         setLoading(false);
                         setShowData(true);
-                    }, 500);
+                    }, 1000);
                 }
             })
             .catch((error) => {

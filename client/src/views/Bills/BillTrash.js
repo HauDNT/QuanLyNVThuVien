@@ -6,9 +6,11 @@ import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Bills.scss";
 
 function BillTrash() {
+    const audio = new Audio(SuccessSound);
     let {type} = useParams();
     const [listBill, setListBill] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
@@ -30,7 +32,7 @@ function BillTrash() {
                     setListBill(res.data);
                     setLoading(false);
                     setShowData(true);
-                }, 500);
+                }, 1000);
             });
     }, [type]);
 
@@ -94,8 +96,10 @@ function BillTrash() {
                     }
                 });
 
-                if (status)
+                if (status) {
                     toast.success('Khôi phục đơn thành công!');
+                    audio.play();
+                }
                 else 
                     toast.error('Khôi phục đơn không thành công!');
             })
@@ -126,9 +130,11 @@ function BillTrash() {
                         status = true;
                     }
                 });
-
-                if (status)
+                
+                if (status) {
+                    audio.play();
                     toast.success('Xóa đơn thành công!');
+                }
                 else 
                     toast.error('Xóa đơn không thành công!');
             })
@@ -146,27 +152,34 @@ function BillTrash() {
                 ) 
                 : 
                 (
-                <div className="container-fluid bill-page">
-                    <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
-                        <FcUndo className="trash-icon"/> Quay lại
-                    </button>
-                    {
-                        idRole === 1 ? (
-                            <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
-                        ) : null
-                    }
-                    <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
-                    <table className="table table-dark">
-                        <thead className="thead-dark">
+                <div className="bill-page">
+                    <div className="row">
+                        <div className="col-3">
+                            <button className="btn btn-outline-secondary btn-trash" onClick={() => window.history.back()}>
+                                <FcUndo className="trash-icon"/> Quay lại
+                            </button>
+                        </div>
+                        <div className="col-9 btn-container">
+                            {
+                                idRole === 1 ? (
+                                    <button className="btn btn-danger btn--bill-page" onClick={() => handleForceDelete()}>Xóa vĩnh viễn</button>
+                                ) : null
+                            }
+                            <button className="btn btn-primary btn--bill-page" onClick={() => handleRestore()}>Khôi phục</button>
+                        </div>
+                    </div>
+                    
+                    <table className="styled-table">
+                        <thead>
                             <tr>
-                                <th scope="col" className="table-dark text-center"> 
+                                <th scope="col" className="text-center"> 
                                     <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
                                 </th>
-                                <th scope="col" className="table-dark text-center">Mã đơn</th>
-                                <th scope="col" className="table-dark text-center">Tên đơn</th>
-                                <th scope="col" className="table-dark text-center">Thời gian tạo</th>
-                                <th scope="col" className="table-dark text-center">Thời gian xóa</th>
-                                <th scope="col" className="table-dark text-center">Nhà xuất bản</th>
+                                <th scope="col" className="text-center">Mã đơn</th>
+                                <th scope="col" className="text-center">Tên đơn</th>
+                                <th scope="col" className="text-center">Thời gian tạo</th>
+                                <th scope="col" className="text-center">Thời gian xóa</th>
+                                <th scope="col" className="text-center">Nhà xuất bản</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -174,18 +187,18 @@ function BillTrash() {
                                 listBill.length > 0 ?
                                 (listBill.map((bill) => (
                                     <tr key={bill.id} className="text-center">
-                                        <td className="table-light">
+                                        <td>
                                             <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
                                         </td>
-                                        <td className="table-light"> {bill.id} </td>
-                                        <td className="table-light"> {bill.NameBill} </td>
-                                        <td className="table-light"> {bill.DateGenerateBill} </td>
-                                        <td className="table-light"> {formatAndDisplayDatetime(bill.deletedAt)} </td>
-                                        <td className="table-light"> {bill.Supplier} </td>
+                                        <td> {bill.id} </td>
+                                        <td> {bill.NameBill} </td>
+                                        <td> {bill.DateGenerateBill} </td>
+                                        <td> {formatAndDisplayDatetime(bill.deletedAt)} </td>
+                                        <td> {bill.Supplier} </td>
                                     </tr>
                                 ))) : (
                                 <tr>
-                                    <td className="table-light text-center" colSpan={6}>
+                                    <td className="text-center" colSpan={6}>
                                         Chưa có hóa đơn nào bị xóa gần đây
                                     </td>
                                 </tr>

@@ -66,16 +66,16 @@ function BillDetail() {
                     />
                     <div className="bill-page">
                         <button onClick={() => window.history.back()} className="btn btn-primary btn--bill-page">Quay về</button>
-                        <table className="table table-dark">
-                            <thead className="thead-dark">
+                        <table className="styled-table">
+                            <thead>
                                 <tr>
-                                    <th scope="col" className="table-dark text-center">Mã sách</th>
-                                    <th scope="col" className="table-dark text-center">Tiêu đề chính</th>
-                                    <th scope="col" className="table-dark text-center">Tác giả</th>
-                                    <th scope="col" className="table-dark text-center">Đơn giá</th>
-                                    <th scope="col" className="table-dark text-center">Số lượng</th>
-                                    <th scope="col" className="table-dark text-center">Chiết khấu (%)</th>
-                                    <th scope="col" className="table-dark text-center">Thành tiền</th>
+                                    <th scope="col" className="text-center">Mã sách</th>
+                                    <th scope="col" className="text-center">Tiêu đề chính</th>
+                                    <th scope="col" className="text-center">Tác giả</th>
+                                    <th scope="col" className="text-center">Đơn giá</th>
+                                    <th scope="col" className="text-center">Số lượng</th>
+                                    <th scope="col" className="text-center">Chiết khấu (%)</th>
+                                    <th scope="col" className="text-center">Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -83,26 +83,26 @@ function BillDetail() {
                                     detail && detail.length > 0 ?
                                     (detail.map((info) => (
                                         <tr key={info.BookId} className="text-center">
-                                            <td className="table-light"> {info.BookId} </td>
-                                            <td className="table-light"> {info.MainTitle} </td>
-                                            <td className="table-light"> {info.Author} </td>
-                                            <td className="table-light"> {info.UnitPrice} </td>
-                                            <td className="table-light"> {info.Amount} </td>
-                                            <td className="table-light"> {info.Discount} </td>
-                                            <td className="table-light"> 
+                                            <td> {info.BookId} </td>
+                                            <td> {info.MainTitle} </td>
+                                            <td> {info.Author} </td>
+                                            <td> {info.UnitPrice} </td>
+                                            <td> {info.Amount} </td>
+                                            <td> {info.Discount} </td>
+                                            <td> 
                                                 {info.UnitPrice * info.Amount * (1 - info.Discount / 100)} 
                                             </td>
                                         </tr>
                                     ))) : (
                                     <tr>
-                                        <td className="table-light text-center" colSpan={7}>
+                                        <td className="text-center" colSpan={7}>
                                             Không có sách nào được phân phối vào hóa đơn này
                                         </td>
                                     </tr>
                                     )}
 
                                     <tr>
-                                        <td className="table-light text-center" colSpan={7}>
+                                        <td className="text-center" colSpan={7}>
                                             Tổng tiền: {calMoney()} VND
                                         </td>
                                     </tr>

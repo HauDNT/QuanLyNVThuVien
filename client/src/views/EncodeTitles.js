@@ -23,7 +23,7 @@ function EncodeTitles() {
                         setEncodeTitles(res.data);
                         setLoading(false);
                         setShowData(true);
-                    }, 500);
+                    }, 1000);
                 }
             })
             .catch(error => toast.error('Đã xảy ra lỗi trong quá trình lấy dữ liệu!'));
@@ -36,30 +36,35 @@ function EncodeTitles() {
                 (<LoadingWindow/>)
                 :
                 (
-                <table className="table table-dark">
-                    <thead className="thead-dark">
-                        <tr>
-                            <th scope="col" className="table-dark text-center"> Ký tự </th>
-                            <th scope="col" className="table-dark text-center"> Số mã hóa </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            encodeTitles && encodeTitles.length > 0 ?
-                            (encodeTitles.map((item) => (
-                                <tr key={item.id} className="text-center">
-                                    <td className="table-light"> {item.Character} </td>
-                                    <td className="table-light"> {item.NumberEncrypt} </td>
-                                </tr>
-                            ))) : (
-                            <tr>
-                                <td className="table-light text-center" colSpan={2}>
-                                    Không có dữ liệu
-                                </td>
-                            </tr>
-                            )}
-                    </tbody>
-                </table>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <table className="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" className="text-center"> Ký tự </th>
+                                        <th scope="col" className="text-center"> Số mã hóa </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        encodeTitles && encodeTitles.length > 0 ?
+                                        (encodeTitles.map((item) => (
+                                            <tr key={item.id} className="text-center">
+                                                <td> {item.Character} </td>
+                                                <td> {item.NumberEncrypt} </td>
+                                            </tr>
+                                        ))) : (
+                                        <tr>
+                                            <td className="text-center" colSpan={2}>
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                        )}
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                    </div>
                 )
             }
         </>

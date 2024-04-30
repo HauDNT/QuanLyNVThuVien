@@ -1,0 +1,13 @@
+.searchbar {
+    display: flex;
+    align-items: flex-start;
+
+    select {
+        text-align: center;
+        border: 1px solid #ccc;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        cursor: pointer;
+        min-width: 10em;
+    }
+}

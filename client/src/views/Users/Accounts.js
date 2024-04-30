@@ -6,6 +6,7 @@ import config from '../../constance.js';
 import {FaEdit, FaTrash } from "react-icons/fa";
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Users.scss";
 
@@ -22,6 +23,8 @@ function Users() {
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
 
+    const audio = new Audio(SuccessSound);
+
     useEffect(() => {
         axios
             .get(
@@ -33,7 +36,7 @@ function Users() {
                     setListUsers(res.data);
                     setLoading(false);
                     setShowData(true);
-                }, 500);
+                }, 1000);
             });
     }, []);
 
@@ -56,6 +59,7 @@ function Users() {
                     if (!res.data.error) {
                         setListUsers((oldList) => oldList.filter((user) => user.id !== eachUserSelected));
                         status = true;
+                        audio.play();
                     }
                 });
 
@@ -123,66 +127,69 @@ function Users() {
                             orderChoice=''
                             onSearchResultChange={handleSearchResultChange}
                         />
-                        <div className="container-fluid user-page">
-                            {
-                                idRole === 1 ? (
-                                    <>
-                                        <Link className="btn btn-outline-secondary btn-trash" to={`/users/trash`}>
-                                            <FaTrash className="trash-icon"/> Tài khoản đã xóa
-                                        </Link>
-                                        <Link className="btn btn-danger btn--account-page" onClick={() => handleDeleteAccount()}>Xóa</Link>
-                                    </>
-                                ) : null
-                            }
-                            <Link className="btn btn-success btn--account-page" to="/users/create">Tạo tài khoản mới</Link>
-                            <table className="table table-dark">
-                                <thead className="thead-dark">
-                                    <tr>
-                                        <th scope="col" className="table-dark text-center"> 
-                                            <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
-                                        </th>
-                                        <th scope="col" className="table-dark text-center">Username</th>
-                                        <th scope="col" className="table-dark text-center">Họ và tên</th>
-                                        <th scope="col" className="table-dark text-center">Email</th>
-                                        <th scope="col" className="table-dark text-center">Số điện thoại</th>
-                                        <th scope="col" className="table-dark text-center">Phòng</th>
-                                        <th scope="col" className="table-dark text-center">Chức vụ</th>
-                                        <th scope="col" className="table-dark text-center">Loại tài khoản</th>
-                                        <th scope="col" className="table-dark text-center">Sửa thông tin</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        listUsers.length > 0 ? (
-                                            listUsers.map((user) => (
-                                            <tr key={user.id} className="text-center">
-                                                <td className="table-light">
-                                                    <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={user.id} onClick={(e) => handleCheck(e)}/>
-                                                </td>
-                                                <td className="table-light">{user.Username}</td>
-                                                <td className="table-light">{user.Fullname}</td>
-                                                <td className="table-light">{user.Email}</td>
-                                                <td className="table-light">{user.PhoneNumber}</td>
-                                                <td className="table-light">{user.RoomName}</td>
-                                                <td className="table-light">{user.PositionName}</td>
-                                                <td className="table-light">{user.RoleName}</td>
-                                                <td className="table-light">
-                                                    <Link to={`edit/${user.id}`}>
-                                                        <FaEdit className="edit-icon table-icon"/>
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))) : (
-                                            <tr>
-                                                <td className="table-light text-center" colSpan={9}>
-                                                    Chưa có tài khoản nào được tạo
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-                                </tbody>
-                            </table>
+                        <div className="row">
+                            <div className="col-lg-12 user-page">
+                                {
+                                    idRole === 1 ? (
+                                        <>
+                                            <Link className="btn btn-outline-secondary btn-trash" to={`/users/trash`}>
+                                                <FaTrash className="trash-icon"/> Tài khoản đã xóa
+                                            </Link>
+                                            <Link className="btn btn-danger btn--account-page" onClick={() => handleDeleteAccount()}>Xóa</Link>
+                                        </>
+                                    ) : null
+                                }
+                                <Link className="btn btn-success btn--account-page" to="/users/create">Tạo tài khoản mới</Link>
+                                <table className="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" className="text-center"> 
+                                                <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
+                                            </th>
+                                            <th scope="col" className="text-center">Username</th>
+                                            <th scope="col" className="text-center">Họ và tên</th>
+                                            <th scope="col" className="text-center">Email</th>
+                                            <th scope="col" className="text-center">Số điện thoại</th>
+                                            <th scope="col" className="text-center">Phòng</th>
+                                            <th scope="col" className="text-center">Chức vụ</th>
+                                            <th scope="col" className="text-center">Loại tài khoản</th>
+                                            <th scope="col" className="text-center">Sửa thông tin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            listUsers.length > 0 ? (
+                                                listUsers.map((user) => (
+                                                <tr key={user.id} className="text-center">
+                                                    <td>
+                                                        <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={user.id} onClick={(e) => handleCheck(e)}/>
+                                                    </td>
+                                                    <td>{user.Username}</td>
+                                                    <td>{user.Fullname}</td>
+                                                    <td>{user.Email}</td>
+                                                    <td>{user.PhoneNumber}</td>
+                                                    <td>{user.RoomName}</td>
+                                                    <td>{user.PositionName}</td>
+                                                    <td>{user.RoleName}</td>
+                                                    <td>
+                                                        <Link to={`edit/${user.id}`}>
+                                                            <FaEdit className="edit-icon table-icon"/>
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))) : (
+                                                <tr>
+                                                    <td className="table-light text-center" colSpan={9}>
+                                                        Chưa có tài khoản nào được tạo
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+
                     </>
                 )
             }

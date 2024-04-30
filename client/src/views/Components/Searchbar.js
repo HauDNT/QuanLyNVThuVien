@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
+import "../../styles/Searchbar.scss";
 
 const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, orderChoice}) => {
     /*
@@ -236,7 +237,7 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
     return (
         <>
             <div className="row">
-                <div class="col-lg-12 view-cataloging--search input-group mb-3">
+                <div class="col-lg-12 searchbar input-group mb-3">
                     <select 
                         name="" 
                         id="" 

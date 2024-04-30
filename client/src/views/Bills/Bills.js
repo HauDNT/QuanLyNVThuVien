@@ -8,9 +8,11 @@ import {FcViewDetails} from "react-icons/fc";
 import {FaTrash } from "react-icons/fa";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Bills.scss";
 
 function Bills() {
+    const audio = new Audio(SuccessSound);
     const {type} = useParams();
     const [listBills, setListBills] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
@@ -32,7 +34,7 @@ function Bills() {
                     setListBills(res.data);
                     setLoading(false);
                     setShowData(true);
-                }, isLoading ? 500 : 0);
+                }, isLoading ? 1000 : 0);
             });
     }, [type]);
 
@@ -66,8 +68,10 @@ function Bills() {
                     }
                 });
 
-            if (status)
+            if (status) {
                 toast.success('Xóa đơn thành công');
+                audio.play();
+            }
             else 
                 toast.error('Xóa đơn không thành công!');
         });
@@ -149,16 +153,16 @@ function Bills() {
                             </div>
                         ) : null
                     }
-                        <table className="table table-dark">
-                            <thead className="thead-dark">
+                        <table className="styled-table">
+                            <thead>
                                 <tr>
-                                    <th scope="col" className="table-dark text-center"> 
+                                    <th scope="col" className="text-center"> 
                                         <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
                                     </th>
-                                    <th scope="col" className="table-dark text-center"> Mã đơn </th>
-                                    <th scope="col" className="table-dark text-center"> Tên đơn </th>
-                                    <th scope="col" className="table-dark text-center"> Thời gian tạo </th>
-                                    <th scope="col" className="table-dark text-center"> Xem chi tiết </th>
+                                    <th scope="col" className="text-center"> Mã đơn </th>
+                                    <th scope="col" className="text-center"> Tên đơn </th>
+                                    <th scope="col" className="text-center"> Thời gian tạo </th>
+                                    <th scope="col" className="text-center"> Xem chi tiết </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -166,13 +170,13 @@ function Bills() {
                                     listBills.length > 0 ?
                                     (listBills.map((bill) => (
                                         <tr key={bill.id} className="text-center">
-                                            <td className="table-light">
+                                            <td>
                                                 <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
                                             </td>
-                                            <td className="table-light"> {bill.id} </td>
-                                            <td className="table-light"> {bill.NameBill} </td>
-                                            <td className="table-light"> {formatAndDisplayDatetime(bill.DateGenerateBill)} </td>
-                                            <td className="table-light">
+                                            <td> {bill.id} </td>
+                                            <td> {bill.NameBill} </td>
+                                            <td> {formatAndDisplayDatetime(bill.DateGenerateBill)} </td>
+                                            <td>
                                                 <Link to={`/bills/detail/${bill.id}`}>
                                                     <FcViewDetails className="info-icon table-icon"/>
                                                 </Link>
@@ -180,7 +184,7 @@ function Bills() {
                                         </tr>
                                     ))) : (
                                     <tr>
-                                        <td className="table-light text-center" colSpan={6}>
+                                        <td className="text-center" colSpan={6}>
                                             Chưa có hóa đơn nào thuộc loại này được tạo
                                         </td>
                                     </tr>

@@ -3,9 +3,11 @@ import {Link, useParams} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
+    const audio = new Audio(SuccessSound);
     const {id} = useParams();                                       // Id của sách 
     const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại liên tục
     const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
@@ -70,6 +72,7 @@ function EditCataloging() {
             }
             else {
                 toast.success(res.data.success);
+                audio.play();
             }
         })
         .catch(error => toast.error("Đã xảy ra lỗi khi cập nhật thông tin!"));
@@ -82,6 +85,7 @@ function EditCataloging() {
                 .patch(`http://${config.URL}/approve/accept/${id}`)
                 .then((res) => {
                     if (res.data.success) {
+                        audio.play();
                         toast.success(res.data.success);
                         setIsNotAccept(0);
                     }

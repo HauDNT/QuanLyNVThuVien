@@ -5,9 +5,11 @@ import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/ApproveView.scss';
 
 function ApproveView() {
+    const audio = new Audio(SuccessSound);
     const {id: bookId} = useParams();
     const [listApproveInfo, setListApproveInfo] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
@@ -26,7 +28,7 @@ function ApproveView() {
                         setListApproveInfo(res.data);
                         setLoading(false);
                         setShowData(true);
-                    }, 500);
+                    }, 1000);
                 });
         } catch (error) {
             toast.error("Không thể tải lên phân phối!");
@@ -94,8 +96,10 @@ function ApproveView() {
                     }
                 });
 
-            if (status)
+            if (status) {
                 toast.success('Xóa phân phối thành công!');
+                audio.play();
+            }
             else 
                 toast.error('Xóa phân phối không thành công!');
         }
@@ -136,19 +140,19 @@ function ApproveView() {
                         <Link 
                             className="btn btn-primary btn-create" 
                             to={`/approve/create/${bookId}`}>Tạo phân phối</Link>
-                        <table className="table table-dark">
-                            <thead className="thead-dark">
+                        <table className="styled-table">
+                            <thead>
                                 <tr>
-                                    <th scope="col" className="table-dark text-center">
+                                    <th scope="col" className="text-center">
                                         <input id="checkbox-parent" class="select-all form-check-input" type="checkbox" value="" onClick={(e) => handleCheckAll(e)}/>
                                     </th>
-                                    <th scope="col" className="table-dark text-center">Mã ĐKCB</th>
-                                    <th scope="col" className="table-dark text-center">Vị trí lưu trữ</th>
-                                    <th scope="col" className="table-dark text-center">Thể loại lưu trữ</th>
-                                    <th scope="col" className="table-dark text-center">Trạng thái tài liệu</th>
-                                    <th scope="col" className="table-dark text-center">Ngày tạo</th>
-                                    <th scope="col" className="table-dark text-center">Ngày cập nhật</th>
-                                    <th scope="col" className="table-dark text-center">Người thực hiện</th>
+                                    <th scope="col" className="text-center">Mã ĐKCB</th>
+                                    <th scope="col" className="text-center">Vị trí lưu trữ</th>
+                                    <th scope="col" className="text-center">Thể loại lưu trữ</th>
+                                    <th scope="col" className="text-center">Trạng thái tài liệu</th>
+                                    <th scope="col" className="text-center">Ngày tạo</th>
+                                    <th scope="col" className="text-center">Ngày cập nhật</th>
+                                    <th scope="col" className="text-center">Người thực hiện</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,23 +161,23 @@ function ApproveView() {
                                     (
                                         listApproveInfo.map((approve) => (
                                             <tr key={approve.id} className="text-center">
-                                                <td className="table-light">
+                                                <td>
                                                     <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={approve.id} onClick={(e) => handleCheck(e)}/>
                                                 </td>
-                                                <td className="table-light">
+                                                <td>
                                                     <Link className="link-update-approve" to={`/approve/update/${approve.id}`}>{approve.RegisCode}</Link>
                                                 </td>
-                                                <td className="table-light">{approve.RoomName}</td>
-                                                <td className="table-light">{approve.NameType}</td>
-                                                <td className="table-light">{approve.Status}</td>
-                                                <td className="table-light">{formatAndDisplayDatetime(approve.createdAt)}</td>
-                                                <td className="table-light">{formatAndDisplayDatetime(approve.updatedAt)}</td>
-                                                <td className="table-light">{approve.Username}</td>
+                                                <td>{approve.RoomName}</td>
+                                                <td>{approve.NameType}</td>
+                                                <td>{approve.Status}</td>
+                                                <td>{formatAndDisplayDatetime(approve.createdAt)}</td>
+                                                <td>{formatAndDisplayDatetime(approve.updatedAt)}</td>
+                                                <td>{approve.Username}</td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td className="table-light text-center" colSpan={8}>
+                                            <td className="text-center" colSpan={8}>
                                                 Chưa có phân phối nào được tạo
                                             </td>
                                         </tr>

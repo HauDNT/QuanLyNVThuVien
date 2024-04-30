@@ -3,10 +3,12 @@ import axios from "axios";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
 import RegexPatterns from "../../helper/RegexPatterns.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreateAccountUser() {
+    const audio = new Audio(SuccessSound);
     const [status, setStatus] = useState(false);
     const {listRooms} = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
@@ -120,6 +122,7 @@ function CreateAccountUser() {
                                 setStatus(false);
                                 handleClearInput();
                                 toast.success(res.data.success);
+                                audio.play();
                             }
                             else
                                 toast.error(res.data.error);

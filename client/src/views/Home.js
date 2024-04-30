@@ -17,13 +17,17 @@ function Home() {
   return (
       <div className="Home">
       <Nav/>
-      <div className="row home-container">
-          <div className="leftSide col-2">
-            <SideBar/>
+      <div className="home-container">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-2 leftSide">
+              <SideBar/>
+            </div>
+            <div className="col-10 rightSide">
+                <Outlet/>
+            </div>
           </div>
-          <div className="rightSide col-10">
-              <Outlet/>
-          </div>
+        </div>
         </div>
       </div>
   )

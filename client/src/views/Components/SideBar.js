@@ -2,26 +2,13 @@ import React, {useContext} from "react";
 import {Sidebar, Menu, MenuItem, SubMenu, sidebarClasses} from "react-pro-sidebar";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 function SideBar() {
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
 
     return (
-        <Sidebar 
-            className="sidebar"
-            rootStyles={{
-                [`.${sidebarClasses.container}`]: {
-                    height: '100%',
-                    backgroundColor: 'white',
-                    border: '1px solid #ccc',
-                    borderTopRightRadius: '10px',
-                    borderBottomRightRadius: '10px',
-                    padding: '10px 0',
-                }
-            }}
-            >
+        <Sidebar className="sidebar">
             <Menu>
                 <MenuItem component={<Link to="/"/>}>Trang chủ</MenuItem>
                 <SubMenu label="Quản lý đơn sách">

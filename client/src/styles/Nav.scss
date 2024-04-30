@@ -4,8 +4,7 @@
 
     .nav-link {
         &:first-child {
-            padding-left: 20px;
-            margin-right: 30px;
+            padding-left: 0px;
         }
 
         &:not(:first-child) {
@@ -26,9 +25,7 @@
 
     .dropdown {
         position: absolute;
-        right: 1em;
-
-        .dropdown-toggle {}
+        right: 0.3em;
 
         .dropdown-menu {
             .dropdown-item {

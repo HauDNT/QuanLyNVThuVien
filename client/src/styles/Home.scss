@@ -3,7 +3,7 @@
 
     .navbar {
         margin: 0;
-        padding: 0;
+        padding: 0 10px;
         height: 55px;
         width: 100%;
         justify-content: start;
@@ -12,6 +12,7 @@
     .home-container {
         margin: 0;
         height: 100%;
+        padding: 10px 0 50px 0;
 
         .col-2 {
             padding: 0;
@@ -28,7 +29,7 @@
         }
         
         .col-10 {
-            padding: 0;
+            // padding: 0;
             padding-top: 15px;
             height: max-content;
             overflow-x: hidden;

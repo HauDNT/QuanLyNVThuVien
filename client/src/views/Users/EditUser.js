@@ -5,9 +5,11 @@ import {Link, useParams} from "react-router-dom";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
 import RegexPatterns from "../../helper/RegexPatterns.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Users.scss";
 
 function EditUser() {
+    const audio = new Audio(SuccessSound);
     const {id} = useParams();
     const [status, setStatus] = useState(false);
     const [userInfo, setUserInfo] = useState([]);
@@ -79,8 +81,10 @@ function EditUser() {
                 if (res.data.error) {
                     toast.error(res.data.error);
                 }
-                else 
+                else {
                     toast.success(res.data.success);
+                    audio.play();
+                }
             })
             .catch(error => toast.error("Không cập nhật được thông tin"));
     };

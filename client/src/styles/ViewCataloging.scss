@@ -1,25 +1,5 @@
-.view-cataloging--search {
-    margin: 0 10px;
-    display: flex;
-    align-items: flex-start;
-
-    select {
-        text-align: center;
-        border: 1px solid #ccc;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        cursor: pointer;
-        width: 10em;
-    }
-
-    button {
-        margin-right: 20px;
-    }
-}
-
 .view-cataloging--container {
     height: max-content;
-    margin: 0 10px;
     border: 1px solid #C7C8CC;
     border-radius: 10px;
     background-color: #fcfbf7;
@@ -28,7 +8,7 @@
     .view-cataloging--header {
         text-align: center;
         padding: 10px 0;
-        background-color: #0E46A3;
+        background-color: #387ADF;
         color: white;
     }
 
@@ -43,7 +23,7 @@
 
                 font-weight: 700;
                 .order-number {
-                                         
+          
                 }
                 .classification {
                     color: green

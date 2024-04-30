@@ -2,10 +2,12 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import RegexPatterns from "../../helper/RegexPatterns.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreatBill() {
+    const audio = new Audio(SuccessSound);
     const [status, setStatus] = useState(false);
     const [amountBills, setAmountBills] = useState(false);
     const [typesBill, setTypesBill] = useState([]);
@@ -93,6 +95,7 @@ function CreatBill() {
                     handleClearInput();
                     setStatus(false);
                     toast.success(res.data.success);
+                    audio.play();
                 }
             })
     };

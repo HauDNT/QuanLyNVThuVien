@@ -1,6 +1,5 @@
 .createCataloging-container {
     height: max-content;
-    margin: 0 10px;
     border: 1px solid #C7C8CC;
     border-radius: 10px;
     background-color: #fcfbf7;
@@ -9,7 +8,7 @@
     .createCataloging-heading {
         text-align: center;
         padding: 10px 0 10px 0;
-        background-color: #0E46A3;
+        background-color: #387ADF;
         color: white;
     }
     .createCataloging-form {
@@ -34,13 +33,13 @@
         }
 
         .button-container {
-            .btn--catalog {
+            .btn {
                 font-weight: 600;
                 font-size: 17px;
-                float: right;
                 margin-left: 10px;
                 min-width: 7em;
             }
+            text-align: right;
         }
     }
 }

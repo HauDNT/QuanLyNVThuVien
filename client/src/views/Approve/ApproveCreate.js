@@ -7,10 +7,12 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
+import SuccessSound from "../../assets/audio/success-sound.mp3";
 import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
+    const audio = new Audio(SuccessSound);
     const {id: bookId} = useParams();
     const [maxRegisCode, setMaxRegisCode] = useState();
     const {listRooms} = useContext(RoomContext);
@@ -165,6 +167,7 @@ function ApproveCreate() {
                                 toast.success(res.data.success);
                                 handleClearInput();
                                 setMaxRegisCode(0);
+                                audio.play();
                             }
                         });
                 }
@@ -175,156 +178,156 @@ function ApproveCreate() {
     };
 
     return (
-        <form method="POST" className="container container--approve-create" onSubmit={handleCreateApprove}>
-            <div className="row">
-                <h3 className="approve-header">Phân phối tài liệu</h3>
-            </div>
-            <div className="row">
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Phần đầu</span>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        name="Heading"
-                        value={initValues.Heading}
-                        onChange={(e) => changeToGenerateRegisCode(e)}
-                        placeholder="VD: PM23" 
-                        required/>
+        <form method="POST" className="container--approve-create" onSubmit={handleCreateApprove}>
+            <h3 className="approve-header">Phân phối tài liệu</h3>
+            <div className="approve-form">
+                <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Phần đầu</span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            name="Heading"
+                            value={initValues.Heading}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            placeholder="VD: PM23" 
+                            required/>
+                    </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Mã số đăng ký</span>
+                        <input 
+                            name="NumberSeries"
+                            value={initValues.NumberSeries}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            type="text" 
+                            className="form-control" 
+                            placeholder="VD: 86594" required/>
+                    </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
+                        <input 
+                            type="text"
+                            name="NumberLength"
+                            value={initValues.NumberLength}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            className="form-control" 
+                            placeholder="Khuyến nghị: 6" 
+                            required/>
+                    </div>
                 </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Mã số đăng ký</span>
-                    <input 
-                        name="NumberSeries"
-                        value={initValues.NumberSeries}
-                        onChange={(e) => changeToGenerateRegisCode(e)}
-                        type="text" 
-                        className="form-control" 
-                        placeholder="VD: 86594" required/>
+                <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Mã vạch</span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            name="RegisCode"
+                            value={initValues.RegisCode}
+                            placeholder="VD: PM23.086594"
+                            readOnly/>
+                    </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Số ĐKCB</span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            name="RegisCode"
+                            value={initValues.RegisCode}
+                            placeholder="VD: PM23.086594" 
+                            readOnly/>
+                    </div>
                 </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
-                    <input 
-                        type="text"
-                        name="NumberLength"
-                        value={initValues.NumberLength}
-                        onChange={(e) => changeToGenerateRegisCode(e)}
-                        className="form-control" 
-                        placeholder="Khuyến nghị: 6" 
-                        required/>
+                <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
+                        <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})} required>
+                            <option value="0" selected>Chọn thể loại lưu trữ</option>
+                            {storeTypes ? 
+                                (
+                                    storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
+                                ) : (
+                                    <option value="0" selected>Không nhận được dữ liệu</option>
+                                )
+                            }
+                        </select>
+                    </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Số lượng</span>
+                        <input 
+                            type="text" 
+                            name="AmountRegis"
+                            value={initValues.AmountRegis}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            className="form-control" 
+                            required/>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Mã vạch</span>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        name="RegisCode"
-                        value={initValues.RegisCode}
-                        placeholder="VD: PM23.086594"
-                        readOnly/>
+                <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
+                        <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})} required>
+                            <option value="0" selected>Chọn vị trí lưu trữ</option>
+                            {
+                                listRooms ? 
+                                (
+                                    listRooms.map(room => (<option value={room.id}>{room.RoomName}</option>))
+                                ) : (
+                                    <option value=''>Không có dữ liệu</option>
+                                )
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Số ĐKCB</span>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        name="RegisCode"
-                        value={initValues.RegisCode}
-                        placeholder="VD: PM23.086594" 
-                        readOnly/>
+                <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Trạng thái</span>
+                        <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})} required>
+                            <option value="0" selected>Chọn trạng thái tài liệu</option>
+                            {statusDocs.length > 0 ? (
+                                    statusDocs.map((status) => (<option value={status.id}>{status.Status}</option>))
+                                ) : (
+                                    <option value="0" selected>Không nhận được dữ liệu</option>
+                                )
+                            }
+                        </select>
+                    </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
+                        <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})} required>
+                            <option value="0" selected>Chọn mã đơn hàng</option>
+                            {listBills ? 
+                                (
+                                    listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
+                                ) : (
+                                    <option value="0" selected>Không nhận được dữ liệu</option>
+                                )
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Thể loại lưu trữ</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StoreTypes: +e.target.value})} required>
-                        <option value="0" selected>Chọn thể loại lưu trữ</option>
-                        {storeTypes ? 
-                            (
-                                storeTypes.map((types) => (<option value={types.id}>{types.NameType}</option>))
-                            ) : (
-                                <option value="0" selected>Không nhận được dữ liệu</option>
-                            )
-                        }
-                    </select>
+                <div className="row">
+                    <div className="input-group">
+                        <span className="input-group-text" onChange={(e) => setInitValues({...initValues, Notes: e.target.value})}>Ghi chú</span>
+                        <textarea className="form-control"></textarea>
+                    </div>
                 </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Số lượng</span>
-                    <input 
-                        type="text" 
-                        name="AmountRegis"
-                        value={initValues.AmountRegis}
-                        onChange={(e) => changeToGenerateRegisCode(e)}
-                        className="form-control" 
-                        required/>
+                <div className="row mb-3">
+                    <div className="col">
+                        <label className="form-label">Dãy số đăng ký cá biệt sẽ được tạo:</label>
+                        <textarea 
+                            className="form-control"
+                            rows="5"
+                            value=  {
+                                    initValues.AllRegisCode.map(regisCode => regisCode).join(' - ')}
+                            readOnly
+                        >
+                        </textarea>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Vị trí lưu trữ</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StorePlace: +e.target.value})} required>
-                        <option value="0" selected>Chọn vị trí lưu trữ</option>
-                        {
-                            listRooms ? 
-                            (
-                                listRooms.map(room => (<option value={room.id}>{room.RoomName}</option>))
-                            ) : (
-                                <option value=''>Không có dữ liệu</option>
-                            )
-                        }
-                    </select>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Trạng thái</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, StatusDoc: +e.target.value})} required>
-                        <option value="0" selected>Chọn trạng thái tài liệu</option>
-                        {statusDocs.length > 0 ? (
-                                statusDocs.map((status) => (<option value={status.id}>{status.Status}</option>))
-                            ) : (
-                                <option value="0" selected>Không nhận được dữ liệu</option>
-                            )
-                        }
-                    </select>
-                </div>
-                <div className="col input-group">
-                    <span className="input-group-text" id="basic-addon1">Mã đơn hàng</span>
-                    <select className="form-select" onChange={(e) => setInitValues({...initValues, BillId: +e.target.value})} required>
-                        <option value="0" selected>Chọn mã đơn hàng</option>
-                        {listBills ? 
-                            (
-                                listBills.map((bill) => (<option value={bill.id}> {formatAndDisplayDatetime(bill.createdAt)} - {bill.NameBill}</option>))
-                            ) : (
-                                <option value="0" selected>Không nhận được dữ liệu</option>
-                            )
-                        }
-                    </select>
-                </div>
-            </div>
-            <div className="row">
-                <div className="input-group">
-                    <span className="input-group-text" onChange={(e) => setInitValues({...initValues, Notes: e.target.value})}>Ghi chú</span>
-                    <textarea className="form-control"></textarea>
-                </div>
-            </div>
-            <div className="row mb-3">
-                <div className="col">
-                    <label className="form-label">Dãy số đăng ký cá biệt sẽ được tạo:</label>
-                    <textarea 
-                        className="form-control"
-                        rows="5"
-                        value=  {
-                                initValues.AllRegisCode.map(regisCode => regisCode).join(' - ')}
-                        readOnly
-                    >
-                    </textarea>
-                </div>
-            </div>
-            <div className="row">
-                <div className="button-container">
-                    <button type="submit" className="btn btn-primary mb-3">Phân phối</button>
+                <div className="row">
+                    <div className="btn-container">
+                        <button type="submit" className="btn btn-primary mb-3">Phân phối</button>
+                    </div>
                 </div>
             </div>
         </form>
