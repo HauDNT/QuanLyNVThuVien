@@ -65,6 +65,12 @@ class ApproveController {
         return res.json(allApp);
     };
 
+    // Lấy tổng số phân phối ~ tổng số sách hiện có:
+    async getAmountApproves(req, res) {
+        const amount = await BooksRegisInfo.count();
+        return res.json(amount);
+    };
+
     // Xem phân phối của từng biên mục sách:
     async getApproveOfBook(req, res) {
         const bookId = +req.params.bookId;

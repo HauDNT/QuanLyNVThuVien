@@ -4,6 +4,7 @@ const ApproveController = require('../controllers/ApproveController');
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 
 router.get('/all', ApproveController.getAllApproves);
+router.get('/amount', ApproveController.getAmountApproves);
 router.get('/getmaxregiscode', ApproveController.getMaxRegisCode);
 router.get('/item/:approveId', ApproveController.getInfoAnApprove);
 router.get('/isnotaccept/:bookId', ApproveController.isNotAccept);

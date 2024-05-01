@@ -13,6 +13,7 @@ import {UserRoleProvider} from "./context/UserRoleContext.js";
 // COMPONENTS:
 import CreateBarCode from "./views/CreateBarCode.js";
 import Home from "./views/Home.js";
+import Dashboard from "./views/Dashboard/Dashboard.js";
 import Login from "./views/Authenticate/Login.js";
 import UserAccounts from "./views/Users/Accounts.js";
 import CreateAccountUser from "./views/Users/CreateAccount.js";
@@ -30,6 +31,7 @@ import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
 import EncodeTitles from "./views/EncodeTitles.js";
 import PageNotFound from "./views/PageNotFound";
+
 import LoadingWindow from "./views/Components/Loading.js";
 
 import "./styles/App.scss";
@@ -79,7 +81,8 @@ function App() {
               <Routes>
                 <Route path="/loading" exact element={<LoadingWindow/>} />
                 <Route path="/login" exact element={<Login/>} />
-                <Route path="/" element={<Home/>}>
+                <Route element={<Home/>}>
+                  <Route path="/" exact element={<Dashboard/>}/>
                   <Route path="barcode" element={<CreateBarCode/>}/>
                   <Route path="users/" element={<UserAccounts/>}/>
                   <Route path="users/create" element={<CreateAccountUser/>}/>

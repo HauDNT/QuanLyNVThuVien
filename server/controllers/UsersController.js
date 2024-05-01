@@ -73,6 +73,12 @@ class UsersController {
             return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
         }
     };
+
+    // Lấy tất cả tài khoản hiện có:
+    async getAmount(req, res) {
+        const amount = await Users.count();
+        return res.json(amount);
+    };
     
     // Tìm thông tin 1 người dùng (tài khoản & thông tin cá nhân):
     async getInfoAUser(req, res) {

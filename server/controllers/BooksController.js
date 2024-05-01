@@ -1,6 +1,12 @@
 const {Books, BooksRegisInfo, EncryptTitles, Sequelize} = require('../models');
 
 class BooksController {
+    // Lấy tổng số sách hiện có:
+    async getAmountOfBooks(req, res) {
+        const amount = await Books.count();
+        return res.json(amount);
+    };
+
     // Lấy một số thông tin biên mục để hiển thị trên trang danh sách:
     async getSomeInfo(req, res) {
         try {

@@ -4,6 +4,7 @@ const {validToken} = require('../middlewares/AuthenMiddlewares');
 const UsersController = require('../controllers/UsersController');
 
 router.get('/all', UsersController.getAllUsers);
+router.get('/amount', UsersController.getAmount);
 router.get('/info/:id', UsersController.getInfoAUser);
 router.get('/fullname/:id', UsersController.getFullname);
 router.get('/trash', UsersController.getAccountSoftDeleted);

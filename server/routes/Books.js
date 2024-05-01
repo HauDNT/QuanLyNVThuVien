@@ -3,6 +3,7 @@ const router = express.Router();
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 const BooksController = require('../controllers/BooksController');
 
+router.get('/amount', BooksController.getAmountOfBooks);
 router.get('/someInfo', BooksController.getSomeInfo);
 router.get('/getInfoCatalog/:id', BooksController.getInfoCataloging);
 router.get('/getAccessCatalog', BooksController.accessCataloging);

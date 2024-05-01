@@ -20,19 +20,16 @@ function ApproveView() {
     const [showData, setShowData] = useState(false);
 
     useEffect(() => {
-        try {
-            axios
-                .get(`http://${config.URL}/approve/getApproves/${bookId}`)
-                .then((res) => {
-                    setTimeout(() => {
-                        setListApproveInfo(res.data);
-                        setLoading(false);
-                        setShowData(true);
-                    }, 1000);
-                });
-        } catch (error) {
-            toast.error("Không thể tải lên phân phối!");
-        }
+        axios
+            .get(`http://${config.URL}/approve/getApproves/${bookId}`)
+            .then((res) => {
+                setTimeout(() => {
+                    setListApproveInfo(res.data);
+                    setLoading(false);
+                    setShowData(true);
+                }, 1000);
+            })
+            .catch(error => toast.error("Không thể tải lên phân phối!"));
     }, []);
 
     const formatAndDisplayDatetime = (dateString) => {
