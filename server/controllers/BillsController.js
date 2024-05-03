@@ -60,6 +60,34 @@ class BillsController {
         }
     };
 
+    // Lấy tổng số tiền trong 1 tháng:
+    async getTotalPerMonth(req, res) {
+        const month = req.params.month;
+        const year = req.params.year;
+
+        // const total = await Bills.findAll({
+        //     attributes: [
+        //         [Sequelize.literal('MONTH(Bills.createdAt)'), 'month'],
+        //         [Sequelize.literal('YEAR(Bills.createdAt)'), 'year'],
+        //         [Sequelize.literal('SUM(UnitPrice * (1 - Discount / 100))'), 'Total'],
+        //     ],
+        //     include: [
+        //         {
+        //             model: BooksRegisInfo,
+        //             include: [
+        //                 {
+        //                     model: Books,
+        //                 }
+        //             ]
+        //         }
+        //     ],
+        //     where: Sequelize.literal(`YEAR(Bills.createdAt) = ${year} AND MONTH(Bills.createdAt) = ${month}`),
+        //     group: ['year', 'month']
+        // });
+
+        // res.json(total);
+    };
+
     // Tạo đơn mới:
     async createBill(req, res) {
         const billInfo = req.body;

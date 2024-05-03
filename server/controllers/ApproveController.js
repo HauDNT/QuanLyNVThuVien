@@ -134,6 +134,38 @@ class ApproveController {
         }
     };
 
+    // Xem phân phối theo các ngày trong 1 tháng cụ thể trong 1 năm:
+    async getApprovePerday(req, res) {
+        const month = req.params.month;
+        const year = req.params.year;
+
+        let data = await BooksRegisInfo.findAll({
+            attributes: [
+                [Sequelize.literal('DAY(createdAt)'), 'day'],
+                [Sequelize.literal('MONTH(createdAt)'), 'month'],
+                [Sequelize.literal('YEAR(createdAt)'), 'year'],
+                [Sequelize.literal('COUNT(id)'), 'amount'],
+            ],
+            where: Sequelize.literal(`YEAR(createdAt) = ${year} AND MONTH(createdAt) = ${month}`),
+            group: ['day', 'year', 'month']
+        });
+
+        if (data.length > 0) {
+            return res.json(data);
+        }
+
+        data = [
+            {
+                day: 0,
+                month: month,
+                year: year,
+                amount: 0,
+            }
+        ];
+
+        return res.json(data);
+    };
+
     // Xóa phân phối:
     async deleteApprove(req, res) {
         try {
@@ -188,19 +220,55 @@ class ApproveController {
         }
     };
 
+    // Hàm lấy số lượng các phân phối đã được duyệt:
+    async allAccept(req, res) {
+        try {
+            const accept = await BooksRegisInfo.findAll({
+                where: {
+                    IndiRegis: 1,
+                    Status: 1,
+                }
+            });
+            
+            return res.json(accept.length);
+        } catch (error) {
+            return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
+        }
+    };
+
+    // Hàm lấy số lượng các phân phối chưa được duyệt:
+    async notAccept(req, res) {
+        try {
+            const notAccept = await BooksRegisInfo.findAll({
+                where: {
+                    IndiRegis: 1,
+                    Status: 0,
+                }
+            });
+            
+            return res.json(notAccept.length);
+        } catch (error) {
+            return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
+        }
+    };
+
     // Hàm tìm xem có bao nhiêu mã chưa được duyệt trong phân phối của sách có id:
-    async isNotAccept(req, res) {
+    async bookIsNotAccept(req, res) {
         const bookId = +req.params.bookId;
 
-        const isNotAccept = await BooksRegisInfo.findAll({
-            where: {
-                IndiRegis: 1,
-                Status: 0,
-                BookId: bookId,
-            }
-        });
+        try {
+            const isNotAccept = await BooksRegisInfo.findAll({
+                where: {
+                    IndiRegis: 1,
+                    Status: 0,
+                    BookId: bookId,
+                }
+            });
 
-        return res.json(isNotAccept.length);
+            return res.json(isNotAccept.length);
+        } catch (error) {
+            return res.json({error: 'Không thể lấy thông tin của phân phối này!'});
+        }
     };
 
     // Lấy thông tin của 1 phân phối:

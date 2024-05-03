@@ -219,6 +219,28 @@ class BooksController {
             res.json({error: 'Không lấy được bảng mã hóa tên sách!'});
         }
 
+    };
+
+    // Lấy số lượng sách được biên mục trong năm X theo từng tháng:
+    async getAmountPerMonthOfYear(req, res) {
+        const year = +req.params.year;
+
+        try {
+            const data = await Books.findAll({
+                attributes: [
+                    [Sequelize.literal('YEAR(createdAt)'), 'year'],
+                    [Sequelize.literal('MONTH(createdAt)'), 'month'],
+                    [Sequelize.literal('COUNT(*)'), 'amount'],
+                ],
+                where: Sequelize.literal(`YEAR(createdAt) = ${year}`),
+                group: ['year', 'month'],
+                order: [['year'], ['month']]
+            });
+
+            return res.json(data);
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi lấy dữ liệu!'});
+        }
     }
 }
 

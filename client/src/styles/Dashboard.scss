@@ -18,9 +18,10 @@
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
         border: 1px solid #ccc;
         border-radius: 10px;
-        background: #00d2ff;
-        background: -webkit-linear-gradient(to right, #3a7bd5, #00d2ff);
-        background: linear-gradient(to right, #3a7bd5, #00d2ff);        
+        background: hsla(217, 100%, 50%, 1);
+        background: linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+        background: -moz-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+        background: -webkit-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);    
         overflow: hidden;
 
         .data {
@@ -40,7 +41,7 @@
                     padding: 10px;
                 }
             }
-            
+
             .data-icon {
                 transform: translate(0, -15%);
                 font-size: 50px;
@@ -61,7 +62,7 @@
             padding-left: 10px;
         }
     }
-    
+
     .chart-container {
         display: flex;
         padding: 50px 0 15px 0;
@@ -72,11 +73,14 @@
             border: 1px solid #cccccc;
             border-radius: 10px;
             box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+            padding-bottom: 10px;
+        }
 
-            .chart-title {
-                text-align: center;
-                margin: 0;
-                padding: 15px 0 10px 0;
+        .chart-doughnut {
+            canvas {
+                margin: auto;
+                width: 70%;
+                height: 70%;
             }
         }
     }
