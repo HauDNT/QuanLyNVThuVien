@@ -2,18 +2,16 @@ import React, { useContext } from "react";
 import {Link} from 'react-router-dom';
 import axios from "axios";
 import * as Yup from "yup";
-import { AuthenContext } from "../../helper/AuthenContext";
-import RegexPatterns from "../../helper/RegexPatterns.js";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import config from "../../constance.js";
+import { UserRoleContext } from "../../context/UserRoleContext.js";
 import "../../styles/Form.scss";
 
 function Login() {
-  const { setAuthenData } = useContext(AuthenContext);
-
   let navigator = useNavigate();
+  const {applyRole} = useContext(UserRoleContext);
 
   const initValuesLogin = {
     username: "",
@@ -24,13 +22,11 @@ function Login() {
     username: Yup.string()
       .min(5)
       .max(15)
-      .required("Bạn phải nhập vào tên tài khoản!")
-      .matches(RegexPatterns.username, "Username không hợp lệ!"),
-      password: Yup.string()
+      .required("Bạn phải nhập vào tên tài khoản!"),
+    password: Yup.string()
       .min(5)
       .max(15)
       .required("Bạn phải nhập vào mật khẩu!")
-      .matches(RegexPatterns.password, "Password không hợp lệ!"),
   });
 
   const handleLogin = (data) => {
@@ -55,15 +51,7 @@ function Login() {
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
           localStorage.setItem('authenToken', res.data.authenToken);
-
-          // Lưu dữ liệu từ local storage vào trong AuthenContext -> authenData để kiểm soát trạng thái đăng nhập của người dùng
-          // trong toàn ứng dụng:
-          setAuthenData ({
-            id: localStorage.getItem('id'), 
-            username: localStorage.getItem('username'), 
-            status: localStorage.getItem('status'), 
-            authenToken: localStorage.getItem('authenToken')
-          });
+          applyRole();
 
           navigator("/");
         }

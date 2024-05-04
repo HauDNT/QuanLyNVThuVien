@@ -4,7 +4,6 @@ import {toast} from 'react-toastify';
 import {Link, useParams} from "react-router-dom";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
-import RegexPatterns from "../../helper/RegexPatterns.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Users.scss";
 
@@ -32,44 +31,11 @@ function EditUser() {
             .catch(error => toast.error('Error!'));
     }, [id]);
 
-    const validateData = (data) => {
-        let message = '';
-        switch (true) {
-            case !RegexPatterns.username.test(data.Username):
-                message = 'Username không hợp lệ!';
-                break;
-            case data.NewPassword !== '':
-                if (!RegexPatterns.password.test(data.NewPassword)) {
-                    message = 'Mật khẩu không hợp lệ!';
-                    break;
-                }
-            case !RegexPatterns.fullname.test(data.Fullname):
-                message = 'Họ và tên không hợp lệ!';
-                break;
-            case !RegexPatterns.email.test(data.Email):
-                message = 'Email không hợp lệ!';
-                break;
-            case !RegexPatterns.phoneNumber.test(data.PhoneNumber):
-                message = 'Số điện thoại không hợp lệ!';
-                break;
-            default:
-                break;
-        }
-        return message;
-    };
-
-
     const handleUpdateInfo = (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
-
-        // Kiểm tra regex: Nếu kiểm tra có message trả về thì có lỗi => Báo lỗi và ngưng thực thi.
-        if (validateData(data) !== '') {
-            toast.warning(validateData(data));
-            return;
-        };
 
         axios
             .put(

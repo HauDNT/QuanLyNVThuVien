@@ -20,7 +20,7 @@ const RoomProvider = ({children}) => {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, []);
+    }, [listRooms.length]);
 
     return (
         <RoomContext.Provider value={{listRooms}}>

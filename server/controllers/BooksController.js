@@ -179,6 +179,25 @@ class BooksController {
         }
     };
 
+    // Xóa 1 biên mục
+    async deleteCataloging(req, res) {
+        const idCatalog = req.params.id;
+        const catalogingInfo = req.body;
+
+        if (!catalogingInfo) {
+            res.json({error: 'Không thể xóa biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
+            return;
+        }
+
+        try {    
+            Books.destroy({where: {id: idCatalog}, force: true,});
+
+            return res.json({success: 'Xóa biên mục thành công!'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
     // Tìm kiếm theo hạng mục và giá trị:
     async searchCataloging(req, res) {
         const {selectedCategory, searchValue} = req.body;

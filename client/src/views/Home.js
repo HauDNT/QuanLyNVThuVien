@@ -2,13 +2,12 @@ import React, {useEffect, useState} from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Nav from "./Components/Navbar";
 import SideBar from "./Components/SideBar";
-import {AuthenContext} from '../helper/AuthenContext';
 
 function Home() {
   let navigator = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('authenToken') && !AuthenContext.status) {
+    if (!localStorage.getItem('authenToken') && !localStorage.getItem('status')) {
       navigator('/login');
     }
   }, []);

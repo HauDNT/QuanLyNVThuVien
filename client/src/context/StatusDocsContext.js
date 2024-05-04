@@ -20,7 +20,7 @@ const StatusDocProvider = ({children}) => {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, []);
+    }, [statusDocs.length]);
 
     return (
         <StatusDocContext.Provider value={{statusDocs}}>

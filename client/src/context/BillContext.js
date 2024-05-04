@@ -20,7 +20,7 @@ const BillProvider = ({children}) => {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, []);
+    }, [listBills.length]);
 
     return (
         <BillContext.Provider value={{listBills: listBills}}>

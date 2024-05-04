@@ -78,6 +78,22 @@ function EditCataloging() {
         .catch(error => toast.error("Đã xảy ra lỗi khi cập nhật thông tin!"));
     };
 
+    // Hàm xóa biên mục:
+    const handleDeleteCataloging = () => {
+        axios
+        .delete(`http://${config.URL}/books/deleteCataloging/${id}`, infoCataloging, {headers: {authenToken: localStorage.getItem('authenToken')}})
+        .then((res) => {
+            if (res.data.error) {
+                toast.error(res.data.error);
+            }
+            else {
+                toast.success(res.data.success);
+                audio.play();
+            }
+        })
+        .catch(error => toast.error("Đã xảy ra lỗi khi xóa biên mục!"));
+    };
+
     // Hàm phê duyệt biên mục:
     const approveCatalogItem = () => {
         try {
@@ -371,6 +387,10 @@ function EditCataloging() {
                         ) : ''
                     }
 
+                    <button 
+                        onClick={(e) => handleDeleteCataloging()}
+                        type="button" 
+                        className="btn btn--catalog btn-danger mb-3">Xóa</button>
                     <button 
                         onClick={(e) => handleUpdateCataloging()}
                         type="button" 

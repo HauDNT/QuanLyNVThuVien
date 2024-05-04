@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {useNavigate} from 'react-router-dom';
-import { AuthenContext } from "../../helper/AuthenContext";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import Dropdown from "react-bootstrap/Dropdown";
 import { PiSignOutBold } from "react-icons/pi";
@@ -11,15 +10,15 @@ import { NavLink } from "react-router-dom";
 
 function Nav() {
   const navigate = useNavigate();
-  const { authenData, setAuthenData } = useContext(AuthenContext);
 
   const userRoles = useContext(UserRoleContext);
+  const {clearRole} = useContext(UserRoleContext);
   const fullname = userRoles.role.Fullname;
   const userId = localStorage.getItem('id');
 
   const handleLogout = () => {
     localStorage.clear();
-    setAuthenData (false);
+    clearRole();
     navigate('/login');
   };
 

@@ -13,5 +13,6 @@ router.get('/encodetitles', BooksController.getEncodeTitles);
 router.post('/search', validToken, BooksController.searchCataloging);
 router.post('/createCataloging', validToken, BooksController.createCataloging);
 router.put('/updateCataloging/:id', validToken, BooksController.updateCataloging);
+router.delete('/deleteCataloging/:id', BooksController.deleteCataloging);
 
 module.exports = router;

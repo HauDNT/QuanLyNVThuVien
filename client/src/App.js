@@ -3,7 +3,6 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthenContext } from "./helper/AuthenContext";
 import config from "../src/constance.js";
 
 // CONTEXTS:  
@@ -31,8 +30,6 @@ import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
 import EncodeTitles from "./views/EncodeTitles.js";
 import PageNotFound from "./views/PageNotFound";
-
-import LoadingWindow from "./views/Components/Loading.js";
 
 import "./styles/App.scss";
 
@@ -73,14 +70,12 @@ function App() {
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-
-      <AuthenContext.Provider value={{ authenData, setAuthenData }}>
         <UserRoleProvider>
           <ProviderContext>
             <BrowserRouter>
               <Routes>
-                <Route path="/loading" exact element={<LoadingWindow/>} />
                 <Route path="/login" exact element={<Login/>} />
+                
                 <Route element={<Home/>}>
                   <Route path="/" exact element={<Dashboard/>}/>
                   <Route path="barcode" element={<CreateBarCode/>}/>
@@ -101,12 +96,12 @@ function App() {
                   <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
                   <Route path="encodetitles" element={<EncodeTitles/>}/>
                 </Route>
+                
                 <Route path="/*" exact element={<PageNotFound/>}/>
               </Routes>
             </BrowserRouter>
           </ProviderContext>
         </UserRoleProvider>
-      </AuthenContext.Provider>
 
       <ToastContainer
         position="top-center"

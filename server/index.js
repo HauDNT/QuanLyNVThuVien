@@ -9,12 +9,14 @@ const body_parser = require('body-parser');
 const rateLimitRequest = require('express-rate-limit');
 
 const limiter = rateLimitRequest.rateLimit({
-    windowMs: 5 * 60 * 100, // Trong vòng 5 phút
-    max: 3000,                // cho phép gửi 150 requests
+    windowMs: 5 * 60 * 100, 
+    max: 3000,               
     message: 'Bạn đang gửi quá nhiều yêu cầu trong một thời điểm. Vui lòng đợi...'
 });
 
 app.use(limiter);
+
+
 app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 app.use(cors());

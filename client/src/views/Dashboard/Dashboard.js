@@ -32,7 +32,7 @@ function Dashboard() {
     const [totalPerMonth, setTotalPerMonth] = useState([]);
     const [approvePerDay, setApprovePerDay] = useState([]);
 
-    const [month, setMonth] = useState(4);
+    const [month, setMonth] = useState(5);
     const [year, setYear] = useState(2024);
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:

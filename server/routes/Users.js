@@ -9,7 +9,7 @@ router.get('/info/:id', UsersController.getInfoAUser);
 router.get('/fullname/:id', UsersController.getFullname);
 router.get('/trash', UsersController.getAccountSoftDeleted);
 router.post('/login', UsersController.login);
-router.post('/register', UsersController.register);
+router.post('/register', validToken, UsersController.register);
 router.post('/createinfo', validToken, UsersController.createInfoUser);
 router.post('/search', validToken, UsersController.searchUser);
 router.put('/updateinfo/:id', validToken, UsersController.updateAccount);

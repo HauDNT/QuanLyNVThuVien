@@ -6,7 +6,7 @@ import config from '../constance.js';
 const UserRoleContext = createContext();
 
 const UserRoleProvider = ({children}) => {
-    const userId = localStorage.getItem('id');
+    let userId;
     const [role, setRole] = useState({
         RoleId: '',
         RoleName: '',
@@ -14,9 +14,10 @@ const UserRoleProvider = ({children}) => {
         Fullname: '',
     });
 
-    useEffect(() => {
+    const applyRole = () => {
+        userId = localStorage.getItem('id');
+        
         if (!userId) {
-            setRole([]);
             return;
         }
 
@@ -36,10 +37,19 @@ const UserRoleProvider = ({children}) => {
             .catch((error) => {
                 toast.error('Không thể nhận phân quyền từ Server, hãy đăng nhập lại sau!');
             });
-    }, [userId]);
+    };
+
+    const clearRole = () => {
+        setRole({
+            RoleId: 0, 
+            RoleName: '',
+            Description: '',
+            Fullname: '',
+        });
+    }
 
     return (
-        <UserRoleContext.Provider value={{role: role}}>
+        <UserRoleContext.Provider value={{role, applyRole, clearRole}}>
             {children}
         </UserRoleContext.Provider>
     )

@@ -4,7 +4,6 @@ import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
 import HandleMarc21Data from "../../helper/HandleMarc21Data.js";
-import RegexPatterns from "../../helper/RegexPatterns.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreateCataloging.scss';
 
@@ -57,28 +56,6 @@ function CreateCataloging() {
         });
     };
 
-    // Kiểm tra regex input: 
-    const validateData = (data) => {
-        let message = '';
-        switch (true) {
-            case !RegexPatterns.ISBN.test(data.ISBN):
-                message = 'Mã ISBN phải là một dãy số và không có dấu '-'!';
-                break;
-            case !RegexPatterns.DDC.test(data.DDC):
-                message = 'Mã DDC không hợp lệ!';
-                break;
-            // case !RegexPatterns.discountBill.test(data.discountBill):
-            //     message = 'Chiết khấu phải là một số từ 0 - 100!';
-            //     break;
-            // case !RegexPatterns.notes.test(data.notes):
-            //     message = 'Ghi chú của bạn không hợp lệ!';
-            //     break;
-            default:
-                break;
-        }
-        return message;
-    };
-
     const handleCreateCataloging = (e) => {
         e.preventDefault();
 
@@ -91,14 +68,6 @@ function CreateCataloging() {
             toast.warning("Bạn phải điền đầy đủ thông tin!");
             return;
         };
-
-        // Kiểm tra regex
-        // if (validateData(data) !== '') {
-        //     toast.warning(validateData(data));
-        //     return;
-        // };
-
-        // toast.success("Dữ liệu hợp lệ!");
 
         // Send info to Server:
         axios

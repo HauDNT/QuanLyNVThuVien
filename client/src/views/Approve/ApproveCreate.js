@@ -8,7 +8,6 @@ import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
-import RegexPatterns from "../../helper/RegexPatterns.js";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
@@ -107,29 +106,6 @@ function ApproveCreate() {
         return dateString;
     };
 
-
-    // Kiểm tra regex input: 
-    const validateData = (data) => {
-        let message = '';
-        switch (true) {
-            case !RegexPatterns.Heading.test(data.Heading):
-                message = 'Phần đầu mã không hợp lệ!';
-                break;
-            case !RegexPatterns.NumberLength.test(data.NumberLength):
-                message = 'Độ dài dãy số phải là một số từ 0!';
-                break;
-            case !RegexPatterns.AmountRegis.test(data.AmountRegis):
-                message = 'Số lượng đăng ký phải là một số từ 0!';
-                break;
-            case !RegexPatterns.notes.test(data.notes):
-                message = 'Ghi chú của bạn không hợp lệ!';
-                break;
-            default:
-                break;
-        }
-        return message;
-    };
-
     // Hàm tạo mã đăng ký:
     const handleCreateApprove = (e) => {
         e.preventDefault();
@@ -144,12 +120,6 @@ function ApproveCreate() {
             UserId: +localStorage.getItem('id'),
             BookId: +bookId,
         };
-
-        // Kiểm tra regex: Nếu kiểm tra có message trả về thì có lỗi => Báo lỗi và ngưng thực thi.
-        if (validateData(data) !== '') {
-            toast.warning(validateData(data));
-            return;
-        }
 
         // Kiểm tra trùng:
         axios
