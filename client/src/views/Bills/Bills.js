@@ -8,6 +8,7 @@ import {FcViewDetails} from "react-icons/fc";
 import {FaTrash } from "react-icons/fa";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
+import { BillContext } from "../../context/BillContext.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Bills.scss";
 
@@ -17,6 +18,7 @@ function Bills() {
     const [listBills, setListBills] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
+    const {removeFromBillList} = useContext(BillContext);
     
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
@@ -64,6 +66,7 @@ function Bills() {
                     const eachBillSelected = billSelected[index];
                     if (!res.data.error) {
                         setListBills((oldList) => oldList.filter((bill) => bill.id !== eachBillSelected));
+                        removeFromBillList(eachBillSelected);
                         status = true;
                     }
                 });

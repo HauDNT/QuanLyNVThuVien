@@ -30,9 +30,9 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                                 headers: { authenToken: localStorage.getItem('authenToken') }
                             })
                             .then((res) => {
-                                if (res.data && res.data.allCatalogings) {
-                                    setResult(res.data.allCatalogings);
-                                    onSearchResultChange(res.data.allCatalogings);
+                                if (res.data) {
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
                                 }
                             })
                             .catch((error) => {
@@ -99,9 +99,9 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                         axios
                             .get(`http://${config.URL}/bills/${orderChoice}`)
                             .then((res) => {
-                                if (res.data && res.data.receiveBills) {
-                                    setResult(res.data.receiveBills);
-                                    onSearchResultChange(res.data.receiveBills);
+                                if (res.data) {
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
                                 }
                             })
                             .catch((error) => {
@@ -162,11 +162,11 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
 
                     if (selectedCategory === "*") {
                         axios
-                            .get(`http://${config.URL}/approve/get/${orderChoice}`)
+                            .get(`http://${config.URL}/approve/getApproves/${orderChoice}`)
                             .then((res) => {
                                 if (!res.data.error) {
-                                    setResult(res.data.approve);
-                                    onSearchResultChange(res.data.approve);
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
                                 }
                                 else toast.error(res.data.error);
                             })
@@ -194,11 +194,11 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
 
                     if (selectedCategory === "*") {
                         axios
-                            .get(`http://${config.URL}/users`)
+                            .get(`http://${config.URL}/users/all`)
                             .then((res) => {
                                 if (!res.data.error) {
-                                    setResult(res.data.allUsers);
-                                    onSearchResultChange(res.data.allUsers);
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
                                 }
                                 else toast.error(res.data.error);
                             })

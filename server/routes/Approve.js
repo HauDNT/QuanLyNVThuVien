@@ -5,7 +5,7 @@ const {validToken} = require('../middlewares/AuthenMiddlewares');
 
 router.get('/all', ApproveController.getAllApproves);
 router.get('/amount', ApproveController.getAmountApproves);
-router.get('/getmaxregiscode', ApproveController.getMaxRegisCode);
+router.get('/getmaxregiscode/:header', ApproveController.getMaxRegisCode);
 router.get('/item/:approveId', ApproveController.getInfoAnApprove);
 router.get('/accept', ApproveController.allAccept);
 router.get('/isnotaccept', ApproveController.notAccept);

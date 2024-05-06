@@ -420,18 +420,23 @@ class UsersController {
                 whereCondition[selectedCategory] = searchValue;
             }
 
-            let result = await UsersInfo.findAll({
+            const data = await UsersInfo.findAll({
                 where: whereCondition,
                 include: includeModels,
-                attributes: [
-                    'id',
-                    'Fullname',
-                    'Birthday',
-                    'Email',
-                    'PhoneNumber',
-                    'Avatar',
-                ]
             });
+
+            const result = data.map(item => (
+                {
+                    id: item.id,
+                    Username: item.User.Username,
+                    Fullname: item.Fullname,
+                    Birthday: item.Birthday,
+                    Email: item.Email,
+                    PhoneNumber: item.PhoneNumber,
+                    RoomName: item.Room.RoomName,
+                    PositionName: item.Position.PositionName,
+                }
+            ));
 
             return res.json(result);
         } catch (error) {

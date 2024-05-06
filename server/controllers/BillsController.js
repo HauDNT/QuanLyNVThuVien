@@ -48,44 +48,28 @@ class BillsController {
         }
     };
 
+    // Lấy mã số đơn lớn nhất để tạo mới:
+    async getMaxNumberBill(req, res) {
+        try {
+            let maxNumber = await Bills.max('id', {paranoid: false});
+            if (!maxNumber)
+                maxNumber = 0;
+            return res.json(maxNumber);
+        } catch (error) {
+            return res.json({ error: 'Đã xảy ra lỗi trong quá trình lấy mã số!' });
+        }
+    };
+
     // Lấy số lượng đơn hiện tại:
     async countAmountOfBills(req, res) {
         try {
-            let amountBills = await Bills.max('id', {paranoid: false});
+            let amountBills = await Bills.count({where: {deletedAt: null}});
             if (!amountBills)
                 amountBills = 0;
             return res.json(amountBills);
         } catch (error) {
             return res.json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
         }
-    };
-
-    // Lấy tổng số tiền trong 1 tháng:
-    async getTotalPerMonth(req, res) {
-        const month = req.params.month;
-        const year = req.params.year;
-
-        // const total = await Bills.findAll({
-        //     attributes: [
-        //         [Sequelize.literal('MONTH(Bills.createdAt)'), 'month'],
-        //         [Sequelize.literal('YEAR(Bills.createdAt)'), 'year'],
-        //         [Sequelize.literal('SUM(UnitPrice * (1 - Discount / 100))'), 'Total'],
-        //     ],
-        //     include: [
-        //         {
-        //             model: BooksRegisInfo,
-        //             include: [
-        //                 {
-        //                     model: Books,
-        //                 }
-        //             ]
-        //         }
-        //     ],
-        //     where: Sequelize.literal(`YEAR(Bills.createdAt) = ${year} AND MONTH(Bills.createdAt) = ${month}`),
-        //     group: ['year', 'month']
-        // });
-
-        // res.json(total);
     };
 
     // Tạo đơn mới:
@@ -134,6 +118,8 @@ class BillsController {
                     id: billId,
                 }
             });
+
+            await BooksRegisInfo.update({Status: 0} , {where: {BillId: billId}});
 
             return res.json({success: 'Xóa đơn thành công!'});
         } catch (error) {

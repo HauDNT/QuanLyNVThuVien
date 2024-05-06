@@ -1,16 +1,31 @@
-import {parse} from 'marc4js';
+import React, { createContext, useState, useEffect } from 'react';
+import MARCRecord from 'marc-record-js';
 
-class HandleMarc21Data {
-    async processData (file) {
-        try {
-            const data = await file.arrayBuffer();
-            const records = await parse(data);
+const Marc21DataContext = createContext();
 
-            return records;
-        } catch (error) {
-            alert('Error processing: ', error);
+const Marc21Provider = ({children}) => {
+    const [records, setRecords] = useState([]);
+
+    const handleReadFile = async (e) => {
+        if (e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = async (e) => {
+                const marcContent = e.target.result;
+                const marcRecords = MARCRecord.fromString(marcContent);
+                setRecords(marcRecords);
+            };
+    
+            reader.readAsText(file);
         }
-    }
-}
+    };
 
-export default HandleMarc21Data;
+    return (
+        <Marc21DataContext.Provider value={{records, handleReadFile}}>
+            {children}
+        </Marc21DataContext.Provider>
+    )
+};  
+
+export {Marc21Provider, Marc21DataContext};

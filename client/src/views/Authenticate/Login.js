@@ -51,6 +51,7 @@ function Login() {
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('status', res.data.status);
           localStorage.setItem('authenToken', res.data.authenToken);
+          
           applyRole();
 
           navigator("/");

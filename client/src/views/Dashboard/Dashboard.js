@@ -29,7 +29,6 @@ function Dashboard() {
         unaccept: 0,
     });
     const [catalogPerMonth, setCatalogPerMonth] = useState([]);
-    const [totalPerMonth, setTotalPerMonth] = useState([]);
     const [approvePerDay, setApprovePerDay] = useState([]);
 
     const [month, setMonth] = useState(5);
@@ -78,28 +77,28 @@ function Dashboard() {
                 <div className="dashboard">
                     {/* Cards */}
                     <div className="row">
-                        <Link to={'/book/cataloging/all'} className="col-lg-3">
+                        <Link to={'/book/cataloging/all'} className="col-lg-3 zoom-effect">
                             <Card
                                 data={books}
                                 title={"Số lượng sách hiện tại"}
                                 icon={<LuBookMarked/>}
                             />
                         </Link>
-                        <Link to={'/bills/1'} className="col-lg-3">
+                        <Link to={'/bills/1'} className="col-lg-3 zoom-effect">
                             <Card
                                 data={listBills.length}
                                 title={"Tổng số đơn hiện có"}
                                 icon={<FaFileInvoiceDollar />}
                             />
                         </Link>
-                        <Link to={'/book/cataloging/all'} className="col-lg-3">
+                        <Link to={'/book/cataloging/all'} className="col-lg-3 zoom-effect">
                             <Card
                                 data={catalogs}
-                                title={"Tổng biên mục"}
+                                title={"Tổng phân phối"}
                                 icon={<BsBookmarkCheckFill />}
                             />
                         </Link>
-                        <Link to={'/users/'} className="col-lg-3">
+                        <Link to={'/users/'} className="col-lg-3 zoom-effect">
                             <Card
                                 data={users}
                                 title={"Số lượng tài khoản"}

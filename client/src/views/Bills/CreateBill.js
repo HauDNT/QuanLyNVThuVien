@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import config from '../../constance.js';
+import { BillContext } from "../../context/BillContext.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
@@ -17,6 +18,7 @@ function CreatBill() {
         discountBill: '',
         notes: '',
     });
+    const {updateListBill} = useContext(BillContext);
 
     const handleClearInput = () => {
         setInputValues({
@@ -29,13 +31,13 @@ function CreatBill() {
     };
 
     useEffect(() => {
-        const getAmountBills = axios.get(`http://${config.URL}/bills/amount`);
+        const getNumberBill = axios.get(`http://${config.URL}/bills/maxNumber`);
         const getTypesBill = axios.get(`http://${config.URL}/bills/gettypes`);
 
         Promise
-            .all([getAmountBills, getTypesBill])
-            .then(([amountBillsRes, typesBillRes]) => {
-                setAmountBills(amountBillsRes.data + 1)
+            .all([getNumberBill, getTypesBill])
+            .then(([numberBillsRes, typesBillRes]) => {
+                setAmountBills(numberBillsRes.data + 1)
                 setTypesBill(typesBillRes.data)
             })
             .catch(error => toast.error("Không tải được loại hóa đơn và số lượng!"));
@@ -60,11 +62,12 @@ function CreatBill() {
             .post(`http://${config.URL}/bills/createbill`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
             .then((res) => {
                 if (res.data.error) {
-                    toast.error(res.data.error)
+                    toast.error(res.data.error);
                 }
                 else {
                     handleClearInput();
                     setStatus(false);
+                    updateListBill();
                     toast.success(res.data.success);
                     audio.play();
                 }

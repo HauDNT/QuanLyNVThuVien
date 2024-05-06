@@ -7,6 +7,8 @@ const {
     Sequelize,
 } = require('../models');
 
+const {Op} = require('sequelize');
+
 class ApproveController {
     // Tìm mã đơn trùng trước khi tạo phân phối:
     async findExist(req, res) {
@@ -67,7 +69,7 @@ class ApproveController {
 
     // Lấy tổng số phân phối ~ tổng số sách hiện có:
     async getAmountApproves(req, res) {
-        const amount = await BooksRegisInfo.count();
+        const amount = await BooksRegisInfo.count({where: {IndiRegis: 1}});
         return res.json(amount);
     };
 
@@ -210,11 +212,20 @@ class ApproveController {
 
     // Hàm lấy số đăng ký lớn nhất hiện tại:
     async getMaxRegisCode(req, res) {
-        try {
-            const maxRegisCode = await BooksRegisInfo.max('RegisCode');
-            const code = +maxRegisCode.slice(5);
+        const {header} = req.params;
 
-            return res.json(code)
+        try {
+            const maxRegisCode = await BooksRegisInfo.count(
+                {
+                    where: 
+                        {
+                            RegisCode: {
+                                [Op.like]: `${header}%`
+                            }
+                        }
+                }) + 1;
+
+            return res.json(maxRegisCode)
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi khi tìm mã!'});
         }
@@ -292,13 +303,6 @@ class ApproveController {
             res.json({error: 'Không thể cập nhật biên mục. Hãy kiểm tra lại thông tin và thử lại sau!'})
             return;
         }
-        
-        // Kiểm tra mã trùng nếu có sửa mã:
-        if (approveInfo.RegisCode) {
-            const existCode = await BooksRegisInfo.findOne({where: {RegisCode: approveInfo.RegisCode}});
-            if (existCode)
-                return res.json({error: 'Đã tồn tại mã đăng ký này!'});
-        }
 
         try {
             const fieldsChange = Object.keys(approveInfo);
@@ -338,7 +342,7 @@ class ApproveController {
                     model: Users,
                     require: true,
                     where: {id: Sequelize.col('UserId')},
-                    attributes: ['username'],
+                    attributes: ['Username'],
                 },
                 {
                     model: StatusDoc,
@@ -388,11 +392,23 @@ class ApproveController {
                 whereCondition[selectedCategory] = searchValue;
             }
             
-            let result = await BooksRegisInfo.findAll({
+            const data = await BooksRegisInfo.findAll({
                 where: whereCondition,
                 include: includeModels,
-                attributes: ['id', 'RegisCode', 'createdAt', 'updatedAt']
             });
+
+            const result = data.map(item => (
+                {
+                    id: item.id,
+                    RegisCode: item.RegisCode,
+                    Username: item.User.Username,
+                    Status: item.StatusDoc.Status,
+                    NameType: item.StoreType.NameType,
+                    RoomName: item.Room.RoomName,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt
+                }
+            ));
             
             return res.json(result);            
         } catch (error) {

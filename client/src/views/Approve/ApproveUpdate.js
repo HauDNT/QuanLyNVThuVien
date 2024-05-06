@@ -83,6 +83,7 @@ function ApproveUpdate() {
                             value={approveInfo.RegisCode}
                             placeholder="VD: PM23.086594"
                             onChange={(e) => setApproveInfo({...approveInfo, RegisCode: e.target.value})}
+                            readOnly
                             />
                     </div>
                     <div className="col input-group">

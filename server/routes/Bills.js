@@ -4,9 +4,9 @@ const BillsController = require('../controllers/BillsController');
 const {validToken} = require('../middlewares/AuthenMiddlewares');
 
 router.get('/all', BillsController.getAllBills);    // Lấy toàn bộ hóa đơn
+router.get('/maxNumber', BillsController.getMaxNumberBill);
 router.get('/amount', BillsController.countAmountOfBills);
 router.get('/gettypes', BillsController.getTypes);
-router.get('/getTotalPerMonth/:month/:year', BillsController.getTotalPerMonth);
 router.get('/detail/:billId', BillsController.getBillDetail);
 router.get('/trash/:type', BillsController.getBillSoftDeleted);
 router.get('/:type', BillsController.getBillOfType);

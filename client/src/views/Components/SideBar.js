@@ -36,15 +36,7 @@ function SideBar() {
                 </SubMenu>
                 {
                     idRole === 1 || idRole === 2 ? (
-                        <SubMenu label="Cấu hình chung">
-                            {
-                                idRole === 1 ? (
-                                    <SubMenu label="Phân quyền">
-                                        <MenuItem component={<Link to="/"/>}>Quyền/Chức năng</MenuItem>
-                                        <MenuItem component={<Link to="/"/>}>Phân quyền</MenuItem>
-                                    </SubMenu>
-                                ) : null
-                            }
+                        <SubMenu label="Khác">
                             <MenuItem component={<Link to="/"/>}>Phân loại hóa đơn</MenuItem>
                             <MenuItem component={<Link to="/"/>}>Phòng</MenuItem>
                             <MenuItem component={<Link to="/"/>}>Thể loại lưu trữ</MenuItem>

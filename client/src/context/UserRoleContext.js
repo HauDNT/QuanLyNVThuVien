@@ -46,13 +46,13 @@ const UserRoleProvider = ({children}) => {
             Description: '',
             Fullname: '',
         });
-    }
+    };
 
     return (
         <UserRoleContext.Provider value={{role, applyRole, clearRole}}>
             {children}
         </UserRoleContext.Provider>
-    )
+    );
 };
 
 export {UserRoleProvider, UserRoleContext};

@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useCallback} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import debounce from 'lodash.debounce';
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
@@ -13,7 +14,7 @@ import '../../styles/ApproveCreate.scss';
 function ApproveCreate() {
     const audio = new Audio(SuccessSound);
     const {id: bookId} = useParams();
-    const [maxRegisCode, setMaxRegisCode] = useState();
+    // const [maxRegisCode, setMaxRegisCode] = useState();
     const {listRooms} = useContext(RoomContext);
     const {listBills} = useContext(BillContext);
     const {statusDocs} = useContext(StatusDocContext);
@@ -47,19 +48,21 @@ function ApproveCreate() {
         })
     };
 
-    useEffect(() => {
+    // Debouncing lấy giá trị heading, number length để tạo number series
+    const debounceCreateNumberSeries = useCallback(debounce((heading, numberLength) => getNumberSeries(heading, numberLength), 1000), []);   
+
+    const getNumberSeries = (heading, numberLength) => {
         try {
             axios
-                .get(`http://${config.URL}/approve/getmaxregiscode`)
+                .get(`http://${config.URL}/approve/getmaxregiscode/${heading}`)
                 .then((res) => {
-                    setMaxRegisCode(res.data + 1)
-                    setInitValues({...initValues, NumberSeries: maxRegisCode});
+                    setInitValues(prevValues => ({...prevValues, NumberSeries: res.data}));
                 })
         } catch (error) {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, [maxRegisCode]);
+    };
 
     // Tạo mã mới nếu có thay đổi thông tin về: Mã đầu, dãy số đăng ký, độ dài dãy số, số lượng
     useEffect(() => {
@@ -76,6 +79,8 @@ function ApproveCreate() {
     const changeToGenerateRegisCode = (e) => {
         const {name, value} = e.target;
         setInitValues(prevValues => ({...prevValues, [name]: value}));
+
+        if (initValues.Heading && initValues.NumberLength) debounceCreateNumberSeries(initValues.Heading, initValues.NumberLength);
     };
 
     // Hàm format lại dãy số đăng ký và độ dài dãy số cho phù hợp
@@ -136,7 +141,6 @@ function ApproveCreate() {
                             else {
                                 toast.success(res.data.success);
                                 handleClearInput();
-                                setMaxRegisCode(0);
                                 audio.play();
                             }
                         });
@@ -171,7 +175,8 @@ function ApproveCreate() {
                             onChange={(e) => changeToGenerateRegisCode(e)}
                             type="text" 
                             className="form-control" 
-                            placeholder="VD: 86594" required/>
+                            placeholder="VD: 86594" 
+                            readOnly/>
                     </div>
                     <div className="col input-group">
                         <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
@@ -277,8 +282,8 @@ function ApproveCreate() {
                 </div>
                 <div className="row">
                     <div className="input-group">
-                        <span className="input-group-text" onChange={(e) => setInitValues({...initValues, Notes: e.target.value})}>Ghi chú</span>
-                        <textarea className="form-control"></textarea>
+                        <span className="input-group-text">Ghi chú</span>
+                        <textarea className="form-control" onChange={(e) => setInitValues({...initValues, Notes: e.target.value})}></textarea>
                     </div>
                 </div>
                 <div className="row mb-3">

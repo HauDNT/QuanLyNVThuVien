@@ -9,6 +9,14 @@ const BillProvider = ({children}) => {
     const [listBills, setListBills] = useState([]);
 
     useEffect(() => {
+        updateListBill();
+    }, []);
+
+    const removeFromBillList = (billDeleteId) => {
+        setListBills(prevList => prevList.filter(bill => bill.id !== billDeleteId));
+    };
+
+    const updateListBill = () => {
         try {
             axios
                 .get(`http://${config.URL}/bills/all`)
@@ -20,10 +28,10 @@ const BillProvider = ({children}) => {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, [listBills.length]);
+    };
 
     return (
-        <BillContext.Provider value={{listBills: listBills}}>
+        <BillContext.Provider value={{listBills: listBills, removeFromBillList, updateListBill}}>
             {children}
         </BillContext.Provider>
     )

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import {useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
@@ -107,6 +107,31 @@ function ApproveView() {
         setListApproveInfo(result);
     };
 
+    // Paginate:
+    const [currentPage, setCurrentPage] = useState(1);
+    const recordsPerPage = 5;
+    const lastIndex = currentPage * recordsPerPage;
+    const firstIndex = lastIndex - recordsPerPage;
+    const records = listApproveInfo.slice(firstIndex, lastIndex);
+    const nPage = Math.ceil(listApproveInfo.length / recordsPerPage);
+    const numbers = [...Array(nPage + 1).keys()].slice(1);
+
+    const nextPage = () => {
+        if (currentPage !== numbers[numbers.length - 1]) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage !== numbers[0]) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const changePage = (id) => {
+        setCurrentPage(id);
+    };
+
     return (
         <>
             {
@@ -154,9 +179,9 @@ function ApproveView() {
                             </thead>
                             <tbody>
                                 {
-                                    listApproveInfo && listApproveInfo.length > 0 ?
+                                    records && records.length > 0 ?
                                     (
-                                        listApproveInfo.map((approve) => (
+                                        records.map((approve) => (
                                             <tr key={approve.id} className="text-center">
                                                 <td>
                                                     <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={approve.id} onClick={(e) => handleCheck(e)}/>
@@ -182,6 +207,23 @@ function ApproveView() {
                                 }
                             </tbody>
                         </table>
+                        <nav className="nav-paginate">
+                            <ul className="paginate">
+                                <li className="page-item">
+                                    <Link className="page-link special-page-link" onClick={() => prevPage()}>Prev</Link>
+                                </li>
+                                {
+                                    numbers.map((n, index) => (
+                                        <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={index}>
+                                            <Link className="page-link" onClick={() => changePage(n)}>{n}</Link>
+                                        </li>
+                                    ))
+                                }
+                                <li className="page-item">
+                                    <Link className="page-link" onClick={() => nextPage()}>Next</Link>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </>
                 )

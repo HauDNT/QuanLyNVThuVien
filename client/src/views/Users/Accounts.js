@@ -152,7 +152,6 @@ function Users() {
                                             <th scope="col" className="text-center">Số điện thoại</th>
                                             <th scope="col" className="text-center">Phòng</th>
                                             <th scope="col" className="text-center">Chức vụ</th>
-                                            <th scope="col" className="text-center">Loại tài khoản</th>
                                             <th scope="col" className="text-center">Sửa thông tin</th>
                                         </tr>
                                     </thead>
@@ -170,7 +169,6 @@ function Users() {
                                                     <td>{user.PhoneNumber}</td>
                                                     <td>{user.RoomName}</td>
                                                     <td>{user.PositionName}</td>
-                                                    <td>{user.RoleName}</td>
                                                     <td>
                                                         <Link to={`edit/${user.id}`}>
                                                             <FaEdit className="edit-icon table-icon"/>

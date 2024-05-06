@@ -89,6 +89,7 @@ function EditCataloging() {
             else {
                 toast.success(res.data.success);
                 audio.play();
+                window.history.back();
             }
         })
         .catch(error => toast.error("Đã xảy ra lỗi khi xóa biên mục!"));

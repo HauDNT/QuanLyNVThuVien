@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
-import HandleMarc21Data from "../../helper/HandleMarc21Data.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreateCataloging.scss';
+import {Marc21DataContext} from "../../helper/HandleMarc21Data.js";
 
 function CreateCataloging() {
+    const {records, handleReadFile} = useContext(Marc21DataContext);
     const audio = new Audio(SuccessSound);
     const idUserCataloging = localStorage.getItem('id');
     const [fullnameUser, setFullname] = useState('');
@@ -96,13 +96,6 @@ function CreateCataloging() {
         }
     }, [idUserCataloging]);
 
-    const handleMarc = async (e) => {
-        const marcFile = e.target.files[0];
-        const handleMarc21Data = new HandleMarc21Data();
-        const result = await handleMarc21Data.processData(marcFile);
-        toast.info(result);
-    }
-
     return (
         <div className="createCataloging-container">
             <h3 className="col-12 createCataloging-heading">Tạo biên mục mới</h3>
@@ -115,10 +108,9 @@ function CreateCataloging() {
                         class="form-control" 
                         type="file" 
                         id="formFile"
-                        onChange={(e) => handleMarc(e)}
+                        onChange={(e) => handleReadFile(e)}
                         />
                 </div>
-                
                 <label>Mã sách</label>
                 <div class="input-group">
                     <span class="input-group-text">ISBN</span>

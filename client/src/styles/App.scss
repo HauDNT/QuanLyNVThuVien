@@ -114,5 +114,27 @@ $space-navbar: 50px;
                 color: red;
             }
         }
+
+        .nav-paginate {
+            margin-top: 5em;
+
+            .paginate {
+                display: flex;
+                list-style-type: none;
+                justify-content: center;
+
+                .special-page-link {
+                    // background-color: #FFF2D7;
+                }
+            }
+        }
+        
+        .zoom-effect {
+            transition: transform 0.3s ease; /* Thời gian và kiểu transition có thể điều chỉnh */
+        }
+        
+        .zoom-effect:hover {
+            transform: scale(1.05); /* Scale ảnh lên khi hover */
+        }
     }
 }

@@ -47,7 +47,7 @@ function App() {
         `http://${config.URL}/authen/verifyToken`,
         { headers: { authenToken: localStorage.getItem("authenToken") } }
       )
-      .then((res) => {
+      .then(() => {
         if (localStorage.getItem("status")) {
           setAuthenData({
             id: localStorage.getItem("id"),
