@@ -116,15 +116,16 @@ $space-navbar: 50px;
         }
 
         .nav-paginate {
-            margin-top: 5em;
+            margin-top: 3em;
 
             .paginate {
                 display: flex;
                 list-style-type: none;
                 justify-content: center;
 
-                .special-page-link {
-                    // background-color: #FFF2D7;
+                .page-link {
+                    margin: 0 .2em;
+                    border-radius: 5px;
                 }
             }
         }

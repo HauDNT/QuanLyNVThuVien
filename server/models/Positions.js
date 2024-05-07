@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Positions = sequelize.define("Positions", {
         PositionName: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             charset: 'utf8mb4',
             allowNull: false,
             defaultValue: '',

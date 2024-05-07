@@ -3,6 +3,7 @@ import axios from 'axios';
 import config from '../constance.js';
 import { toast } from "react-toastify";
 import LoadingWindow from "./Components/Loading.js";
+import Paginate from "../context/PaginateContext.js";
 
 function EncodeTitles() {
     const [encodeTitles, setEncodeTitles] = useState([]);
@@ -10,6 +11,13 @@ function EncodeTitles() {
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
+
+    // Số bảng ghi phân trang (1 trang):
+    const [records, setRecords] = useState(0);
+
+    const applyPaginate = (records) => {
+        setRecords(records);
+    };
 
     useEffect(() => {
         axios
@@ -47,8 +55,8 @@ function EncodeTitles() {
                                 </thead>
                                 <tbody>
                                     {
-                                        encodeTitles && encodeTitles.length > 0 ?
-                                        (encodeTitles.map((item) => (
+                                        records && records.length > 0 ?
+                                        (records.map((item) => (
                                             <tr key={item.id} className="text-center">
                                                 <td> {item.Character} </td>
                                                 <td> {item.NumberEncrypt} </td>
@@ -63,6 +71,10 @@ function EncodeTitles() {
                                 </tbody>
                             </table>
                             
+                            <Paginate
+                            data={encodeTitles}
+                            applyPaginateData={applyPaginate}
+                        />
                         </div>
                     </div>
                 )

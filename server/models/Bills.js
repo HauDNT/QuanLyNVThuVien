@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: '',
         },
         Discount: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         Notes: {

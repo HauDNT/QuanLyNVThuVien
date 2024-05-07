@@ -119,9 +119,6 @@ function Dashboard() {
                     <div className="row chart-container">
                         <div className="col-lg-11 chart-item">
                             <Chart_ApprovePerDay props={approvePerDay} month={month} year={year} />
-                            <p className="chart-title">
-                                Số sách được phân phối theo ngày
-                            </p>
                         </div>
                     </div>
                 </div>

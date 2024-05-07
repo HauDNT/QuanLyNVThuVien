@@ -10,6 +10,8 @@ import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { BillContext } from "../../context/BillContext.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
+import {formatAndDisplayDatetime} from "../../utils/FormatDate.js";
+import Paginate from "../../context/PaginateContext.js";
 import "../../styles/Bills.scss";
 
 function Bills() {
@@ -28,6 +30,9 @@ function Bills() {
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
 
+    // Số bảng ghi phân trang (1 trang):
+    const [records, setRecords] = useState(0);
+
     useEffect(() => {
         axios
             .get(`http://${config.URL}/bills/${type}`)
@@ -39,14 +44,7 @@ function Bills() {
                 }, isLoading ? 1000 : 0);
             });
     }, [type]);
-
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date(dateString);
-        dateString = 
-            `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return dateString;
-    };
-
+    
     // Hàm xóa từng đơn:
     const handleDeteleBill = () => {
         const deletePromises = billSelected.map((billIdSeleted) => {
@@ -117,6 +115,10 @@ function Bills() {
         setListBills(result);
     };
 
+    const applyPaginate = (records) => {
+        setRecords(records);
+    };
+
     return (
         <>
             {
@@ -170,8 +172,8 @@ function Bills() {
                             </thead>
                             <tbody>
                                 {
-                                    listBills.length > 0 ?
-                                    (listBills.map((bill) => (
+                                    records.length > 0 ?
+                                    (records.map((bill) => (
                                         <tr key={bill.id} className="text-center">
                                             <td>
                                                 <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={bill.id} onClick={(e) => handleCheck(e)}/>
@@ -194,6 +196,11 @@ function Bills() {
                                     )}
                             </tbody>
                         </table>
+
+                        <Paginate
+                            data={listBills}
+                            applyPaginateData={applyPaginate}
+                        />
                     </div>
                 </>
                 )

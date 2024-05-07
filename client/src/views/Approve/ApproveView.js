@@ -6,6 +6,8 @@ import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
 import SuccessSound from "../../assets/audio/success-sound.mp3";
+import Paginate from "../../context/PaginateContext.js";
+import {formatAndDisplayDatetime} from "../../utils/FormatDate.js";
 import '../../styles/ApproveView.scss';
 
 function ApproveView() {
@@ -19,6 +21,9 @@ function ApproveView() {
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
 
+    // Số bảng ghi phân trang (1 trang):
+    const [records, setRecords] = useState(0);
+
     useEffect(() => {
         axios
             .get(`http://${config.URL}/approve/getApproves/${bookId}`)
@@ -31,13 +36,6 @@ function ApproveView() {
             })
             .catch(error => toast.error("Không thể tải lên phân phối!"));
     }, []);
-
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date(dateString);
-        dateString = 
-            `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}   |   ${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return dateString;
-    };
 
     const handleCheck = (event) => {
         const {checked, value} = event.target;
@@ -107,29 +105,8 @@ function ApproveView() {
         setListApproveInfo(result);
     };
 
-    // Paginate:
-    const [currentPage, setCurrentPage] = useState(1);
-    const recordsPerPage = 5;
-    const lastIndex = currentPage * recordsPerPage;
-    const firstIndex = lastIndex - recordsPerPage;
-    const records = listApproveInfo.slice(firstIndex, lastIndex);
-    const nPage = Math.ceil(listApproveInfo.length / recordsPerPage);
-    const numbers = [...Array(nPage + 1).keys()].slice(1);
-
-    const nextPage = () => {
-        if (currentPage !== numbers[numbers.length - 1]) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage !== numbers[0]) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const changePage = (id) => {
-        setCurrentPage(id);
+    const applyPaginate = (records) => {
+        setRecords(records);
     };
 
     return (
@@ -207,23 +184,11 @@ function ApproveView() {
                                 }
                             </tbody>
                         </table>
-                        <nav className="nav-paginate">
-                            <ul className="paginate">
-                                <li className="page-item">
-                                    <Link className="page-link special-page-link" onClick={() => prevPage()}>Prev</Link>
-                                </li>
-                                {
-                                    numbers.map((n, index) => (
-                                        <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={index}>
-                                            <Link className="page-link" onClick={() => changePage(n)}>{n}</Link>
-                                        </li>
-                                    ))
-                                }
-                                <li className="page-item">
-                                    <Link className="page-link" onClick={() => nextPage()}>Next</Link>
-                                </li>
-                            </ul>
-                        </nav>
+
+                        <Paginate
+                            data={listApproveInfo}
+                            applyPaginateData={applyPaginate}
+                        />
                     </div>
                 </>
                 )

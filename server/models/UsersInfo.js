@@ -12,12 +12,12 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.NOW,
         },
         Email: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             allowNull: true,
             defaultValue: '',
         },
         PhoneNumber: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(20),
             allowNull: true,
             defaultValue: '',
         },
