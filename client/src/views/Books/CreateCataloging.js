@@ -2,13 +2,11 @@ import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreateCataloging.scss';
 import {Marc21DataContext} from "../../helper/HandleMarc21Data.js";
 
 function CreateCataloging() {
     const {records, handleReadFile} = useContext(Marc21DataContext);
-    const audio = new Audio(SuccessSound);
     const idUserCataloging = localStorage.getItem('id');
     const [fullnameUser, setFullname] = useState('');
     const [inputValues, setInputValues] = useState({
@@ -79,7 +77,6 @@ function CreateCataloging() {
             else {
                 handleClearInput();
                 toast.success(res.data.success);
-                audio.play();
             }
         });
     };

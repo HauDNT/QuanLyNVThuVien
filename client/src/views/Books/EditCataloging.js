@@ -3,11 +3,10 @@ import {Link, useParams} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
+import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
-    const audio = new Audio(SuccessSound);
     const {id} = useParams();                                       // Id của sách 
     const [statusLoadName, setStatusLoadName] = useState(false);    // Ngăn khi sửa đổi các input thì fullname không bị load lại liên tục
     const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
@@ -54,13 +53,6 @@ function EditCataloging() {
         }
     }, []);
 
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date(dateString);
-        dateString = 
-            `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}   |   ${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return dateString;
-    };
-
     // Hàm update thông tin mới vào biên mục
     const handleUpdateCataloging = () => {
         // Send info to Server:
@@ -72,7 +64,6 @@ function EditCataloging() {
             }
             else {
                 toast.success(res.data.success);
-                audio.play();
             }
         })
         .catch(error => toast.error("Đã xảy ra lỗi khi cập nhật thông tin!"));
@@ -88,7 +79,6 @@ function EditCataloging() {
             }
             else {
                 toast.success(res.data.success);
-                audio.play();
                 window.history.back();
             }
         })
@@ -102,7 +92,6 @@ function EditCataloging() {
                 .patch(`http://${config.URL}/approve/accept/${id}`)
                 .then((res) => {
                     if (res.data.success) {
-                        audio.play();
                         toast.success(res.data.success);
                         setIsNotAccept(0);
                     }

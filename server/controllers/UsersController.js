@@ -260,7 +260,7 @@ class UsersController {
                         where: {id: userId}
                     }
                 )
-            }
+            };
     
             // Cập nhật loại tài khoản ở model User_Roles:
             if (data && data.RoleId) {

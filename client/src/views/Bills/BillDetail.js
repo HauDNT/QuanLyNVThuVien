@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
+import Paginate from "../../context/PaginateContext.js";
 import "../../styles/Bills.scss";
 
 function BillDetail() {
@@ -14,6 +14,9 @@ function BillDetail() {
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
+
+    // Số bảng ghi phân trang (1 trang):
+    const [records, setRecords] = useState(0);
 
     useEffect(() => {
         axios
@@ -41,6 +44,10 @@ function BillDetail() {
 
     const handleSearchResultChange = (result) => {
         setDetail(result);
+    };
+
+    const applyPaginate = (records) => {
+        setRecords(records);
     };
 
     return (
@@ -80,8 +87,8 @@ function BillDetail() {
                             </thead>
                             <tbody>
                                 {
-                                    detail && detail.length > 0 ?
-                                    (detail.map((info) => (
+                                    records && records.length > 0 ?
+                                    (records.map((info) => (
                                         <tr key={info.BookId} className="text-center">
                                             <td> {info.BookId} </td>
                                             <td> {info.MainTitle} </td>
@@ -108,6 +115,11 @@ function BillDetail() {
                                     </tr>
                             </tbody>
                         </table>
+
+                        <Paginate
+                            data={detail}
+                            applyPaginateData={applyPaginate}
+                        />
                     </div>
                 </>
                 )

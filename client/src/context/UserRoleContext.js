@@ -14,7 +14,7 @@ const UserRoleProvider = ({children}) => {
         Fullname: '',
     });
 
-    const applyRole = () => {
+    const applyRole = async () => {
         userId = localStorage.getItem('id');
         
         if (!userId) {

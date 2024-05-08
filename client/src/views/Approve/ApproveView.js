@@ -5,13 +5,11 @@ import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import Paginate from "../../context/PaginateContext.js";
-import {formatAndDisplayDatetime} from "../../utils/FormatDate.js";
+import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import '../../styles/ApproveView.scss';
 
 function ApproveView() {
-    const audio = new Audio(SuccessSound);
     const {id: bookId} = useParams();
     const [listApproveInfo, setListApproveInfo] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
@@ -93,7 +91,6 @@ function ApproveView() {
 
             if (status) {
                 toast.success('Xóa phân phối thành công!');
-                audio.play();
             }
             else 
                 toast.error('Xóa phân phối không thành công!');

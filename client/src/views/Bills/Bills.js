@@ -6,16 +6,15 @@ import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import {FcViewDetails} from "react-icons/fc";
 import {FaTrash } from "react-icons/fa";
+import { FaPenToSquare } from "react-icons/fa6";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { BillContext } from "../../context/BillContext.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
-import {formatAndDisplayDatetime} from "../../utils/FormatDate.js";
+import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import Paginate from "../../context/PaginateContext.js";
 import "../../styles/Bills.scss";
 
 function Bills() {
-    const audio = new Audio(SuccessSound);
     const {type} = useParams();
     const [listBills, setListBills] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
@@ -71,7 +70,6 @@ function Bills() {
 
             if (status) {
                 toast.success('Xóa đơn thành công');
-                audio.play();
             }
             else 
                 toast.error('Xóa đơn không thành công!');
@@ -152,7 +150,6 @@ function Bills() {
                                 </div>
                                 <div className="col-9 btn-container">
                                     <button className="btn btn-danger btn--bill-page" onClick={() => handleDeteleBill()}>Xóa</button>
-                                    <Link className="btn btn-primary btn--bill-page" to="/bills/">Sửa</Link>
                                     <Link className="btn btn-success btn--bill-page" to="/bills/createbill">Tạo đơn mới</Link>
                                 </div>
                             </div>
@@ -168,6 +165,7 @@ function Bills() {
                                     <th scope="col" className="text-center"> Tên đơn </th>
                                     <th scope="col" className="text-center"> Thời gian tạo </th>
                                     <th scope="col" className="text-center"> Xem chi tiết </th>
+                                    <th scope="col" className="text-center"> Sửa thông tin </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,6 +182,11 @@ function Bills() {
                                             <td>
                                                 <Link to={`/bills/detail/${bill.id}`}>
                                                     <FcViewDetails className="info-icon table-icon"/>
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link to={`/bills/edit/${bill.id}`}>
+                                                    <FaPenToSquare className="info-icon table-icon"/>
                                                 </Link>
                                             </td>
                                         </tr>

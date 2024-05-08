@@ -2,12 +2,10 @@ import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
 
 function CreateAccountUser() {
-    const audio = new Audio(SuccessSound);
     const {listRooms} = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
     const [listRoles, setListRoles] = useState([]);
@@ -89,7 +87,6 @@ function CreateAccountUser() {
                             if (res.data.success) {
                                 handleClearInput();
                                 toast.success(res.data.success);
-                                audio.play();
                             }
                             else
                                 toast.error(res.data.error);

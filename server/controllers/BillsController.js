@@ -197,43 +197,48 @@ class BillsController {
     async getBillDetail(req, res) {
         const billId = req.params.billId;
 
-        const data = await BooksRegisInfo.findAll(
-            {
-                attributes: [
-                    'BookId',
-                    [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
-                ],
-                include: [
-                    {
-                        model: Books,
-                        attributes: ['MainTitle', 'UnitPrice', 'Author'],
-                        where: {id: Sequelize.col('BooksRegisInfo.BookId')},
-                    },
-                    {
-                        model: Bills,
-                        attributes: ['Discount'],
-                        where: {id: Sequelize.col('BooksRegisInfo.BillId')},
-                    }
-                ],
-                where: {BillId: billId, Status: 1},
-                group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
-            }
-        );
-
-        const detail = data.map((item) => (
-            {
-                BookId: item.BookId,
-                Amount: item.dataValues.Amount,
-                MainTitle: item.Book.MainTitle,
-                UnitPrice: +item.Book.UnitPrice,
-                Author: item.Book.Author,
-                Discount: +item.Bill.Discount,
-            }
-        ))
-
-        res.json(detail);
+        try {
+            const data = await BooksRegisInfo.findAll(
+                {
+                    attributes: [
+                        'BookId',
+                        [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
+                    ],
+                    include: [
+                        {
+                            model: Books,
+                            attributes: ['MainTitle', 'UnitPrice', 'Author'],
+                            where: {id: Sequelize.col('BooksRegisInfo.BookId')},
+                        },
+                        {
+                            model: Bills,
+                            attributes: ['Discount'],
+                            where: {id: Sequelize.col('BooksRegisInfo.BillId')},
+                        }
+                    ],
+                    where: {BillId: billId, Status: 1},
+                    group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
+                }
+            );
+    
+            const detail = data.map((item) => (
+                {
+                    BookId: item.BookId,
+                    Amount: item.dataValues.Amount,
+                    MainTitle: item.Book.MainTitle,
+                    UnitPrice: +item.Book.UnitPrice,
+                    Author: item.Book.Author,
+                    Discount: +item.Bill.Discount,
+                }
+            ));
+    
+            return res.json(detail);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
+        };
     };
 
+    // Hàm tìm kiếm hóa đơn theo điều kiện:
     async searchBills(req, res) {
         const {selectedCategory, searchValue, orderChoice} = req.body;
 
@@ -255,7 +260,7 @@ class BillsController {
         const {selectedCategory, searchValue, orderChoice} = req.body;
 
         try {
-            const detail = await BooksRegisInfo.findAll(
+            const data = await BooksRegisInfo.findAll(
                 {
                     attributes: [
                         'BookId',
@@ -281,10 +286,53 @@ class BillsController {
                 }
             );
 
+            const detail = data.map(item => (
+                {
+                    BookId: item.BookId,
+                    Amount: item.dataValues.Amount,
+                    MainTitle: item.Book.MainTitle,
+                    UnitPrice: +item.Book.UnitPrice,
+                    Author: item.Book.Author,
+                    Discount: +item.Bill.Discount,
+                }
+            ));
+
             return res.json(detail);
         } catch (error) {
             return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
+    };
+
+    // Lấy thông tin của hóa đơn theo mã hóa đơn:
+    async getInfoBill(req, res) {
+        const billId = req.params.billId;
+        const data = await Bills.findByPk(billId);
+        return res.json(data);
+    };
+
+    // Cập nhật thông tin hóa đơn:
+    async updateBill(req, res) {
+        const billId = req.params.billId;
+        const data = req.body;
+
+        try {
+            const fieldsChange = Object.keys(data);
+            const valuesChange = Object.values(data);
+    
+            for (let i = 0; i < fieldsChange.length; i++) {
+                let attributesUpdating = {};
+                attributesUpdating[fieldsChange[i]] = valuesChange[i];
+                Bills.update(
+                    attributesUpdating, 
+                    {where: {id: billId}}
+                );
+            };
+
+            return res.json({success: 'Cập nhật thông tin thành công!'})
+        } catch (error) {
+            res.json({error: 'Không cập nhật được thông tin!'});
+        }
+
     };
 }
 

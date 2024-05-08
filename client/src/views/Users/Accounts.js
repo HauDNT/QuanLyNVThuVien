@@ -6,7 +6,6 @@ import config from '../../constance.js';
 import {FaEdit, FaTrash } from "react-icons/fa";
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import "../../styles/Users.scss";
 
@@ -22,8 +21,6 @@ function Users() {
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
-
-    const audio = new Audio(SuccessSound);
 
     useEffect(() => {
         axios
@@ -59,7 +56,6 @@ function Users() {
                     if (!res.data.error) {
                         setListUsers((oldList) => oldList.filter((user) => user.id !== eachUserSelected));
                         status = true;
-                        audio.play();
                     }
                 });
 

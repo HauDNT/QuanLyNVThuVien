@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import { MdArrowBackIos, MdArrowForwardIos  } from "react-icons/md";
 
 const Paginate = ({data, applyPaginateData}) => {
+    const [change, setChange] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 10;
     const lastIndex = currentPage * recordsPerPage;
@@ -13,22 +14,25 @@ const Paginate = ({data, applyPaginateData}) => {
 
     useEffect(() => {
         applyPaginateData(records);
-    }, [records]);
+    }, [currentPage, data.length]);
 
     const nextPage = () => {
         if (currentPage !== numbers[numbers.length - 1]) {
             setCurrentPage(currentPage + 1);
+            setChange(!change);
         }
     };
 
     const prevPage = () => {
         if (currentPage !== numbers[0]) {
             setCurrentPage(currentPage - 1);
+            setChange(!change);
         }
     };
 
     const changePage = (id) => {
         setCurrentPage(id);
+        setChange(!change);
     };
 
     return (

@@ -132,8 +132,8 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                             .get(`http://${config.URL}/bills/detail/${orderChoice}`)
                             .then((res) => {
                                 if (!res.data.error) {
-                                    setResult(res.data.detail);
-                                    onSearchResultChange(res.data.detail);
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
                                 }
                                 else toast.error(res.data.error);
                             })

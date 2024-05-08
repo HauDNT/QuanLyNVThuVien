@@ -4,11 +4,10 @@ import {toast} from 'react-toastify';
 import {Link, useParams} from "react-router-dom";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
+import { BlobToUrl } from "../../utils/BlobToUrl.js";
 import "../../styles/Users.scss";
 
 function EditUser() {
-    const audio = new Audio(SuccessSound);
     const {id} = useParams();
     const [status, setStatus] = useState(false);
     const [userInfo, setUserInfo] = useState([]);
@@ -34,9 +33,6 @@ function EditUser() {
     const handleUpdateInfo = (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-
         axios
             .put(
                 `http://${config.URL}/users/updateinfo/${id}`, 
@@ -49,7 +45,6 @@ function EditUser() {
                 }
                 else {
                     toast.success(res.data.success);
-                    audio.play();
                 }
             })
             .catch(error => toast.error("Không cập nhật được thông tin"));
@@ -62,6 +57,9 @@ function EditUser() {
                 <div className="col-12 label-info">
                     <h5>Thông tin tài khoản</h5>
                 </div>
+                {
+                    userInfo.Avatar && BlobToUrl(userInfo.Avatar.data)
+                }
                 <div className="col-4 input-field">
                     <label for="input--username" className="form-label">Tên tài khoản</label>
                     <input 

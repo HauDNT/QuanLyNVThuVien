@@ -7,11 +7,9 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveUpdate() {
-    const audio = new Audio(SuccessSound);
     const {id} = useParams();
     const [approveInfo, setApproveInfo] = useState([]);
     const {listRooms} = useContext(RoomContext);
@@ -60,7 +58,6 @@ function ApproveUpdate() {
                     }
                     else {
                         toast.success(res.data.success);
-                        audio.play();
                     }
                 });
         } catch (error) {

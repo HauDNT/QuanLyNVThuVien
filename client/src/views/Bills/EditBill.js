@@ -4,77 +4,51 @@ import config from '../../constance.js';
 import { BillContext } from "../../context/BillContext.js";
 import '../../styles/CreatePage.scss';
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-function CreatBill() {
-    const [status, setStatus] = useState(false);
-    const [amountBills, setAmountBills] = useState(false);
+function EditBill() {
+    const {billId} = useParams();
     const [typesBill, setTypesBill] = useState([]);
-    const [inputValues, setInputValues] = useState({
-        nameBill: '',
-        typeBill: 1,
-        supplierBill: '',
-        discountBill: '',
-        notes: '',
-    });
+    const [billData, setBillData] = useState({});
     const {updateListBill} = useContext(BillContext);
 
-    const handleClearInput = () => {
-        setInputValues({
-            nameBill: '',
-            typeBill: 1,
-            supplierBill: '',
-            discountBill: '',
-            notes: '',
-        });
-    };
-
     useEffect(() => {
-        const getNumberBill = axios.get(`http://${config.URL}/bills/maxNumber`);
         const getTypesBill = axios.get(`http://${config.URL}/bills/gettypes`);
+        const getBillData = axios.get(`http://${config.URL}/bills/info/${billId}`);
 
         Promise
-            .all([getNumberBill, getTypesBill])
-            .then(([numberBillsRes, typesBillRes]) => {
-                setAmountBills(numberBillsRes.data + 1)
+            .all([getTypesBill, getBillData])
+            .then(([typesBillRes, billDataRes]) => {
                 setTypesBill(typesBillRes.data)
+                setBillData(billDataRes.data)
             })
-            .catch(error => toast.error("Không tải được loại hóa đơn và số lượng!"));
-    }, [status]);
+            .catch(error => toast.error("Không tải được loại hóa đơn!"));
+    }, []);
 
-    const handleCreateBill = (e) => {
+    const updateBill = (e) => {
         e.preventDefault();
 
-        setStatus(true);
-        
-        // Get data from form:
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-
-        if (!data || !data.id || !data.nameBill) {
-            toast.warning("Bạn phải điền đầy đủ thông tin!");
-            return;
-        };
-
-        // Send info to Server:
         axios
-            .post(`http://${config.URL}/bills/createbill`, data, {headers: {authenToken: localStorage.getItem('authenToken')}})
+            .put(
+                `http://${config.URL}/bills/update/${billId}`,
+                billData,
+                {headers: {authenToken: localStorage.getItem('authenToken')}}
+            )
             .then((res) => {
                 if (res.data.error) {
                     toast.error(res.data.error);
                 }
                 else {
-                    handleClearInput();
-                    setStatus(false);
-                    updateListBill();
                     toast.success(res.data.success);
                 }
             })
+            .catch(error => toast.error("Không cập nhật được thông tin"));
     };
 
     return (
         <div className="creatpage-container">
-            <h1 className="col-12 creatpage-heading">Tạo hóa đơn mới</h1>
-            <form method="POST" className="row createpage-form" onSubmit={handleCreateBill}>
+            <h1 className="col-12 creatpage-heading">Thông tin hóa đơn</h1>
+            <form method="POST" className="row createpage-form" onSubmit={updateBill}>
                 <div className="col-4 input-field">
                     <label for="input--bookcode" className="form-label">Mã đơn</label>
                     <input 
@@ -82,67 +56,71 @@ function CreatBill() {
                         type="text" 
                         id="input--bookcode" 
                         className="form-control" 
-                        value={amountBills}
-                        readOnly/>
+                        value={billData.id}
+                        readOnly
+                    />
                 </div>
                 <div className="col-4 input-field">
                     <label for="input--bookname" className="form-label">Tên đơn</label>
                     <input 
-                        name="nameBill" 
+                        name="NameBill" 
                         type="text" 
                         id="input--bookname" 
                         className="form-control"
-                        value={inputValues.nameBill}
-                        onChange={(e) => setInputValues({...inputValues, nameBill: e.target.value})}
+                        value={billData.NameBill}
+                        onChange={(e) => setBillData({...billData, NameBill: e.target.value})}
                         required
-                        />
+                    />
                 </div>
                 <div className="col-4 input-field">
                     <label for="input--supplier" className="form-label">Nhà cung cấp</label>
                     <input 
-                        name="supplierBill" 
+                        name="Supplier" 
                         type="text" 
                         id="input--supplier" 
                         className="form-control"
-                        value={inputValues.supplierBill}
-                        onChange={(e) => setInputValues({...inputValues, supplierBill: e.target.value})}
+                        value={billData.Supplier}
+                        onChange={(e) => setBillData({...billData, Supplier: e.target.value})}
                         required
-                        />
+                    />
                 </div>
                 <div className="col-4 input-field">
                     <label for="input--discount" className="form-label">Chiết khấu (%)</label>
                     <input 
-                        name="discountBill" 
+                        name="Discount" 
                         type="text" 
                         id="input--discount" 
                         className="form-control"
-                        value={inputValues.discountBill}
+                        value={billData.Discount}
+                        onChange={(e) => setBillData({...billData, Discount: e.target.value})}
                         required
-                        onChange={(e) => setInputValues({...inputValues, discountBill: e.target.value})}
-                        />
+                    />
                 </div>
                 <div className="col-4 input-field">
                     <label for="input--date-create-bill" className="form-label">Ngày tạo đơn (mm/dd/yyyy)</label>
                     <input 
-                        name="dateGenerate" 
+                        name="DateGenerateBill" 
                         type="date" 
                         id="input--date-create-bill" 
                         className="form-control"
                         placeholder="dd-mm-yyyy"
+                        value={billData.DateGenerateBill}
+                        onChange={(e) => setBillData({...billData, DateGenerateBill: e.target.value})}
                         required
-                        />
+                    />
                 </div>
                 <div className="col-4 input-field">
                     <label for="select--type-bill" className="form-label">Hình thức</label>
                     <select 
-                        value={inputValues.typeBill} 
-                        name="typeBill" 
+                        name="BillTypeId" 
                         class="form-select" 
                         id="select--type-bill" 
                         title="Loại đơn"
+                        placeholder="dd-mm-yyyy"
+                        value={billData.BillTypeId} 
+                        onChange={(e) => setBillData({...billData, BillTypeId: e.target.value})}
                         required
-                        onChange={(e) => setInputValues({...inputValues, typeBill: e.target.value})}
-                        >
+                    >
                         {typesBill.map((type) => (
                             <option key={type.id} value={type.id}>{type.Name}</option>
                         ))}
@@ -151,20 +129,20 @@ function CreatBill() {
                 <div className="col-12 input-field">
                     <label for="input--notes" className="form-label">Ghi chú thêm</label>
                     <input 
-                        name="notes" 
+                        name="Notes" 
                         type="text" 
                         id="input--notes" 
                         className="form-control"
-                        value={inputValues.notes}
-                        onChange={(e) => setInputValues({...inputValues, notes: e.target.value})}
-                        />
+                        value={billData.Notes}
+                        onChange={(e) => setBillData({...billData, Notes: e.target.value})}
+                    />
                 </div>
                 <div className="col-12 mt-3 button-container">
-                    <button type="submit" className="btn btn-primary mb-3">Tạo</button>
+                    <button type="submit" className="btn btn-primary mb-3">Cập nhật</button>
                 </div>
             </form>
         </div>
     );
 }
 
-export default CreatBill;
+export default EditBill;

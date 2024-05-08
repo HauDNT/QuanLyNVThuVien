@@ -6,11 +6,9 @@ import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Bills.scss";
 
 function BillTrash() {
-    const audio = new Audio(SuccessSound);
     let {type} = useParams();
     const [listBill, setListBill] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
@@ -98,7 +96,6 @@ function BillTrash() {
 
                 if (status) {
                     toast.success('Khôi phục đơn thành công!');
-                    audio.play();
                 }
                 else 
                     toast.error('Khôi phục đơn không thành công!');
@@ -132,7 +129,6 @@ function BillTrash() {
                 });
                 
                 if (status) {
-                    audio.play();
                     toast.success('Xóa đơn thành công!');
                 }
                 else 

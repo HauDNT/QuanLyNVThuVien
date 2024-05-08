@@ -8,13 +8,10 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
-    const audio = new Audio(SuccessSound);
     const {id: bookId} = useParams();
-    // const [maxRegisCode, setMaxRegisCode] = useState();
     const {listRooms} = useContext(RoomContext);
     const {listBills} = useContext(BillContext);
     const {statusDocs} = useContext(StatusDocContext);
@@ -141,7 +138,6 @@ function ApproveCreate() {
                             else {
                                 toast.success(res.data.success);
                                 handleClearInput();
-                                audio.play();
                             }
                         });
                 }

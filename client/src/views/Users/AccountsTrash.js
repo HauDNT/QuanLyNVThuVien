@@ -5,7 +5,6 @@ import {toast} from 'react-toastify';
 import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
 import LoadingWindow from "../Components/Loading.js";
-import SuccessSound from "../../assets/audio/success-sound.mp3";
 import "../../styles/Users.scss";
 
 function AccountTrash() {
@@ -16,8 +15,6 @@ function AccountTrash() {
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
     const [showData, setShowData] = useState(false);
-
-    const audio = new Audio(SuccessSound);
 
     useEffect(() => {
         axios
@@ -89,7 +86,6 @@ function AccountTrash() {
                     if (!res.data.error) {
                         setListAccount((oldList) => oldList.filter((bill) => bill.id !== eachUserSelected));
                         status = true;
-                        audio.play();
                     }
                 });
 
@@ -121,7 +117,6 @@ function AccountTrash() {
                     if (!res.data.error) {
                         setListAccount((oldList) => oldList.filter((bill) => bill.id !== eachUserSelected));
                         status = true;
-                        audio.play();
                     }
                 });
 

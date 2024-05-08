@@ -29,7 +29,7 @@ function Login() {
       .required("Bạn phải nhập vào mật khẩu!")
   });
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     if (!data || !data.username || !data.password) {
       toast.error("Thông tin không hợp lệ. Hãy kiểm tra và thử lại!");
       return;
