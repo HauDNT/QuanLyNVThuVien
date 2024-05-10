@@ -7,12 +7,12 @@ import { toast } from "react-toastify";
 import "../styles/BarCode.scss";
 
 function CreateBarCode() {    
-    const [listCode, setListCode] = useState([]);   // Mảng chứa các mã nằm trong phạm vị firstCode <--> lastCode
-    const [notFound, setNotFound] = useState([]);   // Mảng chứa và hiển thị các mã không tìm thấy -> không tạo barcode
     const [initValues, setInitValues] = useState({
         firstCode: '',
         lastCode: ''
     });     // Mã đầu & cuối
+    const [listCode, setListCode] = useState([]);   // Mảng chứa các mã nằm trong phạm vị firstCode <--> lastCode
+    const [notFound, setNotFound] = useState([]);   // Mảng chứa và hiển thị các mã không tìm thấy -> không tạo barcode
 
     const [barcode, setBarcodes] = useState([]);    // Mảng chứa thông tin của barcode [Mã DDC, tên mã hóa và barcode]
 
@@ -52,7 +52,7 @@ function CreateBarCode() {
         
         
             // Sau đó lặp dài từ mã đầu đến cuối để lấy tất cả các mã trong phạm vi.
-            // Kết hợp đưa các số 0 và phần heading (PM23, PM24,...) vào để hoàn thiện mã.
+            // Kết hợp đưa các số 0 và phần heading (PM23, PM24,...) vào và cắt từ vị trí thứ -6 đến -1 là được 6 số để hoàn thiện mã.
             for (let codeNumber = firstCodeNumber + 1; codeNumber < lastCodeNumber; codeNumber++) {
                 let newCode = heading + '.' + (strZero + codeNumber).slice(-6);
                 newListCode.push(newCode); // Thêm mã mới vào mảng tạm thời
@@ -150,16 +150,6 @@ function CreateBarCode() {
                         </div>
                     ) : ('')
                 }
-                {/* <div className="not-found">
-                    <p>Có {notFound.length} mã không có barcode do không tìm thấy mã số phân phối</p>
-                    {
-                        notFound ? (
-                            notFound.map((item) => (
-                                <span>{item.RegisCode}</span>
-                            ))
-                        ) : ('')
-                    }
-                </div> */}
             </div>
             <div className="row">
                 {

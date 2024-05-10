@@ -10,7 +10,6 @@ import "../../styles/Users.scss";
 function AccountTrash() {
     const [listAccount, setListAccount] = useState([]);
     const [userSelected, setUserSelected] = useState([]);
-    const [checkAll, setCheckAll] = useState(false);
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
@@ -46,14 +45,12 @@ function AccountTrash() {
         }
         else {            
             setUserSelected(userSelected.filter(accountId => accountId !== +value));
-            setCheckAll(checked);
         };
     };
 
     // Hàm xử lý khi check chọn tất cả user:
     const handleCheckAll = (event) => {
         const {checked} = event.target;
-        setCheckAll(checked);
 
         const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
         const selectedAccounts = [];

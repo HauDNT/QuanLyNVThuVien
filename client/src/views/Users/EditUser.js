@@ -57,9 +57,9 @@ function EditUser() {
                 <div className="col-12 label-info">
                     <h5>Thông tin tài khoản</h5>
                 </div>
-                {
+                {/* {
                     userInfo.Avatar && BlobToUrl(userInfo.Avatar.data)
-                }
+                } */}
                 <div className="col-4 input-field">
                     <label for="input--username" className="form-label">Tên tài khoản</label>
                     <input 

@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import {Link} from 'react-router-dom';
 import axios from "axios";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -113,9 +112,6 @@ function Login() {
             <button className="btn btn-primary btn-login" type="submit">
               Đăng nhập
             </button>
-            {/* <Link to='/register' className="btn btn-light btn-to-register" >
-              Đăng ký
-            </Link> */}
           </Form>
         )}
       </Formik>

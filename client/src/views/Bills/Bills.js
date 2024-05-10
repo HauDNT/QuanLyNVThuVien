@@ -18,7 +18,6 @@ function Bills() {
     const {type} = useParams();
     const [listBills, setListBills] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
-    const [checkAll, setCheckAll] = useState(false);
     const {removeFromBillList} = useContext(BillContext);
     
     // Lấy id của loại tài khoản
@@ -84,14 +83,12 @@ function Bills() {
         }
         else {            
             setBillSelected(billSelected.filter(billId => billId !== +value));
-            setCheckAll(checked);
         };
     };
 
     // Hàm xử lý khi check chọn tất cả đơn:
     const handleCheckAll = (event) => {
         const {checked} = event.target;
-        setCheckAll(checked);
 
         const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
         const selectedBills = [];

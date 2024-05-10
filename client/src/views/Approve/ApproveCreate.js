@@ -8,6 +8,7 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
+import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveCreate() {
@@ -48,7 +49,7 @@ function ApproveCreate() {
     // Debouncing lấy giá trị heading, number length để tạo number series
     const debounceCreateNumberSeries = useCallback(debounce((heading, numberLength) => getNumberSeries(heading, numberLength), 1000), []);   
 
-    const getNumberSeries = (heading, numberLength) => {
+    const getNumberSeries = (heading) => {
         try {
             axios
                 .get(`http://${config.URL}/approve/getmaxregiscode/${heading}`)
@@ -77,7 +78,8 @@ function ApproveCreate() {
         const {name, value} = e.target;
         setInitValues(prevValues => ({...prevValues, [name]: value}));
 
-        if (initValues.Heading && initValues.NumberLength) debounceCreateNumberSeries(initValues.Heading, initValues.NumberLength);
+        if (initValues.Heading && initValues.NumberLength) 
+            debounceCreateNumberSeries(initValues.Heading, initValues.NumberLength);
     };
 
     // Hàm format lại dãy số đăng ký và độ dài dãy số cho phù hợp
@@ -98,14 +100,6 @@ function ApproveCreate() {
             initValues.AllRegisCode[i] = initValues.Heading + '.' + numberSeries;
             numberSeries++;
         }
-    };
-
-    // Hàm hiển thị định đạng: ngày/tháng/năm
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date(dateString);
-        dateString = 
-            `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return dateString;
     };
 
     // Hàm tạo mã đăng ký:

@@ -6,6 +6,7 @@ import config from '../../constance.js';
 import {FcUndo} from "react-icons/fc";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
+import { BillContext } from "../../context/BillContext.js";
 import "../../styles/Bills.scss";
 
 function BillTrash() {
@@ -13,6 +14,7 @@ function BillTrash() {
     const [listBill, setListBill] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
+    const {updateListBill} = useContext(BillContext);
     
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
@@ -90,6 +92,7 @@ function BillTrash() {
                     const eachBillSelected = billSelected[index];
                     if (!res.data.error) {
                         setListBill((oldList) => oldList.filter((bill) => bill.id !== eachBillSelected));
+                        updateListBill();
                         status = true;
                     }
                 });

@@ -41,6 +41,9 @@ function EditCataloging() {
         }
     }, [statusLoadName]);
 
+    // Khi Component vừa mới tạo nó sẽ không bắt kịp giá trị fullname nên ta phải dùng
+    // useEffect để set lại khi statusLoadName có thay đổi (tức đã load xong)
+
     useEffect(() => {
         try {
             axios

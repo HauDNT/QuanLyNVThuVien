@@ -16,7 +16,6 @@ function Users() {
 
     const [listUsers, setListUsers] = useState([]);
     const [userSelected, setUserSelected] = useState([]);
-    const [checkAll, setCheckAll] = useState(false);
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
@@ -44,7 +43,6 @@ function Users() {
                     `http://${config.URL}/users/delete/${userIdSelected}`, 
                     {headers: {authenToken: localStorage.getItem('authenToken')}}
                 );
-
             });
 
         Promise
@@ -73,13 +71,11 @@ function Users() {
         }
         else {
             setUserSelected(userSelected.filter(userId => userId !== +value));
-            setCheckAll(false);
         };
     };
 
     const handleCheckAll = (event) => {
         const {checked} = event.target;
-        setCheckAll(checked);
 
         const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
         const selectedUser = [];
@@ -183,7 +179,6 @@ function Users() {
                                 </table>
                             </div>
                         </div>
-
                     </>
                 )
             }

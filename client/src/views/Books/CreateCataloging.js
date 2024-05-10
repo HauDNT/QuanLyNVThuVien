@@ -1,12 +1,10 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
 import '../../styles/CreateCataloging.scss';
-import {Marc21DataContext} from "../../helper/HandleMarc21Data.js";
 
 function CreateCataloging() {
-    const {records, handleReadFile} = useContext(Marc21DataContext);
     const idUserCataloging = localStorage.getItem('id');
     const [fullnameUser, setFullname] = useState('');
     const [inputValues, setInputValues] = useState({
@@ -99,15 +97,6 @@ function CreateCataloging() {
             <div class="row input-file mb-3">
             </div>
             <form method="POST" className="row createCataloging-form" onSubmit={handleCreateCataloging}>
-                <label for="formFile" class="form-label">Nhập từ file Marc</label>
-                <div className="input-group">
-                    <input 
-                        class="form-control" 
-                        type="file" 
-                        id="formFile"
-                        onChange={(e) => handleReadFile(e)}
-                        />
-                </div>
                 <label>Mã sách</label>
                 <div class="input-group">
                     <span class="input-group-text">ISBN</span>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import {useParams, Link} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import config from '../../constance.js';
@@ -7,6 +7,7 @@ import { RoomContext } from "../../context/RoomContext.js";
 import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
+import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import '../../styles/ApproveCreate.scss';
 
 function ApproveUpdate() {
@@ -29,13 +30,6 @@ function ApproveUpdate() {
             return;
         }
     }, []);
-
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date(dateString);
-        dateString = 
-            `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return dateString;
-    };
 
     const handleUpdateApprove = (e) => {
         e.preventDefault();

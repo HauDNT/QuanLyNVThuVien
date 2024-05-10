@@ -13,6 +13,8 @@ import { FaFileInvoiceDollar } from "react-icons/fa";
 import { BsBookmarkCheckFill } from "react-icons/bs";
 import { RiAccountPinCircleLine } from "react-icons/ri";
 import { BillContext } from "../../context/BillContext";
+import {renderYears} from "../../utils/RenderYears.js";
+import {renderMonths} from "../../utils/RenderMonths.js";
 import "../../styles/Dashboard.scss";
 
 function Dashboard() {
@@ -31,8 +33,8 @@ function Dashboard() {
     const [catalogPerMonth, setCatalogPerMonth] = useState([]);
     const [approvePerDay, setApprovePerDay] = useState([]);
 
-    const [month, setMonth] = useState(5);
-    const [year, setYear] = useState(2024);
+    const [month, setMonth] = useState(new Date().getMonth() + 1);
+    const [year, setYear] = useState(new Date().getFullYear());
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
@@ -60,13 +62,13 @@ function Dashboard() {
 
                     setLoading(false);
                     setShowData(true);
-                }, 1500);
+                }, 500);
             })
             .catch(error => {
                 setLoading(false);
                 toast.error("Đã xảy ra lỗi khi lấy dữ liệu!");
             });
-    }, [])
+    }, [year, month]);
 
     return (
         <>
@@ -109,15 +111,43 @@ function Dashboard() {
 
                     {/* Charts - Row 1 */}
                     <div className="row chart-container">
-                        <div className="col-lg-6 chart-item">
+                        <div className="col-lg-7 chart-item">
+                            <select 
+                                class="form-select chart-time text-center" 
+                                name="year"
+                                value={year}
+                                onChange={(e) => setYear(+e.target.value)}
+                            >
+                                <option selected>Chọn năm</option>
+                                {
+                                    renderYears(10, year, 10).map(year => (
+                                        <option value={year}>{year}</option>
+                                    ))
+                                }
+                            </select>
                             <Chart_CatalogPerMonth props={catalogPerMonth} year={year}/>
                         </div>
                         <div className="col-lg-4 chart-item chart-doughnut">
                             <Chart_Accept_Unaccept accept={accept_unAcceptApprove.accept} unaccept={accept_unAcceptApprove.unaccept}/>
                         </div>
                     </div>
+                    <div className="row">
+                    </div>
                     <div className="row chart-container">
                         <div className="col-lg-11 chart-item">
+                        <select 
+                            class="form-select chart-time text-center" 
+                            name="month"
+                            value={month}
+                            onChange={(e) => setMonth(+e.target.value)}
+                        >
+                                <option selected>Chọn tháng</option>
+                                {
+                                    renderMonths().map(month => (
+                                        <option value={month}>Tháng {month}</option>
+                                    ))
+                                }
+                            </select>
                             <Chart_ApprovePerDay props={approvePerDay} month={month} year={year} />
                         </div>
                     </div>

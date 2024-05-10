@@ -12,7 +12,6 @@ import '../../styles/ApproveView.scss';
 function ApproveView() {
     const {id: bookId} = useParams();
     const [listApproveInfo, setListApproveInfo] = useState([]);
-    const [checkAll, setCheckAll] = useState(false);
     const [approveSelected, setApproveSelected] = useState([]);
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
@@ -42,13 +41,11 @@ function ApproveView() {
         }
         else {            
             setApproveSelected(approveSelected.filter(approveId => approveId !== +value));
-            setCheckAll(checked);
         };
     };
 
     const handleCheckAll = (event) => {
         const {checked} = event.target;
-        setCheckAll(checked);
 
         const allChildCheckboxes = document.querySelectorAll('input[type="checkbox"][data-parent="checkbox-parent"]');
         const selectedApproves = [];
