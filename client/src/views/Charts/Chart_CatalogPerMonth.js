@@ -9,7 +9,7 @@ function Chart_CatalogPerMonth({props, year}) {
     const [data, setData] = useState({
         labels: chartLabels,
         datasets: [{
-            label: `Số lượng sách được biên mục theo tháng trong năm ${year}`,
+            label: `Số lượng sách được biên mục theo từng tháng trong năm ${year}`,
             data: chartLabels.map(month => {
                 const item = props.find(item => item.month === month);
                 return item ? item.amount : 0;

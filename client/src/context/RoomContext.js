@@ -13,17 +13,35 @@ const RoomProvider = ({children}) => {
             axios
                 .get(`http://${config.URL}/rooms/all`)
                 .then((res) => {
-                    setListRooms(res.data.rooms)
+                    setListRooms(res.data)
                 })
                 .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
         } catch (error) {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, [listRooms.length]);
+    }, []);
+
+    const updateListRooms = () => {
+        try {
+            axios
+                .get(`http://${config.URL}/rooms/all`)
+                .then((res) => {
+                    setListRooms(res.data)
+                })
+                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
+        } catch (error) {
+            toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
+            return;
+        }
+    };
+
+    const removeFromRoomList = (roomDeleteId) => {
+        setListRooms(prevList => prevList.filter(room => room.id !== roomDeleteId));
+    };
 
     return (
-        <RoomContext.Provider value={{listRooms}}>
+        <RoomContext.Provider value={{listRooms, updateListRooms, removeFromRoomList}}>
             {children}
         </RoomContext.Provider>
     )

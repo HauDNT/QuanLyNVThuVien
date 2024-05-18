@@ -60,7 +60,38 @@ class RolesController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tải lên dữ liệu!'});
         }
-    }
+    };
+
+    async createRole(req, res) {
+        try {
+            const {roleName, description} = req.body;
+            await Roles.create({RoleName: roleName, Description: description});
+
+            return res.json({success: "Tạo quyền hạn mới thành công!"});
+        } catch (error) {
+            return res.json({error: "Đã xảy ra lỗi khi tạo quyền hạn mới!"});
+        }
+    };
+
+    async deleteRole(req, res) {
+        const roleId = req.params.id;
+        try {
+            // Trước khi xóa thì chuyển quyền hạn của các tài khoản có quyền hạn này sang "Không xác định"
+            await User_Roles.update({RoleId: 0} , {where: {RoleId: roleId}});
+
+            // Sau đó mới xóa quyền hạn:
+            await Roles.destroy({
+                where: {
+                    id: roleId
+                },
+                force: true,
+            });
+
+            return res.json({success: 'Xóa quyền hạn thành công! Các tài khoản thuộc quyền hạn này sẽ được chuyển thành "Không xác định"'});
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi khi xóa quyền hạn. Vui lòng thử lại sau.'})
+        }
+    };
 };
 
 module.exports = new RolesController();

@@ -9,7 +9,7 @@ function Chart_ApprovePerDay({props, month, year}) {
     const [data, setData] = useState({
         labels: chartLabels,
         datasets: [{
-            label: `Số lượng sách được phân phối theo ngày trong tháng ${month} - ${year}`,
+            label: `Số lượng sách được phân phối theo ngày trong tháng ${month} trong ${year}`,
             data: chartLabels.map(day => {
                 const item = props.find(item => item.day === day);
                 return item ? item.amount : 0;
@@ -22,7 +22,7 @@ function Chart_ApprovePerDay({props, month, year}) {
             const newData = {
                 labels: chartLabels,
                 datasets: [{
-                    label: `Số lượng sách được phân phối theo ngày trong tháng ${month} - ${year}`,
+                    label: `Số lượng sách được phân phối theo ngày trong tháng ${month} trong ${year}`,
                     data: chartLabels.map(day => {
                         const item = props.find(item => item.day === day);
                         return item ? item.amount : 0;

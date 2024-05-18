@@ -37,10 +37,12 @@ module.exports = (sequelize, DataTypes) => {
         Bill.hasMany(models.BooksRegisInfo, {
             foreignKey: {
                 onDelete: 'cascade',
+                defaultValue: 0,
             }
         });
         Bill.belongsTo(models.BillTypes, {
             onDelete: 'cascade',
+            defaultValue: 0,
         });
     };
 

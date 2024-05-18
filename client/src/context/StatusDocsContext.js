@@ -11,7 +11,7 @@ const StatusDocProvider = ({children}) => {
     useEffect(() => {
         try {
             axios
-                .get(`http://${config.URL}/statusdoc`)
+                .get(`http://${config.URL}/statusdocs`)
                 .then((res) => {
                     setStatusDocs(res.data.types)
                 })
@@ -20,10 +20,28 @@ const StatusDocProvider = ({children}) => {
             toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
             return;
         }
-    }, [statusDocs.length]);
+    }, []);
+
+    const removeStatusDocs = (statusDocDeleteId) => {
+        setStatusDocs(prevList => prevList.filter(statusDocId => statusDocId.id !== statusDocDeleteId));
+    };
+
+    const updateStatusDocs = () => {
+        try {
+            axios
+                .get(`http://${config.URL}/statusdocs`)
+                .then((res) => {
+                    setStatusDocs(res.data)
+                })
+                .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
+        } catch (error) {
+            toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
+            return;
+        }
+    };
 
     return (
-        <StatusDocContext.Provider value={{statusDocs}}>
+        <StatusDocContext.Provider value={{statusDocs, updateStatusDocs, removeStatusDocs}}>
             {children}
         </StatusDocContext.Provider>
     )

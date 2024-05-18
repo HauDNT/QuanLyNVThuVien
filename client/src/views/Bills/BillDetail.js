@@ -5,6 +5,7 @@ import config from '../../constance.js';
 import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
 import Paginate from "../../context/PaginateContext.js";
+import {formatCash} from "../../utils/FormatCash.js";
 import "../../styles/Bills.scss";
 
 function BillDetail() {
@@ -93,11 +94,11 @@ function BillDetail() {
                                             <td> {info.BookId} </td>
                                             <td> {info.MainTitle} </td>
                                             <td> {info.Author} </td>
-                                            <td> {info.UnitPrice} </td>
+                                            <td> {formatCash(info.UnitPrice)} </td>
                                             <td> {info.Amount} </td>
                                             <td> {info.Discount} </td>
                                             <td> 
-                                                {info.UnitPrice * info.Amount * (1 - info.Discount / 100)} 
+                                                {formatCash(info.UnitPrice * info.Amount * (1 - info.Discount / 100))} 
                                             </td>
                                         </tr>
                                     ))) : (
@@ -110,7 +111,7 @@ function BillDetail() {
 
                                     <tr>
                                         <td className="text-center" colSpan={7}>
-                                            Tổng tiền: {calMoney()} VND
+                                            Tổng tiền: {formatCash(calMoney())} VND
                                         </td>
                                     </tr>
                             </tbody>

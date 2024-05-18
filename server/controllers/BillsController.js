@@ -48,6 +48,36 @@ class BillsController {
         }
     };
 
+    // Lấy danh sách đơn đã bị xóa mềm:
+    async getBillSoftDeleted(req, res) {
+        const type = +req.params.type;
+
+        try {
+            const billDeleted = await Bills
+                .findAll({
+                    attributes: [
+                        'id', 
+                        'NameBill',
+                        'DateGenerateBill', 
+                        'Supplier', 
+                        'deletedAt',
+                    ],
+                    include: [{model: BillTypes}],
+                    where: {
+                        deletedAt: {
+                            [Op.ne]: null,
+                        },
+                        BillTypeId: type,
+                    },
+                    paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
+                });
+
+                return res.json(billDeleted);
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+        }
+    };
+
     // Lấy mã số đơn lớn nhất để tạo mới:
     async getMaxNumberBill(req, res) {
         try {
@@ -69,6 +99,74 @@ class BillsController {
             return res.json(amountBills);
         } catch (error) {
             return res.json({ error: 'Đã xảy ra lỗi trong quá trình đếm đơn!' });
+        }
+    };
+
+    /* Lấy chi tiết thông tin hóa đơn, bao gồm: 
+        + Danh sách các sách thuộc hóa đơn này.
+        + Số lượng mỗi quyển sách.
+        + Đơn giá mỗi quyển sách.
+    */
+    async getBillDetail(req, res) {
+        const billId = req.params.billId;
+    
+        try {
+            const data = await BooksRegisInfo.findAll(
+                {
+                    attributes: [
+                        'BookId',
+                        [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
+                    ],
+                    include: [
+                        {
+                            model: Books,
+                            attributes: ['MainTitle', 'UnitPrice', 'Author'],
+                            where: {id: Sequelize.col('BooksRegisInfo.BookId')},
+                        },
+                        {
+                            model: Bills,
+                            attributes: ['Discount'],
+                            where: {id: Sequelize.col('BooksRegisInfo.BillId')},
+                        }
+                    ],
+                    where: {BillId: billId, Status: 1},
+                    group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
+                }
+            );
+        
+            const detail = data.map((item) => (
+                {
+                    BookId: item.BookId,
+                    Amount: item.dataValues.Amount,
+                    MainTitle: item.Book.MainTitle,
+                    UnitPrice: +item.Book.UnitPrice,
+                    Author: item.Book.Author,
+                    Discount: +item.Bill.Discount,
+                }
+            ));
+        
+            return res.json(detail);
+        } catch (error) {
+            return res.json({error: 'Dữ liệu không hợp lệ!'});
+        };
+    };
+
+    // Lấy thông tin của hóa đơn theo mã hóa đơn:
+    async getInfoBill(req, res) {
+        const billId = req.params.billId;
+        const data = await Bills.findByPk(billId);
+        return res.json(data);
+    };
+
+    // Lấy các loại hóa đơn:
+    async getAllBillTypes(req, res) {
+        try {
+            const data = await BillTypes.findAll({
+                attributes: ['id', 'Name']
+            });
+            return res.json(data);
+        } catch (error) {
+            return res.json({error: "Đã xảy ra lỗi khi lấy danh sách loại hóa đơn"});
         }
     };
 
@@ -107,6 +205,51 @@ class BillsController {
             return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo đơn!'});
         }
     };
+
+    // Tạo một loại hóa đơn mới:
+    async creatBillType(req, res) {
+        const {typeId, typeName} = req.body;
+        try {
+            // Vì chỉ được thêm vào 2 loại "Mua" hoặc "Biếu tặng" nên
+            // khi thêm vào ta phải kiểm tra xem 2 loại này đã tồn tại chưa (kiểm theo id):
+            const checkExist = await BillTypes.findByPk(+typeId);
+
+            if (!checkExist) {
+                await BillTypes.create({id: typeId, Name: typeName});
+                return res.json({success: 'Tạo loại hóa đơn mới thành công!'});
+            }
+            else {
+                return res.json({error: 'Loại hóa đơn này đã có.'});
+            }
+
+        } catch (error) {
+            return res.json({error: 'Đã xảy ra lỗi trong quá trình tạo loại hóa đơn!'});
+        }
+    };
+
+    // Cập nhật thông tin hóa đơn:
+    async updateBill(req, res) {
+        const billId = req.params.billId;
+        const data = req.body;
+
+        try {
+            const fieldsChange = Object.keys(data);
+            const valuesChange = Object.values(data);
+    
+            for (let i = 0; i < fieldsChange.length; i++) {
+                let attributesUpdating = {};
+                attributesUpdating[fieldsChange[i]] = valuesChange[i];
+                Bills.update(
+                    attributesUpdating, 
+                    {where: {id: billId}}
+                );
+            };
+
+            return res.json({success: 'Cập nhật thông tin thành công!'})
+        } catch (error) {
+            res.json({error: 'Không cập nhật được thông tin!'});
+        }
+    };
     
     // Xóa một đơn theo id (Xóa mềm):
     async deleteBill(req, res) {
@@ -127,35 +270,27 @@ class BillsController {
         }
     };
 
-    // Lấy danh sách đơn đã bị xóa mềm:
-    async getBillSoftDeleted(req, res) {
-        const type = +req.params.type;
-
+    // Xóa một loại hóa đơn:
+    async deleteType(req, res) {
+        const typeId = req.params.typeId;
         try {
-            const billDeleted = await Bills
-                .findAll({
-                    attributes: [
-                        'id', 
-                        'NameBill',
-                        'DateGenerateBill', 
-                        'Supplier', 
-                        'deletedAt',
-                    ],
-                    include: [{model: BillTypes}],
-                    where: {
-                        deletedAt: {
-                            [Op.ne]: null,
-                        },
-                        BillTypeId: type,
-                    },
-                    paranoid: false,    // Cho phép đưa ra những bản ghi bị Soft Delete
-                });
+            // Trước khi xóa thì chuyển loại hóa đơn của các hóa đơn có loại này sang "Không xác định"
+            await Bills.update({BillTypeId: 0} , {where: {BillTypeId: typeId}});
 
-                return res.json(billDeleted);
+            // Sau đó mới xóa loại hóa đơn:
+            await BillTypes.destroy({
+                where: {
+                    id: typeId
+                },
+                force: true,
+            });
+
+
+            return res.json({success: 'Xóa loại hóa đơn thành công! Các đơn thuộc loại này sẽ được chuyển vào "Đơn chưa phân loại"'});
         } catch (error) {
-            return res.json({error: 'Đã xảy ra lỗi từ phía máy chủ. Hãy thử lại sau!'});
+            return res.json({error: 'Đã xảy ra lỗi khi xóa loại hóa đơn. Vui lòng thử lại sau.'})
         }
-    };
+    }
 
     // Khôi phục lại hóa đơn đã bị xóa mềm:
     async restoreReachBill(req, res) {
@@ -187,55 +322,6 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Đã xảy ra lỗi khi xóa đơn. Vui lòng thử lại sau.'})
         }
-    };
-
-    /* Lấy chi tiết thông tin hóa đơn, bao gồm: 
-        + Danh sách các sách thuộc hóa đơn này.
-        + Số lượng mỗi quyển sách.
-        + Đơn giá mỗi quyển sách.
-    */
-    async getBillDetail(req, res) {
-        const billId = req.params.billId;
-
-        try {
-            const data = await BooksRegisInfo.findAll(
-                {
-                    attributes: [
-                        'BookId',
-                        [Sequelize.fn('COUNT', Sequelize.col('BooksRegisInfo.id')), 'Amount']
-                    ],
-                    include: [
-                        {
-                            model: Books,
-                            attributes: ['MainTitle', 'UnitPrice', 'Author'],
-                            where: {id: Sequelize.col('BooksRegisInfo.BookId')},
-                        },
-                        {
-                            model: Bills,
-                            attributes: ['Discount'],
-                            where: {id: Sequelize.col('BooksRegisInfo.BillId')},
-                        }
-                    ],
-                    where: {BillId: billId, Status: 1},
-                    group: ['BooksRegisInfo.BookId', 'BooksRegisInfo.BillId'],
-                }
-            );
-    
-            const detail = data.map((item) => (
-                {
-                    BookId: item.BookId,
-                    Amount: item.dataValues.Amount,
-                    MainTitle: item.Book.MainTitle,
-                    UnitPrice: +item.Book.UnitPrice,
-                    Author: item.Book.Author,
-                    Discount: +item.Bill.Discount,
-                }
-            ));
-    
-            return res.json(detail);
-        } catch (error) {
-            return res.json({error: 'Dữ liệu không hợp lệ!'});
-        };
     };
 
     // Hàm tìm kiếm hóa đơn theo điều kiện:
@@ -301,38 +387,6 @@ class BillsController {
         } catch (error) {
             return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
-    };
-
-    // Lấy thông tin của hóa đơn theo mã hóa đơn:
-    async getInfoBill(req, res) {
-        const billId = req.params.billId;
-        const data = await Bills.findByPk(billId);
-        return res.json(data);
-    };
-
-    // Cập nhật thông tin hóa đơn:
-    async updateBill(req, res) {
-        const billId = req.params.billId;
-        const data = req.body;
-
-        try {
-            const fieldsChange = Object.keys(data);
-            const valuesChange = Object.values(data);
-    
-            for (let i = 0; i < fieldsChange.length; i++) {
-                let attributesUpdating = {};
-                attributesUpdating[fieldsChange[i]] = valuesChange[i];
-                Bills.update(
-                    attributesUpdating, 
-                    {where: {id: billId}}
-                );
-            };
-
-            return res.json({success: 'Cập nhật thông tin thành công!'})
-        } catch (error) {
-            res.json({error: 'Không cập nhật được thông tin!'});
-        }
-
     };
 }
 

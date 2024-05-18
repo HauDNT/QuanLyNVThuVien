@@ -15,8 +15,11 @@ import UserAccounts from "./views/Users/Accounts.js";
 import CreateAccountUser from "./views/Users/CreateAccount.js";
 import AccountsTrash from "./views/Users/AccountsTrash.js";
 import EditUser from "./views/Users/EditUser.js";
+import Positions from "./views/Users/Position.js";
+import Roles from "./views/Users/Roles.js";
 import Bills from "./views/Bills/Bills.js";
 import BillDetail from "./views/Bills/BillDetail.js";
+import BillTypes from "./views/Bills/BillTypes.js";
 import CreatBill from "./views/Bills/CreateBill.js";
 import EditBill from "./views/Bills/EditBill.js";
 import BillTrash from "./views/Bills/BillTrash.js";
@@ -27,6 +30,9 @@ import ApproveView from "./views/Approve/ApproveView.js";
 import ApproveCreate from "./views/Approve/ApproveCreate.js";
 import ApproveUpdate from "./views/Approve/ApproveUpdate.js";
 import EncodeTitles from "./views/EncodeTitles.js";
+import Rooms from "./views/Rooms/Rooms.js";
+import StoreTypes from "./views/StoreTypes/StoreTypes.js";
+import StatusDocs from "./views/StatusDocs/StatusDocs.js";
 import PageNotFound from "./views/PageNotFound";
 
 import "./styles/App.scss";
@@ -55,9 +61,12 @@ function App() {
                             <Route path="users/create" element={<CreateAccountUser/>}/>
                             <Route path="users/edit/:id" element={<EditUser/>}/>
                             <Route path="users/trash" element={<AccountsTrash/>}/>
+                            <Route path="positions" element={<Positions/>}/>
+                            <Route path="roles" element={<Roles/>}/>
                             <Route path="bills/createbill" element={<CreatBill/>}/>
                             <Route path="bills/detail/:billId" element={<BillDetail/>}/>
                             <Route path="bills/edit/:billId" element={<EditBill/>}/>
+                            <Route path="bills/types" exact element={<BillTypes/>}/>
                             <Route path="bills/:type" element={<Bills/>}/>
                             <Route path="bills/trash/:type" element={<BillTrash/>}/>
                             <Route path="bills/trash/:type" element={<BillTrash/>}/>
@@ -68,6 +77,9 @@ function App() {
                             <Route path="approve/create/:id" element={<ApproveCreate/>}/>
                             <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
                             <Route path="encodetitles" element={<EncodeTitles/>}/>
+                            <Route path="rooms" element={<Rooms/>}/>
+                            <Route path="storetypes" element={<StoreTypes/>}/>
+                            <Route path="statusdocs" element={<StatusDocs/>}/>
                         </Route>
                         <Route path="/*" exact element={<PageNotFound/>}/>
                     </Routes>
@@ -77,7 +89,7 @@ function App() {
 
         <ToastContainer
           position="top-center"
-          autoClose={2000}
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

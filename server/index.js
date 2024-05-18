@@ -45,7 +45,7 @@ app.use('/positions', positionsRouter);
 app.use('/books', booksRouter);
 app.use('/approve', approveRouter);
 app.use('/storetypes', storetypesRouter);
-app.use('/statusdoc', statusdocRouter);
+app.use('/statusdocs', statusdocRouter);
 app.use('/search', searchRouter);
 app.use('/barcode', barcodeRouter);
 app.use('/roles', rolesRouter);

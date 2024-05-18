@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Sidebar, Menu, MenuItem, SubMenu, sidebarClasses} from "react-pro-sidebar";
+import {Sidebar, Menu, MenuItem, SubMenu} from "react-pro-sidebar";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { Link } from "react-router-dom";
 
@@ -12,13 +12,17 @@ function SideBar() {
             <Menu>
                 <MenuItem component={<Link to="/"/>}>Trang chủ</MenuItem>
                 <SubMenu label="Quản lý đơn sách">
-                    <MenuItem component={<Link to="/bills/1"/>}>Đơn đặt</MenuItem>
-                    <MenuItem component={<Link to="/bills/2"/>}>Đơn nhận</MenuItem>
+                    <MenuItem component={<Link to="/bills/1"/>}>Đơn mua</MenuItem>
+                    <MenuItem component={<Link to="/bills/2"/>}>Đơn nhận / biếu tặng</MenuItem>
+                    <MenuItem component={<Link to="/bills/0"/>}>Đơn chưa phân loại</MenuItem>
+                    <MenuItem component={<Link to="/bills/types"/>}>Phân loại hóa đơn</MenuItem>
                 </SubMenu>
                 {
                     idRole === 1 || idRole === 2 ? (
                         <SubMenu label="Quản lý người dùng">
                             <MenuItem component={<Link to="/users/"/>}>Quản lý tài khoản</MenuItem>
+                            <MenuItem component={<Link to="/positions/"/>}>Chức vụ</MenuItem>
+                            <MenuItem component={<Link to="/roles/"/>}>Quyền hạn</MenuItem>
                         </SubMenu>
                     ) : null
                 }
@@ -37,10 +41,9 @@ function SideBar() {
                 {
                     idRole === 1 || idRole === 2 ? (
                         <SubMenu label="Khác">
-                            <MenuItem component={<Link to="/"/>}>Phân loại hóa đơn</MenuItem>
-                            <MenuItem component={<Link to="/"/>}>Phòng</MenuItem>
-                            <MenuItem component={<Link to="/"/>}>Thể loại lưu trữ</MenuItem>
-                            <MenuItem component={<Link to="/"/>}>Trạng thái tài liệu</MenuItem>
+                            <MenuItem component={<Link to="/rooms"/>}>Phòng</MenuItem>
+                            <MenuItem component={<Link to="/storetypes"/>}>Thể loại lưu trữ</MenuItem>
+                            <MenuItem component={<Link to="/statusdocs"/>}>Trạng thái tài liệu</MenuItem>
                         </SubMenu>
                     ) : null
                 }

@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             defaultValue: null,
         },
+    }, {
+        freezeTableName: true,
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
+        paranoid: true,
     });
 
     StatusDoc.associate = (models) => {

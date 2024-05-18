@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from 'react-router-dom';
 import axios from "axios";
 import config from '../../constance.js';
 import { toast } from "react-toastify";
 import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import '../../styles/CreateCataloging.scss';
 
 function EditCataloging() {
@@ -12,6 +13,7 @@ function EditCataloging() {
     const [fullname, setFullname] = useState('');                   // Load lên fullname người tạo biên mục
     const [infoCataloging, setInfoCataloging] = useState([]);       // Lấy thông tin biên mục
     const [isNotAccept, setIsNotAccept] = useState(0);              // Kiểm soát xem biên mục hiện tại có bao nhiêu phân phối chưa được duyệt.
+    const idRole = useContext(UserRoleContext).role.RoleId;
 
     useEffect(() => {
         try {
@@ -371,7 +373,7 @@ function EditCataloging() {
 
                 <div className="col-12 mt-3 button-container">
                     {
-                        isNotAccept > 0 ? (
+                        isNotAccept > 0 && (idRole === 1 || idRole === 2) ? (
                             <button 
                                 onClick={(e) => approveCatalogItem(e)}
                                 type="button" 

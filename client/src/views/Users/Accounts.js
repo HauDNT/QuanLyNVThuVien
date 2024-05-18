@@ -152,9 +152,12 @@ function Users() {
                                             listUsers.length > 0 ? (
                                                 listUsers.map((user) => (
                                                 <tr key={user.id} className="text-center">
-                                                    <td>
-                                                        <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={user.id} onClick={(e) => handleCheck(e)}/>
-                                                    </td>
+                                                        <td>
+                                                            {user.id !== +localStorage.getItem('id') ? (
+                                                                <input data-parent="checkbox-parent" class="form-check-input" type="checkbox" value={user.id} onClick={(e) => handleCheck(e)}/>
+                                                            ) : null
+                                                            }
+                                                        </td>
                                                     <td>{user.Username}</td>
                                                     <td>{user.Fullname}</td>
                                                     <td>{user.Email}</td>

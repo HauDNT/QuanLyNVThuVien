@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import config from '../../constance.js';
 import { RoomContext } from "../../context/RoomContext.js";
 import { BlobToUrl } from "../../utils/BlobToUrl.js";
@@ -9,7 +9,6 @@ import "../../styles/Users.scss";
 
 function EditUser() {
     const {id} = useParams();
-    const [status, setStatus] = useState(false);
     const [userInfo, setUserInfo] = useState([]);
     const {listRooms} = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
@@ -23,7 +22,7 @@ function EditUser() {
                 axios.get(`http://${config.URL}/users/info/${id}`),
             ])
             .then(([positionRes, roleRes, userRes]) => {
-                setListPositions(positionRes.data.positions)
+                setListPositions(positionRes.data)
                 setListRoles(roleRes.data)
                 setUserInfo(userRes.data)
             })

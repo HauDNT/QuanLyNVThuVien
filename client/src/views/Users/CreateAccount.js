@@ -45,7 +45,7 @@ function CreateAccountUser() {
                 axios.get(`http://${config.URL}/roles/getAllRoles`, {headers: {authenToken: localStorage.getItem('authenToken')}})
             ])
             .then(([positionRes, roleRes]) => {
-                setListPositions(positionRes.data.positions)
+                setListPositions(positionRes.data)
                 setListRoles(roleRes.data)
             })
             .catch(error => toast.error('Error!'));
