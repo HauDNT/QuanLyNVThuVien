@@ -29,7 +29,7 @@ class StoretypesController {
 
         try {
             // Trước khi xóa thì chuyển phân phối sách thuộc thể loại lưu trữ này sang "Không xác định"
-            await BooksRegisInfo.update({StoreTypeId: 0, Status: 0} , {where: {StoreTypeId: typeId}});
+            await BooksRegisInfo.update({StoreTypeId: 1, Status: 0} , {where: {StoreTypeId: typeId}});
 
             // Sau đó mới xóa thể loại:
             await StoreTypes.destroy({

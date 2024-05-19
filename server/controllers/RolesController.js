@@ -77,7 +77,7 @@ class RolesController {
         const roleId = req.params.id;
         try {
             // Trước khi xóa thì chuyển quyền hạn của các tài khoản có quyền hạn này sang "Không xác định"
-            await User_Roles.update({RoleId: 0} , {where: {RoleId: roleId}});
+            await User_Roles.update({RoleId: 1} , {where: {RoleId: roleId}});
 
             // Sau đó mới xóa quyền hạn:
             await Roles.destroy({

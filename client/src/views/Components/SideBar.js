@@ -30,6 +30,15 @@ function SideBar() {
                     <MenuItem component={<Link to="/book/cataloging/create"/>}>Tạo mới</MenuItem>
                     <MenuItem component={<Link to="/book/cataloging/all"/>}>Danh sách biên mục</MenuItem>
                 </SubMenu>
+                {
+                    idRole === 1 || idRole === 2 ? (
+                        <SubMenu label="Thông tin phân phối">
+                            <MenuItem component={<Link to="/rooms"/>}>Phòng</MenuItem>
+                            <MenuItem component={<Link to="/storetypes"/>}>Thể loại lưu trữ</MenuItem>
+                            <MenuItem component={<Link to="/statusdocs"/>}>Trạng thái tài liệu</MenuItem>
+                        </SubMenu>
+                    ) : null
+                }
                 <SubMenu label="Công cụ">
                     <MenuItem component={<Link to="/encodetitles"/>}>Bảng mã hóa tên sách</MenuItem>
                     {
@@ -38,15 +47,6 @@ function SideBar() {
                         ) : null
                     }
                 </SubMenu>
-                {
-                    idRole === 1 || idRole === 2 ? (
-                        <SubMenu label="Khác">
-                            <MenuItem component={<Link to="/rooms"/>}>Phòng</MenuItem>
-                            <MenuItem component={<Link to="/storetypes"/>}>Thể loại lưu trữ</MenuItem>
-                            <MenuItem component={<Link to="/statusdocs"/>}>Trạng thái tài liệu</MenuItem>
-                        </SubMenu>
-                    ) : null
-                }
             </Menu>
         </Sidebar>
     );

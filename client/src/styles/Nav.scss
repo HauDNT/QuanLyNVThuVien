@@ -2,9 +2,17 @@
     margin: 0;
     padding: 0;
 
+    background-image: linear-gradient(180deg, #ffffff 0%, #f2f2f2e9 100%);
+
     .nav-link {
         &:first-child {
-            padding-left: 0px;
+            margin-left: -5px;
+            font-weight: 600;
+            font-size: 23px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: -webkit-linear-gradient(#000000 , #000000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         &:not(:first-child) {
@@ -26,6 +34,7 @@
     .dropdown {
         position: absolute;
         right: 0.3em;
+        background-color: #f2f2f2e9;
 
         .dropdown-menu {
             .dropdown-item {

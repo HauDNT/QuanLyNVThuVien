@@ -143,7 +143,7 @@ function Positions() {
                             {
                                 records.length > 0 ? (
                                     records.map((position, index) => (
-                                        position.id !== 0 && 
+                                        position.id !== 1 && 
                                         (
                                             <tr key={position.id} className="text-center">
                                                 <td>{index}</td>

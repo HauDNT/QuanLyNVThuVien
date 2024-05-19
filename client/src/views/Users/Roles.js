@@ -150,7 +150,7 @@ function Roles() {
                             {
                                 records.length > 0 ? (
                                     records.map((role) => (
-                                        role.id > 0 && 
+                                        role.id > 1 && 
                                         (
                                             <tr key={role.id} className="text-center">
                                                 <td>{role.id}</td>
@@ -158,7 +158,7 @@ function Roles() {
                                                 <td> {role.Description || "Không"} </td>
                                                 {
                                                     // Chỉ cho phép xóa các quyền không phải QTV cấp 1
-                                                    role.id > 1 && (
+                                                    role.id > 2 && (
                                                         <button
                                                             className="btn-delete"
                                                             value={role.id}

@@ -275,7 +275,7 @@ class BillsController {
         const typeId = req.params.typeId;
         try {
             // Trước khi xóa thì chuyển loại hóa đơn của các hóa đơn có loại này sang "Không xác định"
-            await Bills.update({BillTypeId: 0} , {where: {BillTypeId: typeId}});
+            await Bills.update({BillTypeId: 1} , {where: {BillTypeId: typeId}});
 
             // Sau đó mới xóa loại hóa đơn:
             await BillTypes.destroy({

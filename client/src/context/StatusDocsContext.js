@@ -13,7 +13,7 @@ const StatusDocProvider = ({children}) => {
             axios
                 .get(`http://${config.URL}/statusdocs`)
                 .then((res) => {
-                    setStatusDocs(res.data.types)
+                    setStatusDocs(res.data)
                 })
                 .catch((error) => toast.error(`Đã xảy ra lỗi trong quá trình lấy dữ liệu từ Server - ${error}`));
         } catch (error) {

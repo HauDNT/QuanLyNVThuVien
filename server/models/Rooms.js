@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Rooms.associate = (models) => {
         Rooms.hasMany(models.BooksRegisInfo, {
-            onDelete: 'set null',
+            onDelete: 'cascade',
         });
         Rooms.hasOne(models.UsersInfo, {
             onDelete: 'cascade',

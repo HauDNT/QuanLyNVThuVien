@@ -23,8 +23,11 @@ function Nav() {
   };
 
   return (
-    <div className="navbar navbar-dark bg-dark">
-      <NavLink className="nav-link navbar-brand">QUẢN LÝ NGHIỆP VỤ SÁCH</NavLink>
+    <div className="navbar">
+      <NavLink className="nav-link navbar-brand">
+        LIBTECH
+      </NavLink>
+      
       <Dropdown>
         <Dropdown.Toggle variant="primary" id="dropdown-basic">
           {fullname}

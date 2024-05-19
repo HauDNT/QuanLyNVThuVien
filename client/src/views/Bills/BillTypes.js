@@ -145,7 +145,7 @@ function BillTypes() {
                             {
                                 records.length > 1 ? (
                                     records.map((type, index) => (
-                                        type.id !== 0 && 
+                                        type.id !== 1 && 
                                         (
                                             <tr key={type.id} className="text-center">
                                                 <td>{index}</td>

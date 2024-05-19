@@ -27,7 +27,7 @@ class PositionsController {
         const positionId = req.params.id;
         try {
             // Trước khi xóa thì chuyển chức vụ của các tài khoản có chức vụ này sang "Không xác định"
-            await UsersInfo.update({PositionId: 0} , {where: {PositionId: positionId}});
+            await UsersInfo.update({PositionId: 1} , {where: {PositionId: positionId}});
 
             // Sau đó mới xóa chức vụ:
             await Positions.destroy({

@@ -29,7 +29,7 @@ class StatusdocController {
 
         try {
             // Trước khi xóa thì chuyển phân phối sách thuộc trạng thái tài liệu này sang "Không xác định"
-            await BooksRegisInfo.update({StatusDocId: 0, Status: 0} , {where: {StatusDocId: statusId}});
+            await BooksRegisInfo.update({StatusDocId: 1, Status: 0} , {where: {StatusDocId: statusId}});
 
             // Sau đó mới xóa:
             await StatusDoc.destroy({

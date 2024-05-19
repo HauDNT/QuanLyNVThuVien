@@ -27,8 +27,8 @@ class RoomsController {
         const roomId = req.params.id;
         try {
             // Trước khi xóa thì chuyển phòng của các tài khoản và phân phối sách thuộc phòng này sang "Không xác định"
-            await UsersInfo.update({RoomId: 0} , {where: {RoomId: roomId}});
-            await BooksRegisInfo.update({RoomId: 0, Status: 0} , {where: {RoomId: roomId}});
+            await UsersInfo.update({RoomId: 1} , {where: {RoomId: roomId}});
+            await BooksRegisInfo.update({RoomId: 1, Status: 0} , {where: {RoomId: roomId}});
 
             // Sau đó mới xóa phòng:
             await Rooms.destroy({

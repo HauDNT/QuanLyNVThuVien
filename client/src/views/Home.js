@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Nav from "./Components/Navbar";
-import SideBar from "./Components/SideBar";
+import SideBar from "./Components/SideBar.js";
 
 function Home() {
   let navigator = useNavigate();

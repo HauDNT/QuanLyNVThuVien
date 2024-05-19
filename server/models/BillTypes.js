@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     BillTypes.associate = (models) => {
         BillTypes.hasMany(models.Bills, {
-            onDelete: 'SET DEFAULT',
+            onDelete: 'cascade',
         });
     };
 
