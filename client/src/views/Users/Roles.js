@@ -11,7 +11,6 @@ import "../../styles/Bills.scss";
 function Roles() {
     const [roles, setRoles] = useState([]);
     const [initValues, setInitValues] = useState({
-        roleId: 1,
         roleName: '',
         description: '',
     });
@@ -64,6 +63,10 @@ function Roles() {
                 else {
                     renderRoles();
                     toast.success(res.data.success);
+                    setInitValues({
+                        roleName: '',
+                        description: '',
+                    });
                 }
             })
             .catch(error => {

@@ -9,7 +9,6 @@ router.get('/getInfoCatalog/:id', BooksController.getInfoCataloging);
 router.get('/getAccessCatalog', BooksController.accessCataloging);
 router.get('/getNotAccessCatalog', BooksController.notAccessCataloging);
 router.get('/getPerMonth/:year', BooksController.getAmountPerMonthOfYear);
-router.get('/encodetitles', BooksController.getEncodeTitles);
 router.post('/search', validToken, BooksController.searchCataloging);
 router.post('/createCataloging', validToken, BooksController.createCataloging);
 router.put('/updateCataloging/:id', validToken, BooksController.updateCataloging);

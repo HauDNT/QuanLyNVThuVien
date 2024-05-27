@@ -45,6 +45,7 @@ function StoreTypes() {
                 else {
                     toast.success(res.data.success);
                     updateStoreType();
+                    setInitValues({nameType: ''});
                 }
             })
             .catch(error => {

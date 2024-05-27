@@ -154,24 +154,13 @@ function ApproveCreate() {
                             name="Heading"
                             value={initValues.Heading}
                             onChange={(e) => changeToGenerateRegisCode(e)}
-                            placeholder="VD: PM23" 
+                            placeholder="VD: PM24" 
                             required/>
-                    </div>
-                    <div className="col input-group">
-                        <span className="input-group-text" id="basic-addon1">Mã số đăng ký</span>
-                        <input 
-                            name="NumberSeries"
-                            value={initValues.NumberSeries}
-                            onChange={(e) => changeToGenerateRegisCode(e)}
-                            type="text" 
-                            className="form-control" 
-                            placeholder="VD: 86594" 
-                            readOnly/>
                     </div>
                     <div className="col input-group">
                         <span className="input-group-text" id="basic-addon1">Độ dài dãy số</span>
                         <input 
-                            type="text"
+                            type="number"
                             name="NumberLength"
                             value={initValues.NumberLength}
                             onChange={(e) => changeToGenerateRegisCode(e)}
@@ -179,8 +168,28 @@ function ApproveCreate() {
                             placeholder="Khuyến nghị: 6" 
                             required/>
                     </div>
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Số lượng</span>
+                        <input 
+                            type="number" 
+                            name="AmountRegis"
+                            value={initValues.AmountRegis}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            className="form-control" 
+                            required/>
+                    </div>
                 </div>
                 <div className="row">
+                    <div className="col input-group">
+                        <span className="input-group-text" id="basic-addon1">Mã số đăng ký</span>
+                        <input 
+                            name="NumberSeries"
+                            value={initValues.NumberSeries}
+                            onChange={(e) => changeToGenerateRegisCode(e)}
+                            type="number" 
+                            className="form-control" 
+                            placeholder="Tự động tạo, có thể tùy chỉnh"/>
+                    </div>
                     <div className="col input-group">
                         <span className="input-group-text" id="basic-addon1">Mã vạch</span>
                         <input 
@@ -188,7 +197,7 @@ function ApproveCreate() {
                             className="form-control" 
                             name="RegisCode"
                             value={initValues.RegisCode}
-                            placeholder="VD: PM23.086594"
+                            placeholder="VD: PM24.086594"
                             readOnly/>
                     </div>
                     <div className="col input-group">
@@ -215,16 +224,6 @@ function ApproveCreate() {
                                 )
                             }
                         </select>
-                    </div>
-                    <div className="col input-group">
-                        <span className="input-group-text" id="basic-addon1">Số lượng</span>
-                        <input 
-                            type="text" 
-                            name="AmountRegis"
-                            value={initValues.AmountRegis}
-                            onChange={(e) => changeToGenerateRegisCode(e)}
-                            className="form-control" 
-                            required/>
                     </div>
                 </div>
                 <div className="row">

@@ -189,7 +189,7 @@ class BooksController {
         }
 
         try {    
-            Books.destroy({where: {id: idCatalog}, force: true,});
+            await Books.destroy({where: {id: idCatalog}, force: true,});
 
             return res.json({success: 'Xóa biên mục thành công!'});
         } catch (error) {
@@ -222,21 +222,6 @@ class BooksController {
         } catch (error) {
             return res.json({error: 'Dữ liệu không hợp lệ!'});
         }
-    };
-
-    // Lấy bảng mã hóa tên sách:
-    async getEncodeTitles(req, res) {
-        try {
-            const encodeTitles = await EncryptTitles.findAll(
-                {
-                    attributes: ['Character', 'NumberEncrypt']
-                }
-            );
-            res.json(encodeTitles);
-        } catch (error) {
-            res.json({error: 'Không lấy được bảng mã hóa tên sách!'});
-        }
-
     };
 
     // Lấy số lượng sách được biên mục trong năm X theo từng tháng:

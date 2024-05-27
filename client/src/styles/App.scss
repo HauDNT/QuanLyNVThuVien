@@ -93,6 +93,16 @@ $space-navbar: 50px;
                     &:last-of-type {
                         border-bottom: 2px solid #387ADF;
                     }
+
+                    .td-edit {
+                        align-items: center;
+                        
+                        input {
+                            max-width: 80px;
+                            margin: auto;
+                            text-align: center;
+                        }
+                    }
                 }
             }
     

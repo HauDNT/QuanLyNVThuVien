@@ -105,7 +105,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.ISBN}
                         onChange={(e) => setInputValues({...inputValues, ISBN: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>
@@ -116,7 +116,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.DDC}
                         onChange={(e) => setInputValues({...inputValues, DDC: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>
@@ -252,7 +252,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.PubYear}
                         onChange={(e) => setInputValues({...inputValues, PubYear: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>
@@ -263,7 +263,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.QuantityCopies}
                         onChange={(e) => setInputValues({...inputValues, QuantityCopies: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>
@@ -286,7 +286,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.NumPages}
                         onChange={(e) => setInputValues({...inputValues, NumPages: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>
@@ -297,7 +297,7 @@ function CreateCataloging() {
                         id=""
                         value={inputValues.UnitPrice}
                         onChange={(e) => setInputValues({...inputValues, UnitPrice: e.target.value})}
-                        type="text"
+                        type="number"
                         className="form-control"
                     />
                 </div>

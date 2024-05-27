@@ -10,7 +10,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import LoadingWindow from "../Components/Loading.js";
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { BillContext } from "../../context/BillContext.js";
-import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
+import {formatAndDisplayDate} from "../../utils/FormatDate.js";
 import Paginate from "../../context/PaginateContext.js";
 import "../../styles/Bills.scss";
 
@@ -175,7 +175,7 @@ function Bills() {
                                             </td>
                                             <td> {bill.id} </td>
                                             <td> {bill.NameBill} </td>
-                                            <td> {formatAndDisplayDatetime(bill.DateGenerateBill)} </td>
+                                            <td> {formatAndDisplayDate(bill.DateGenerateBill)} </td>
                                             <td>
                                                 <Link to={`/bills/detail/${bill.id}`}>
                                                     <FcViewDetails className="info-icon table-icon"/>

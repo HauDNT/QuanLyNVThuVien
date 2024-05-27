@@ -45,6 +45,7 @@ function Rooms() {
                 else {
                     toast.success(res.data.success);
                     updateListRooms();
+                    setInitValues({roomName: ''});
                 }
             })
             .catch(error => {

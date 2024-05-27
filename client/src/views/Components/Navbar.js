@@ -24,7 +24,7 @@ function Nav() {
 
   return (
     <div className="navbar">
-      <NavLink className="nav-link navbar-brand">
+      <NavLink className="nav-link navbar-brand" to="/">
         LIBTECH
       </NavLink>
       

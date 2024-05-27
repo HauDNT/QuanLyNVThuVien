@@ -45,6 +45,7 @@ function StatusDocs() {
                 else {
                     toast.success(res.data.success);
                     updateStatusDocs();
+                    setInitValues({status: ''});
                 }
             })
             .catch(error => {

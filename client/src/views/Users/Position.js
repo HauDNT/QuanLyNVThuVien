@@ -11,7 +11,6 @@ import "../../styles/Bills.scss";
 function Positions() {
     const [positions, setPositions] = useState([]);
     const [initValues, setInitValues] = useState({
-        positionId: 1,
         positionName: '',
         description: '',
     });
@@ -57,6 +56,10 @@ function Positions() {
                 else {
                     renderPositions();
                     toast.success(res.data.success);
+                    setInitValues({
+                        positionName: '',
+                        description: '',
+                    });
                 }
             })
             .catch(error => {

@@ -16,7 +16,6 @@ const limiter = rateLimitRequest.rateLimit({
 
 app.use(limiter);
 
-
 app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 app.use(cors());
@@ -35,6 +34,7 @@ const statusdocRouter = require('./routes/Statusdoc');
 const searchRouter = require('./routes/Search');
 const barcodeRouter = require('./routes/Barcode');
 const rolesRouter = require('./routes/Roles');
+const encodeTitlesRouter = require("./routes/EncodeTitles")
 
 app.use('/users', usersRouter);
 app.use('/bills', billsRouter);
@@ -49,6 +49,7 @@ app.use('/statusdocs', statusdocRouter);
 app.use('/search', searchRouter);
 app.use('/barcode', barcodeRouter);
 app.use('/roles', rolesRouter);
+app.use('/encodeTitles', encodeTitlesRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {

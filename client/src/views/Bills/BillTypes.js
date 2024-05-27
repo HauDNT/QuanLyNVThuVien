@@ -11,7 +11,7 @@ import "../../styles/Bills.scss";
 function BillTypes() {
     const [types, setTypes] = useState([]);
     const [initValues, setInitValues] = useState({
-        typeId: 1,
+        typeId: null,
         typeName: '',
     });
 
@@ -56,6 +56,10 @@ function BillTypes() {
                 else {
                     renderBillTypes();
                     toast.success(res.data.success);
+                    setInitValues({
+                        typeId: null,
+                        typeName: '',
+                    });
                 }
             })
             .catch(error => {
