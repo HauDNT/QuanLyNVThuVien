@@ -9,27 +9,21 @@ import Searchbar from "./Components/Searchbar.js";
 function EncodeTitles() {
     // State danh sách tên mã hóa:
     const [encodeTitles, setEncodeTitles] = useState([]);
-
-    // State cập nhật useEffect khi có thay đổi về dữ liệu:
-    const [isChange, setChange] = useState(false);
     
     // Số bảng ghi phân trang (1 trang):
     const [records, setRecords] = useState(0);
 
-    const applyPaginate = (data) => {
-        setRecords(data);
-    };
-
-    // State tạo mã mới:
+    // State tạo mã và tên mã hóa mới:
     const [initValues, setInitValues] = useState({
         Character: null,
         NumberEncrypt: null,
     });
 
-    // State lưu trạng thái cập nhật:
+    // State lưu trạng thái tên mã hóa nào đang được cập nhật:
     const [isEdit, setEdit] = useState({
-        itemId: null,
-        status: false,
+        itemId: null,       // itemId ~ numberEncrypt của tên mã hóa
+        status: false,      // status - true: đang cập nhật
+                            // status - false: không có tên nào đang cập nhật
     });
 
     const [newValues, setNewValues] = useState({
@@ -46,11 +40,10 @@ function EncodeTitles() {
                 }
                 else {
                     setEncodeTitles(res.data);
-                    applyPaginate(res.data);        // Cập nhật lại các bản ghi trong records để render ra data mới
                 }
             })
             .catch(error => toast.error('Đã xảy ra lỗi trong quá trình lấy dữ liệu!'));
-    }, [isChange]);
+    }, []);
 
     const handleClickToUpdate = (numberEncrypt_item) => {
         // Nếu phần tử hiện đang chọn đã cho phép cập nhật mà
@@ -100,10 +93,12 @@ function EncodeTitles() {
             )
             .then((res) => {
                 if (res.data.success) {
+                    // Cập nhật lại bản ghi mới vào danh sách tên mã hóa
+                    // Tên nào có mã được thay đổi (numberEncrypt_item_old) thì gán giá trị mới
+                    // còn không thì giữ nguyên nó
+                    setEncodeTitles(prevListEncodeTitles => prevListEncodeTitles.map(item => item.NumberEncrypt === numberEncrypt_item_old ? {...item, ...newValues} : item));
+
                     toast.success(res.data.success);
-                    
-                    // Thay đổi trạng thái state isChange để render lại giao diện chứa data mới
-                    setChange(!isChange);
                 }
                 else {
                     toast.error(res.data.error);
@@ -131,7 +126,7 @@ function EncodeTitles() {
                 if (res.data.success) {
                     toast.success(res.data.success);
                     setInitValues({Character: '', NumberEncrypt: ''});
-                    setChange(!isChange);
+                    setEncodeTitles(prevListEncodeTitles => [...prevListEncodeTitles, initValues]);
                 }
                 else {
                     toast.error(res.data.error);
@@ -151,7 +146,7 @@ function EncodeTitles() {
             .then((res) => {
                 if (res.data.success) {
                     toast.success(res.data.success);
-                    setChange(!isChange);
+                    setEncodeTitles(prev => prev.filter(item => item.NumberEncrypt !== numberEncrypt)); // Lọc ra item có mã là mã đã được chỉ định xóa
                 }
                 else {
                     toast.error(res.data.error);
@@ -160,6 +155,15 @@ function EncodeTitles() {
             .catch((error) => {
                 toast.error("Đã xảy ra lỗi khi xóa tên mã hóa!");
             });
+    };
+
+    const applyPaginate = (records) => {
+        setRecords(records);
+    };
+
+    const handleSearchResultChange = (result) => {
+        setEncodeTitles(result);   // Cập nhật lại các bản ghi trong records để render ra data mới
+        applyPaginate(result);     // Tiến hành phân trang lại
     };
 
     return (
@@ -214,19 +218,15 @@ function EncodeTitles() {
             <div className="row">
                 <div className="col-lg-12">
                     <Searchbar
-                        searchType="users" 
+                        searchType="encodeTitles" 
                         placeholder="Chọn hạng mục và nhập để tìm kiếm"
                         categories={[
+                            {value: "Character", name: "Ký tự"},
+                            {value: "NumberEncrypt", name: "Số mã hóa"},
                             {value: "*", name: "Tất cả"},
-                            {value: "Username", name: "Username"},
-                            {value: "Fullname", name: "Họ và tên"},
-                            {value: "Email", name: "Email"},
-                            {value: "PhoneNumber", name: "Số điện thoại"},
-                            {value: "Room", name: "Phòng"},
-                            {value: "Position", name: "Chức vụ"},
                         ]}
                         orderChoice=''
-                        // onSearchResultChange={handleSearchResultChange}
+                        onSearchResultChange={handleSearchResultChange}
                     />
                 </div>
             </div>

@@ -10,7 +10,7 @@ import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
 import '../../styles/ApproveView.scss';
 
 function ApproveView() {
-    const {id: bookId} = useParams();
+    const {bookId} = useParams();
     const [listApproveInfo, setListApproveInfo] = useState([]);
     const [approveSelected, setApproveSelected] = useState([]);
 

@@ -72,7 +72,7 @@ function App() {
                             <Route path="book/cataloging/all" element={<ViewCataloging/>}/>
                             <Route path="book/cataloging/create" element={<CreateCataloging/>}/>
                             <Route path="book/cataloging/edit/:id" element={<EditCataloging/>}/>
-                            <Route path="approve/:id" element={<ApproveView/>}/>
+                            <Route path="approve/:bookId" element={<ApproveView/>}/>
                             <Route path="approve/create/:id" element={<ApproveCreate/>}/>
                             <Route path="approve/update/:id" element={<ApproveUpdate/>}/>
                             <Route path="encodetitles" element={<EncodeTitles/>}/>

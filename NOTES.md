@@ -66,3 +66,10 @@ module.exports = (sequelize, DataTypes) => {
 }
 
 => Hai tên "BillTypes" & "Bill_Types" khác nhau nên sẽ gây lỗi. Ta cần lưu ý điều này!
+
+6. Viết API xử lý tìm kiếm:
+- Phương thức findAll() luôn trả về cho ta 1 mảng gồm các đối tượng dù cho chỉ có 1 kết quả.
+- Cho nên khi hiển thị kết quả sau khi tìm kiếm không bị lỗi.
+- Tuy nhiên, nếu sử dụng phương thức findOne() nó sẽ trả về cho ta 1 object.
+- Lúc này ta phải ép kiểu cho nó thành dạng mảng (return res.json([data])) rồi mới gửi kết quả về để hiển thị ra giao diện.
+- Vì search chỉ nhận và hiển thị kết quả dạng array.

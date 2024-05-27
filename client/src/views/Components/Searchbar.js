@@ -224,6 +224,41 @@ const Searchbar = ({searchType, placeholder, categories, onSearchResultChange, o
                             });
                     }
                     break;
+                case 'encodeTitles':
+                    data = {searchValue, selectedCategory};
+
+                    if (selectedCategory === "*") {
+                        axios
+                            .get(`http://${config.URL}/encodeTitles/`)
+                            .then((res) => {
+                                if (!res.data.error) {
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
+                                }
+                                else toast.error(res.data.error);
+                            })
+                            .catch(error => toast.error('Không thể tải dữ liệu lên!', error));
+                    }
+                    else {
+                        axios
+                            .post
+                            (
+                                `http://${config.URL}/encodeTitles/search`, 
+                                data, 
+                                {headers: { authenToken: localStorage.getItem('authenToken')}}
+                            )
+                            .then((res) => {
+                                if (!res.data.error) {
+                                    setResult(res.data);
+                                    onSearchResultChange(res.data);
+                                }
+                                else toast.error(res.data.error);
+                            })
+                            .catch((error) => {
+                                toast.error('Không thể tải dữ liệu lên!');
+                            });
+                    }
+                    break;
                 default:
                     break;
             }

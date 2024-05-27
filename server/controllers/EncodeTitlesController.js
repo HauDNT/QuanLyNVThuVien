@@ -16,6 +16,42 @@ class EncodeTitlesController {
         }
     };
 
+    // Lấy mã & tên mã hóa theo hạng mục tìm kiếm:
+    async searchEncodeTitle(req, res) {
+        const {selectedCategory, searchValue} = req.body;
+        let data = null;
+        
+        if (selectedCategory === "Character") {
+            data = await EncryptTitles.findAll({
+                where: {
+                    Character: searchValue
+                },
+                attributes: ['id', 'Character', 'NumberEncrypt']
+            });
+        }
+        else if (selectedCategory === "NumberEncrypt") {
+            data = await EncryptTitles.findAll({
+                where: {
+                    NumberEncrypt: +searchValue
+                },
+                attributes: ['id', 'Character', 'NumberEncrypt']
+            });
+        }
+        else {
+            return res.json({error: 'Không tìm thấy dữ liệu!'});
+        };
+
+        return res.json(data);
+
+        /*
+            - Phương thức findAll luôn trả về cho ta 1 mảng gồm các đối tượng dù cho chỉ có 1 kết quả.
+            - Cho nên khi hiển thị kết quả sau khi tìm kiếm không bị lỗi.
+            - Tuy nhiên, nếu sử dụng phương thức "findOne()" nó sẽ trả về cho ta 1 object.
+            - Lúc này ta phải ép kiểu cho nó thành dạng mảng (return res.json([data])) rồi mới gửi kết quả về để hiển thị ra giao diện.
+            - Vì search chỉ nhận và hiển thị kết quả dạng array.
+        */
+    };
+
     // Tạo tên mã hóa mới:
     async createEncodeTitles(req, res) {
         const {Character, NumberEncrypt} = req.body;
@@ -84,7 +120,6 @@ class EncodeTitlesController {
         } catch (error) {
             return res.json({success: 'Xóa tên mã hóa thất bại!'});
         }
-
     };
 }
 
