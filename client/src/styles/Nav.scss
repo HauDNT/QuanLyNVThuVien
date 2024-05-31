@@ -1,56 +1,57 @@
 .navbar {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 
-    background-image: linear-gradient(180deg, #ffffff 0%, #f2f2f2e9 100%);
+  background-image: linear-gradient(180deg, #ffffff 0%, #f2f2f2e9 100%);
 
-    .nav-link {
-        &:first-child {
-            margin-left: -5px;
-            font-weight: 600;
-            font-size: 23px;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            background: -webkit-linear-gradient(#000000 , #000000);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        &:not(:first-child) {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            padding: 0 10px;
-            margin: 0 10px;
-            font-size: 17px;
-            color: white;
-            text-decoration: none;
-        }
-    
-        &:hover {
-            opacity: 0.6;
-        }
+  .nav-link {
+    &:first-child {
+      margin-left: -5px;
+      font-weight: 600;
+      font-size: 23px;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+      background: -webkit-linear-gradient(#000000, #000000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .dropdown {
-        position: absolute;
-        right: 0.3em;
-        background-color: #f2f2f2e9;
-
-        .dropdown-menu {
-            .dropdown-item {
-                display: flex;
-                a {
-                    width: 100%;
-                    color: black;
-                    text-decoration: none;
-                }
-
-                svg {
-                    height: 25px;
-                    width: 20px;
-                    margin-right: 10px;
-                }
-            }
-        }
+    &:not(:first-child) {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 10px;
+      margin: 0 10px;
+      font-size: 17px;
+      color: white;
+      text-decoration: none;
     }
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  .dropdown {
+    position: absolute;
+    right: 0.3em;
+    background-color: #f2f2f2e9;
+
+    .dropdown-menu {
+      .dropdown-item {
+        display: flex;
+        a {
+          width: 100%;
+          color: black;
+          text-decoration: none;
+        }
+
+        svg {
+          height: 25px;
+          width: 20px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
 }

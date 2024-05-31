@@ -12,7 +12,7 @@ import "../../styles/Login.scss";
 
 function Login() {
   let navigator = useNavigate();
-  const {applyRole} = useContext(UserRoleContext);
+  const { applyRole } = useContext(UserRoleContext);
 
   const initValuesLogin = {
     username: "",
@@ -27,7 +27,7 @@ function Login() {
     password: Yup.string()
       .min(5)
       .max(15)
-      .required("Bạn phải nhập vào mật khẩu!")
+      .required("Bạn phải nhập vào mật khẩu!"),
   });
 
   const handleLogin = async (data) => {
@@ -37,22 +37,18 @@ function Login() {
     }
 
     axios
-      .post(
-        `http://${config.URL}/users/login`,
-        data
-      )
+      .post(`http://${config.URL}/users/login`, data)
 
       .then((res) => {
         if (res.data && res.data.error) {
           toast.error(res.data.error);
-        } 
-        else {
+        } else {
           // Phải set vào local storage để khi refresh trang thì data không bị mất:
-          localStorage.setItem('id', res.data.id);
-          localStorage.setItem('username', res.data.username);
-          localStorage.setItem('status', res.data.status);
-          localStorage.setItem('authenToken', res.data.authenToken);
-          
+          localStorage.setItem("id", res.data.id);
+          localStorage.setItem("username", res.data.username);
+          localStorage.setItem("status", res.data.status);
+          localStorage.setItem("authenToken", res.data.authenToken);
+
           applyRole();
 
           navigator("/");
@@ -78,14 +74,14 @@ function Login() {
       }
     }
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       input.addEventListener("focus", addcl);
       input.addEventListener("blur", remcl);
     });
 
     // Cleanup function to remove event listeners
     return () => {
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         input.removeEventListener("focus", addcl);
         input.removeEventListener("blur", remcl);
       });
@@ -95,61 +91,59 @@ function Login() {
   return (
     <>
       <div className="login-page">
-        <img class="wave" src={backgroundImg}/>
+        <img class="wave" src={backgroundImg} />
         <div class="container">
-          <div class="img">
-            {/* <img src={backgroundImg}/> */}
-          </div>
+          <div class="img">{/* <img src={backgroundImg}/> */}</div>
           <div class="login-content">
             <Formik
               initialValues={initValuesLogin}
               validationSchema={validateSchema}
               onSubmit={handleLogin}
             >
-            {({ handleChange, values }) => (
-              <Form>
-                  <img src={avatarIcon} className="mb-3"/>
+              {({ handleChange, values }) => (
+                <Form>
+                  <img src={avatarIcon} className="mb-3" />
                   <h3 class="title">Welcome to LibTech</h3>
 
                   <div className="input-div one">
                     <div class="i">
-                          <i class="fas fa-user"></i>
+                      <i class="fas fa-user"></i>
                     </div>
                     <div class="div">
-                        <h5>Username</h5>
-                        <Field
-                          className="input"
-                          autoComplete="off"
-                          id="loginFormInput"
-                          name="username"
-                          onChange={handleChange}
-                          value={values.username}
-                        />
+                      <h5>Username</h5>
+                      <Field
+                        className="input"
+                        autoComplete="off"
+                        id="loginFormInput"
+                        name="username"
+                        onChange={handleChange}
+                        value={values.username}
+                      />
                     </div>
                   </div>
 
                   <div class="input-div pass">
-                    <div class="i"> 
-                        <i class="fas fa-lock"></i>
+                    <div class="i">
+                      <i class="fas fa-lock"></i>
                     </div>
                     <div class="div">
-                        <h5>Password</h5>
-                        <Field
-                          className="input"
-                          autoComplete="off"
-                          id="loginFormInput"
-                          name="password"
-                          onChange={handleChange}
-                          value={values.password}
-                        />
+                      <h5>Password</h5>
+                      <Field
+                        className="input"
+                        autoComplete="off"
+                        id="loginFormInput"
+                        name="password"
+                        onChange={handleChange}
+                        value={values.password}
+                      />
                     </div>
                   </div>
 
                   <button className="btn-login" type="submit">
                     Đăng nhập
                   </button>
-              </Form>
-            )}
+                </Form>
+              )}
             </Formik>
           </div>
         </div>

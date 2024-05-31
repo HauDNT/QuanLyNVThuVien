@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const CreateNewPasswordController = require('../controllers/CreateNewPasswordController');
+const CreateNewPasswordController = require("../controllers/CreateNewPasswordController");
 
 // /newpassword/...
-router.post('/verifyemail', CreateNewPasswordController.verifyEmail);
+router.post("/verifyemail", CreateNewPasswordController.verifyEmail);
 
 module.exports = router;

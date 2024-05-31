@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('BillTypes', [
+  async up(queryInterface, Sequelize) {
+    return queryInterface.bulkInsert("BillTypes", [
       {
-        Name: 'Mua',
+        Name: "Mua",
       },
       {
-        Name: 'Tang',
+        Name: "Tang",
       },
     ]);
   },
 
-  async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('BillTypes', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    return queryInterface.bulkDelete("BillTypes", null, {});
+  },
 };

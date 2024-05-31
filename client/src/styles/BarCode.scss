@@ -1,54 +1,52 @@
 .container {
-    form {
-        .form-group {
-            padding: 1.5em 1em .5em 1em;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            margin-bottom: 15px;
-            min-height: 5em;
-    
-            .row .btn-container {
-                text-align: right;
-    
-                .btn {
-                    margin-left: 10px;
-                    min-width: 7em;
-                }
-            }
-    
+  form {
+    .form-group {
+      padding: 1.5em 1em 0.5em 1em;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      min-height: 5em;
+
+      .row .btn-container {
+        text-align: right;
+
+        .btn {
+          margin-left: 10px;
+          min-width: 7em;
         }
+      }
+    }
+  }
+
+  .not-found {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 10em;
+    overflow-y: scroll;
+    padding: 10px;
+    border: 3px solid #faabab;
+    border-radius: 5px;
+    background-color: rgb(248, 213, 213);
+    margin-bottom: 20px;
+
+    p {
+      width: 100%;
+      font-weight: 600;
     }
 
-    .not-found {
-        display: flex;
-        flex-wrap: wrap;
-        max-height: 10em;
-        overflow-y: scroll;
-        padding: 10px;
-        border: 3px solid #faabab;
-        border-radius: 5px;
-        background-color: rgb(248, 213, 213);
-        margin-bottom: 20px;
-
-
-        p {
-            width: 100%;
-            font-weight: 600;
-        }
-
-        span {
-            padding-right: 20px;
-        }
+    span {
+      padding-right: 20px;
     }
+  }
 }
 
 .card-body {
-    display: block;
-    border-radius: 5px;
-    border: 3px solid black;
+  display: block;
+  border-radius: 5px;
+  border: 3px solid black;
 
-    .barcode {
-        width: 200px;
-        height: 100px;
-    }
+  .barcode {
+    width: 200px;
+    height: 100px;
+  }
 }

@@ -1,68 +1,71 @@
 .form-page {
-    font-family: 'Nunito';
-    height: 100vh;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    background-image: url('../assets//images/background-1.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  font-family: "Nunito";
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-image: url("../assets//images/background-1.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 
-    Form {
-        background-color: white;
-        position: relative;
-        left: 50%;
-        top: 20%;
-        translate: -50%;
-        padding: 30px;
-        width: 35%;
-        border-radius: 10px;
+  Form {
+    background-color: white;
+    position: relative;
+    left: 50%;
+    top: 20%;
+    translate: -50%;
+    padding: 30px;
+    width: 35%;
+    border-radius: 10px;
 
-        .form-header {
-            font-size: 30px;
-            font-weight: 600;
-            padding-bottom: 15px;
-        }
-
-        label {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .form-control {
-            border: 1px solod #ccc;
-            border-radius: 5px;
-        }
-
-        .error-message {
-            font-weight: 500;
-            font-size: 16px;
-            color: red;
-        }
-
-        .forgot-passwordLink {
-            font-style: italic;
-            text-align: right;
-        }
-
-        .btn-login, .btn-to-register,
-        .btn-regis, .btn-to-login {
-            width: 100%;
-            height: 40px;
-        }
-
-        .btn-to-register, .btn-to-login {
-            margin-top: 10px;
-        }
+    .form-header {
+      font-size: 30px;
+      font-weight: 600;
+      padding-bottom: 15px;
     }
 
-    .regisForm {
-        top: 12%;
+    label {
+      font-size: 18px;
+      font-weight: 600;
     }
 
-    .blurry-form {
-        background-color: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
+    .form-control {
+      border: 1px solod #ccc;
+      border-radius: 5px;
     }
+
+    .error-message {
+      font-weight: 500;
+      font-size: 16px;
+      color: red;
+    }
+
+    .forgot-passwordLink {
+      font-style: italic;
+      text-align: right;
+    }
+
+    .btn-login,
+    .btn-to-register,
+    .btn-regis,
+    .btn-to-login {
+      width: 100%;
+      height: 40px;
+    }
+
+    .btn-to-register,
+    .btn-to-login {
+      margin-top: 10px;
+    }
+  }
+
+  .regisForm {
+    top: 12%;
+  }
+
+  .blurry-form {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+  }
 }

@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const {validToken} = require('../middlewares/AuthenMiddlewares');
-const AuthenticateController = require('../controllers/AuthenticateController');
+const { validToken } = require("../middlewares/AuthenMiddlewares");
+const AuthenticateController = require("../controllers/AuthenticateController");
 
-router.get('/verifyToken', validToken, AuthenticateController.verifyTokenUser);
+router.get("/verifyToken", validToken, AuthenticateController.verifyTokenUser);
 
 module.exports = router;

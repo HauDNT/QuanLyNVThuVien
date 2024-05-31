@@ -1,58 +1,59 @@
-import React, { createContext, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import config from '../constance.js';
+import React, { createContext, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import config from "../constance.js";
 
 const UserRoleContext = createContext();
 
-const UserRoleProvider = ({children}) => {
-    let userId;
-    const [role, setRole] = useState({
-        RoleId: '',
-        RoleName: '',
-        Description: '',
-        Fullname: '',
-    });
+const UserRoleProvider = ({ children }) => {
+  let userId;
+  const [role, setRole] = useState({
+    RoleId: "",
+    RoleName: "",
+    Description: "",
+    Fullname: "",
+  });
 
-    const applyRole = async () => {
-        userId = localStorage.getItem('id');
-        
-        if (!userId) {
-            return;
-        }
+  const applyRole = async () => {
+    userId = localStorage.getItem("id");
 
-        axios
-            .get(
-                `http://${config.URL}/roles/getRolePermissByUserId/${userId}`, 
-                {headers: {authenToken: localStorage.getItem('authenToken')}}        
-            )
-            .then((res) => {
-                setRole({
-                    RoleId: res.data[0].RoleId, 
-                    RoleName: res.data[0].RoleName,
-                    Description: res.data[0].Description,
-                    Fullname: res.data[0].fullname
-                });
-            })
-            .catch((error) => {
-                toast.error('Không thể nhận phân quyền từ Server, hãy đăng nhập lại sau!');
-            });
-    };
+    if (!userId) {
+      return;
+    }
 
-    const clearRole = () => {
+    axios
+      .get(`http://${config.URL}/roles/getRolePermissByUserId/${userId}`, {
+        headers: { authenToken: localStorage.getItem("authenToken") },
+      })
+      .then((res) => {
         setRole({
-            RoleId: 0, 
-            RoleName: '',
-            Description: '',
-            Fullname: '',
+          RoleId: res.data[0].RoleId,
+          RoleName: res.data[0].RoleName,
+          Description: res.data[0].Description,
+          Fullname: res.data[0].fullname,
         });
-    };
+      })
+      .catch((error) => {
+        toast.error(
+          "Không thể nhận phân quyền từ Server, hãy đăng nhập lại sau!",
+        );
+      });
+  };
 
-    return (
-        <UserRoleContext.Provider value={{role, applyRole, clearRole}}>
-            {children}
-        </UserRoleContext.Provider>
-    );
+  const clearRole = () => {
+    setRole({
+      RoleId: 0,
+      RoleName: "",
+      Description: "",
+      Fullname: "",
+    });
+  };
+
+  return (
+    <UserRoleContext.Provider value={{ role, applyRole, clearRole }}>
+      {children}
+    </UserRoleContext.Provider>
+  );
 };
 
-export {UserRoleProvider, UserRoleContext};
+export { UserRoleProvider, UserRoleContext };

@@ -1,9 +1,9 @@
 export const renderMonths = () => {
-    const months = [];
+  const months = [];
 
-    for (let i = 1; i <= 12; i++) {
-        months.push(i);
-    };
+  for (let i = 1; i <= 12; i++) {
+    months.push(i);
+  }
 
-    return months;
+  return months;
 };

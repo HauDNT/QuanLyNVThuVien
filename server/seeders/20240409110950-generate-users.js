@@ -1,39 +1,43 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Users', [
+  async up(queryInterface, Sequelize) {
+    return queryInterface.bulkInsert("Users", [
       {
-        Username: 'Thomas',
-        Password: '123456',
+        Username: "Thomas",
+        Password: "123456",
         createdAt: new Date(),
         updatedAt: new Date(),
-      }, {
-        Username: 'Sadra',
-        Password: '123456',
+      },
+      {
+        Username: "Sadra",
+        Password: "123456",
         createdAt: new Date(),
         updatedAt: new Date(),
-      }, {
-        Username: 'Clark',
-        Password: '123456',
+      },
+      {
+        Username: "Clark",
+        Password: "123456",
         createdAt: new Date(),
         updatedAt: new Date(),
-      }, {
-        Username: 'Heidy',
-        Password: '123456',
+      },
+      {
+        Username: "Heidy",
+        Password: "123456",
         createdAt: new Date(),
         updatedAt: new Date(),
-      }, {
-        Username: 'Marry',
-        Password: '123456',
+      },
+      {
+        Username: "Marry",
+        Password: "123456",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
   },
 
-  async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('Users', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    return queryInterface.bulkDelete("Users", null, {});
+  },
 };
