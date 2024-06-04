@@ -1,0 +1,44 @@
+.sidebar {
+    position: fixed !important;
+    top: 0;
+    width: 20% !important;
+    height: 100vh !important;
+    background-color: rgba(255, 255, 255, 0.945);
+    z-index: 2000;
+}
+
+.sidebar_show {
+    animation: show .3s forwards;
+}
+
+.sidebar_hide {
+    animation: hide .3s forwards;
+}
+
+@keyframes show {
+    from {
+        left: -300px;
+        opacity: 0.5;
+    }
+    to { 
+        left: 0; 
+        opacity: 1;
+    }
+}
+
+@keyframes hide {
+    from {
+        left: 0px;
+        opacity: 1;
+    }
+    to { 
+        left: -300px; 
+        opacity: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100vw !important;
+    }
+}

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import config from '../../constance.js';
 import * as Yup from 'yup';
 import LoadingWindow from '../Components/Loading.js';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
-import '../../styles/Bills.scss';
 
 function BillTypes() {
     const [types, setTypes] = useState([]);
@@ -101,7 +100,7 @@ function BillTypes() {
                 <LoadingWindow />
             ) : (
                 <>
-                    <div className="row">
+                    <div className="row add-type-wrapper">
                         <Formik
                             initialValues={initValues}
                             validationSchema={validateSchema}
@@ -109,7 +108,7 @@ function BillTypes() {
                             onSubmit={addType}
                         >
                             {({ values, setFieldValue }) => (
-                                <Form className="col-5 form-add-type">
+                                <Form className="col-md-5 col-sm-12 mb-3">
                                     <div className="mb-3">
                                         <h5 className="form-label mb-3 text-center">
                                             Thêm loại hóa đơn
@@ -158,28 +157,25 @@ function BillTypes() {
                                     </div>
                                     <button
                                         type="submit"
-                                        className="btn btn-primary float-end"
+                                        className="btn btn-primary w-100 float-end"
                                     >
                                         Tạo
                                     </button>
                                 </Form>
                             )}
                         </Formik>
-                        <div className="col-7">
+                        <div className="col-md-7 col-sm-12">
                             <table className="styled-table table--bill-types">
                                 <thead>
                                     <tr>
                                         <th scope="col" className="text-center">
-                                            {' '}
-                                            STT{' '}
+                                            STT
                                         </th>
                                         <th scope="col" className="text-center">
-                                            {' '}
-                                            Tên loại{' '}
+                                            Tên loại
                                         </th>
                                         <th scope="col" className="text-center">
-                                            {' '}
-                                            Xóa{' '}
+                                            Xóa
                                         </th>
                                     </tr>
                                 </thead>

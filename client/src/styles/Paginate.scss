@@ -1,0 +1,14 @@
+.nav-paginate {
+    margin-top: 3em;
+
+    .paginate {
+        display: flex;
+        list-style-type: none;
+        justify-content: center;
+
+        .page-link {
+            margin: 0 0.2em;
+            border-radius: 5px;
+        }
+    }
+}

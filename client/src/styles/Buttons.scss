@@ -1,0 +1,63 @@
+.btn-trash {
+    .trash-icon {
+        font-size: 18px;
+        cursor: pointer;
+    }
+}
+
+.btn-delete {
+    border: none;
+    background-color: unset;
+    min-height: 50px;
+
+    .btn-delete--icon {
+        color: red;
+        font-size: 25px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.btn-menu {
+    position: fixed;
+    top: 4px;
+    left: .3%;
+    background-color: transparent;
+    font-size: 25px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 50px !important;
+    z-index: 1000;
+}
+
+.btn--account-page {
+    float: right;
+    margin-bottom: 0.75em;
+    margin-left: 10px;
+}
+
+.btn-container-barcode {
+    button {
+        margin: auto;
+    }
+}
+
+.btn-back {
+    border: 1px solid #ccc !important;
+    &:hover {
+        background-color: #ccc;
+    }
+}
+
+@media screen and (max-width: 764px) {
+    .btn-container-barcode {
+        padding: 0 11px;
+
+        button {
+            margin-bottom: 15px;
+        }
+    }
+}

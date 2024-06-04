@@ -4,7 +4,6 @@ import { UserRoleContext } from "../../context/UserRoleContext.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import { PiSignOutBold } from "react-icons/pi";
 import { FaRegCircleUser } from "react-icons/fa6";
-import "../../styles/Nav.scss";
 
 import { NavLink } from "react-router-dom";
 

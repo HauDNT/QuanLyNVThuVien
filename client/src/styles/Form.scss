@@ -1,71 +1,46 @@
-.form-page {
-  font-family: "Nunito";
-  height: 100vh;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  background-image: url("../assets//images/background-1.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  Form {
-    background-color: white;
-    position: relative;
-    left: 50%;
-    top: 20%;
-    translate: -50%;
-    padding: 30px;
-    width: 35%;
+.form-container {
+    border: 1px solid #ccc;
     border-radius: 10px;
+    overflow: hidden;
 
     .form-header {
-      font-size: 30px;
-      font-weight: 600;
-      padding-bottom: 15px;
+        text-align: center;
+        padding: 10px 0 10px 0;
+        background-color: #387adf;
+        color: white;
     }
 
-    label {
-      font-size: 18px;
-      font-weight: 600;
+    .form-body {
+        padding: 10px;
+
+        .input-group {
+            margin-bottom: 20px;
+
+            span {
+                width: 10em;
+            }
+        }
+
+        .btn-container {
+            flex-direction: row-reverse;
+            margin: auto;
+
+            button {
+                &:first-child {
+                    margin-left: 10px;
+                }
+            }
+        }
     }
+}
 
-    .form-control {
-      border: 1px solod #ccc;
-      border-radius: 5px;
+@media screen and (max-width: 768px) {
+    .form-container {
+        margin-bottom: 15px;
+        .btn-container {
+            button:first-child {
+                margin-bottom: 10px;
+            }
+        }
     }
-
-    .error-message {
-      font-weight: 500;
-      font-size: 16px;
-      color: red;
-    }
-
-    .forgot-passwordLink {
-      font-style: italic;
-      text-align: right;
-    }
-
-    .btn-login,
-    .btn-to-register,
-    .btn-regis,
-    .btn-to-login {
-      width: 100%;
-      height: 40px;
-    }
-
-    .btn-to-register,
-    .btn-to-login {
-      margin-top: 10px;
-    }
-  }
-
-  .regisForm {
-    top: 12%;
-  }
-
-  .blurry-form {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-  }
 }

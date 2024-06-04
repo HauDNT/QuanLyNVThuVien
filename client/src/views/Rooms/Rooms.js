@@ -7,7 +7,6 @@ import { RoomContext } from '../../context/RoomContext.js';
 import * as Yup from 'yup';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
-import '../../styles/Bills.scss';
 
 function Rooms() {
     const { listRooms } = useContext(RoomContext);
@@ -76,7 +75,7 @@ function Rooms() {
 
     return (
         <>
-            <div className="row">
+            <div className="row add-type-wrapper">
                 <Formik
                     initialValues={initValues}
                     validationSchema={validateSchema}
@@ -84,7 +83,7 @@ function Rooms() {
                     onSubmit={addRoom}
                 >
                     {({ values, setFieldValue }) => (
-                        <Form className="col-5 form-add-type">
+                        <Form className="col-md-5 col-sm-12 mb-3">
                             <div className="mb-3">
                                 <h5 className="form-label mb-3 text-center">
                                     Thêm phòng ban mới
@@ -108,30 +107,29 @@ function Rooms() {
                                     value={values.roomName}
                                 />
                             </div>
-                            <button
-                                type="submit"
-                                className="btn btn-primary float-end"
-                            >
-                                Tạo
-                            </button>
+                            <div className="col-md-12 col-sm-12 ">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary w-100 float-end"
+                                >
+                                    Tạo
+                                </button>
+                            </div>
                         </Form>
                     )}
                 </Formik>
-                <div className="col-7">
+                <div className="col-md-7 col-sm-12">
                     <table className="styled-table table--bill-types">
                         <thead>
                             <tr>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Mã phòng{' '}
+                                    Mã phòng
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Tên phòng{' '}
+                                    Tên phòng
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Xóa{' '}
+                                    Xóa
                                 </th>
                             </tr>
                         </thead>

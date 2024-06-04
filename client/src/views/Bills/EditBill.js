@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import config from "../../constance.js";
 import { BillContext } from "../../context/BillContext.js";
-import "../../styles/CreatePage.scss";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 

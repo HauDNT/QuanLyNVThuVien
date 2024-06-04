@@ -1,0 +1,31 @@
+@import url('../styles/Navbar.scss');
+@import url('../styles/Sidebar.scss');
+@import url('../styles/Buttons.scss');
+@import url('../styles/StyleTable.scss');
+@import url('../styles/Paginate.scss');
+@import url('../styles/AddTypePage.scss');
+@import url('../styles/Form.scss');
+
+body {
+    margin: 0;
+    font-family: "Nunito", Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container-fluid {
+    position: relative;
+    top: 70px;
+}
+
+.zoom-effect {
+    transition: transform 0.3s ease;
+}
+
+.zoom-effect:hover {
+    transform: scale(1.03);
+}
+
+@media screen and (max-width: 768px) {
+
+}

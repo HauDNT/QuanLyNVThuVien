@@ -8,7 +8,6 @@ import Searchbar from '../Components/Searchbar.js';
 import LoadingWindow from '../Components/Loading.js';
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import Paginate from '../../context/PaginateContext.js';
-import '../../styles/Users.scss';
 
 function Users() {
     // Lấy id của loại tài khoản
@@ -127,30 +126,43 @@ function Users() {
                         onSearchResultChange={handleSearchResultChange}
                     />
                     <div className="row">
-                        <div className="col-lg-12 user-page">
+                        <div className="col-md-12 user-page">
                             {idRole === 2 ? (
-                                <>
-                                    <Link
-                                        className="btn btn-outline-secondary btn-trash"
-                                        to={`/users/trash`}
-                                    >
-                                        <FaTrash className="trash-icon" /> Tài
-                                        khoản đã xóa
-                                    </Link>
-                                    <Link
-                                        className="btn btn-danger btn--account-page"
-                                        onClick={() => handleDeleteAccount()}
-                                    >
-                                        Xóa
-                                    </Link>
-                                </>
+                                <div className="row">
+                                    <div className="col-md-2 col-sm-12">
+                                        <Link
+                                            className="btn btn-outline-secondary btn-trash mb-2 w-100"
+                                            to={`/users/trash`}
+                                        >
+                                            <FaTrash className="trash-icon" />
+                                            Tài khoản đã xóa
+                                        </Link>
+                                    </div>
+                                    <div className="col-md-6 col-sm-12"></div>
+                                    <div className="col-md-4 col-sm-12">
+                                        <div className="row">
+                                            <div className="col-md-6 col-sm-12">
+                                                <Link
+                                                    className="btn btn-danger w-100 mb-2"
+                                                    onClick={() =>
+                                                        handleDeleteAccount()
+                                                    }
+                                                >
+                                                    Xóa
+                                                </Link>
+                                            </div>
+                                            <div className="col-md-6 col-sm-12">
+                                                <Link
+                                                    className="btn btn-success w-100 mb-2"
+                                                    to="/users/create"
+                                                >
+                                                    Tạo tài khoản mới
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             ) : null}
-                            <Link
-                                className="btn btn-success btn--account-page"
-                                to="/users/create"
-                            >
-                                Tạo tài khoản mới
-                            </Link>
                             <table className="styled-table">
                                 <thead>
                                     <tr>

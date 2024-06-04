@@ -193,9 +193,27 @@ function EncodeTitles() {
                 <>
                     <div className="row">
                         <div className="col-lg-12">
+                            <Searchbar
+                                searchType="encodeTitles"
+                                placeholder="Chọn hạng mục và nhập để tìm kiếm"
+                                categories={[
+                                    { value: 'Character', name: 'Ký tự' },
+                                    {
+                                        value: 'NumberEncrypt',
+                                        name: 'Số mã hóa',
+                                    },
+                                    { value: '*', name: 'Tất cả' },
+                                ]}
+                                orderChoice=""
+                                onSearchResultChange={handleSearchResultChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12 col-sm-12">
                             <div class="form-group">
                                 <div className="row">
-                                    <div className="col-4">
+                                    <div className="col-md-5 col-sm-12">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span
@@ -222,7 +240,7 @@ function EncodeTitles() {
                                             />
                                         </div>
                                     </div>
-                                    <div className="col-4">
+                                    <div className="col-md-5 col-sm-12">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span
@@ -249,10 +267,10 @@ function EncodeTitles() {
                                             />
                                         </div>
                                     </div>
-                                    <div className="col-4 btn-container">
+                                    <div className="col-md-2 col-sm-12 btn-container mb-3">
                                         <button
                                             type="button"
-                                            className="btn btn-primary float-end"
+                                            className="btn btn-primary float-end w-100"
                                             onClick={() => createEncodeTitle()}
                                         >
                                             Tạo tên mã hóa
@@ -262,25 +280,7 @@ function EncodeTitles() {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <Searchbar
-                                searchType="encodeTitles"
-                                placeholder="Chọn hạng mục và nhập để tìm kiếm"
-                                categories={[
-                                    { value: 'Character', name: 'Ký tự' },
-                                    {
-                                        value: 'NumberEncrypt',
-                                        name: 'Số mã hóa',
-                                    },
-                                    { value: '*', name: 'Tất cả' },
-                                ]}
-                                orderChoice=""
-                                onSearchResultChange={handleSearchResultChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
+                    <div className="row mt-3">
                         <div className="col-lg-12">
                             <table className="styled-table">
                                 <thead>

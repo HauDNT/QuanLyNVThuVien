@@ -8,7 +8,6 @@ import { BillContext } from "../../context/BillContext.js";
 import { StatusDocContext } from "../../context/StatusDocsContext.js";
 import { StoreTypesContext } from "../../context/StoreTypesContext.js";
 import { formatAndDisplayDatetime } from "../../utils/FormatDateTime.js";
-import "../../styles/ApproveCreate.scss";
 
 function ApproveUpdate() {
   const { id } = useParams();

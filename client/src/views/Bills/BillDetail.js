@@ -6,7 +6,6 @@ import Searchbar from "../Components/Searchbar.js";
 import LoadingWindow from "../Components/Loading.js";
 import Paginate from "../../context/PaginateContext.js";
 import { formatCash } from "../../utils/FormatCash.js";
-import "../../styles/Bills.scss";
 
 function BillDetail() {
   const { billId } = useParams();
@@ -71,7 +70,7 @@ function BillDetail() {
           <div className="bill-page">
             <button
               onClick={() => window.history.back()}
-              className="btn btn-primary btn--bill-page"
+              className="btn btn-back"
             >
               Quay về
             </button>

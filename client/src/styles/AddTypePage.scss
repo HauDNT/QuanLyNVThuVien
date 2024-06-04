@@ -1,0 +1,22 @@
+.add-type-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: auto !important;
+
+    Form {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 25px 10px 15px 10px;
+        height: max-content;
+
+        .error-message {
+            color: red;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .btn {
+            min-width: 100px;
+        }
+    }
+}

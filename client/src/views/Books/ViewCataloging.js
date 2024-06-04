@@ -193,13 +193,12 @@ function ViewCataloging() {
                                     </div>
                                 );
                             })}
-
-                            <Paginate
+                    </div>
+                        <Paginate
                             data={listCataloging}
                             applyPaginateData={applyPaginate}
                             page={5}
                         />
-                    </div>
                 </>
             )}
         </>

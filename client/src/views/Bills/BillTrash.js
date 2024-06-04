@@ -3,13 +3,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import config from '../../constance.js';
-import { FcUndo } from 'react-icons/fc';
 import LoadingWindow from '../Components/Loading.js';
 import Paginate from '../../context/PaginateContext.js';
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { BillContext } from '../../context/BillContext.js';
-import {formatAndDisplayDatetime} from "../../utils/FormatDateTime.js";
-import '../../styles/Bills.scss';
+import { formatAndDisplayDatetime } from '../../utils/FormatDateTime.js';
 
 function BillTrash() {
     let { type } = useParams();
@@ -30,8 +28,8 @@ function BillTrash() {
     const [records, setRecords] = useState(0);
 
     const applyPaginate = (records) => {
-      setRecords(records);
-  };
+        setRecords(records);
+    };
 
     useEffect(() => {
         axios.get(`http://${config.URL}/bills/trash/${type}`).then((res) => {
@@ -157,29 +155,36 @@ function BillTrash() {
             ) : (
                 <div className="bill-page">
                     <div className="row">
-                        <div className="col-3">
+                        <div className="col-md-2 col-sm-12">
                             <button
-                                className="btn btn-outline-secondary btn-trash"
+                                className="btn btn-back w-100 mb-2"
                                 onClick={() => window.history.back()}
                             >
-                                <FcUndo className="trash-icon" /> Quay lại
+                                Quay lại
                             </button>
                         </div>
-                        <div className="col-9 btn-container">
-                            {idRole === 1 ? (
-                                <button
-                                    className="btn btn-danger btn--bill-page"
-                                    onClick={() => handleForceDelete()}
-                                >
-                                    Xóa vĩnh viễn
-                                </button>
-                            ) : null}
-                            <button
-                                className="btn btn-primary btn--bill-page"
-                                onClick={() => handleRestore()}
-                            >
-                                Khôi phục
-                            </button>
+                        <div className="col-md-6 col-sm-12"></div>
+                        <div className="col-md-4 col-sm-12">
+                            <div className="row">
+                                <div className="col-md-6 col-sm-12">
+                                    {idRole === 2 ? (
+                                        <button
+                                            className="btn btn-danger w-100 mb-2"
+                                            onClick={() => handleForceDelete()}
+                                        >
+                                            Xóa vĩnh viễn
+                                        </button>
+                                    ) : null}
+                                </div>
+                                <div className="col-md-6 col-sm-12">
+                                    <button
+                                        className="btn btn-primary w-100 mb-2"
+                                        onClick={() => handleRestore()}
+                                    >
+                                        Khôi phục
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

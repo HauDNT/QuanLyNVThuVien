@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import LoadingWindow from '../Components/Loading.js';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
-import '../../styles/Bills.scss';
 
 function Roles() {
     const [roles, setRoles] = useState([]);
@@ -106,7 +105,7 @@ function Roles() {
             {isLoading ? (
                 <LoadingWindow />
             ) : (
-                <div className="row">
+                <div className="row add-type-wrapper">
                     <Formik
                         initialValues={initValues}
                         validationSchema={validateSchema}
@@ -114,7 +113,7 @@ function Roles() {
                         onSubmit={addRole}
                     >
                         {({ values, setFieldValue }) => (
-                            <Form className="col-5 form-add-type">
+                            <Form className="col-md-5 col-sm-12 mb-3">
                                 <div className="mb-3">
                                     <h5 className="form-label mb-3 text-center">
                                         Thêm quyền hạn mới
@@ -164,25 +163,21 @@ function Roles() {
                             </Form>
                         )}
                     </Formik>
-                    <div className="col-7">
+                    <div className="col-md-6 col-sm-12">
                         <table className="styled-table table--bill-types">
                             <thead>
                                 <tr>
                                     <th scope="col" className="text-center">
-                                        {' '}
-                                        Mã quyền{' '}
+                                        Mã quyền
                                     </th>
                                     <th scope="col" className="text-center">
-                                        {' '}
-                                        Tên quyền{' '}
+                                        Tên quyền
                                     </th>
                                     <th scope="col" className="text-center">
-                                        {' '}
-                                        Mô tả{' '}
+                                        Mô tả
                                     </th>
                                     <th scope="col" className="text-center">
-                                        {' '}
-                                        Xóa{' '}
+                                        Xóa
                                     </th>
                                 </tr>
                             </thead>
