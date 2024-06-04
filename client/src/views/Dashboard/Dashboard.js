@@ -132,7 +132,6 @@ function Dashboard() {
                 value={year}
                 onChange={(e) => setYear(+e.target.value)}
               >
-                <option selected>Chọn năm</option>
                 {renderYears(10, year, 10).map((year) => (
                   <option value={year}>{year}</option>
                 ))}
@@ -155,7 +154,6 @@ function Dashboard() {
                 value={month}
                 onChange={(e) => setMonth(+e.target.value)}
               >
-                <option selected>Chọn tháng</option>
                 {renderMonths().map((month) => (
                   <option value={month}>Tháng {month}</option>
                 ))}

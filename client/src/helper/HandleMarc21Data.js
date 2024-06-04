@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
-import MARCRecord from "marc-record-js";
+import React, { createContext, useState } from 'react';
+import MARCRecord from 'marc-record-js';
+import { toast } from 'react-toastify';
 
 const Marc21DataContext = createContext();
 
@@ -11,10 +12,10 @@ const Marc21Provider = ({ children }) => {
       const file = e.target.files[0];
       const reader = new FileReader();
 
-      reader.onload = async (e) => {
+      reader.onload = (e) => {
         const marcContent = e.target.result;
-        const marcRecords = MARCRecord.fromString(marcContent);
-        setRecords(marcRecords);
+        const marcRecord = MARCRecord.fromString(marcContent);
+        setRecords(marcRecord);
       };
 
       reader.readAsText(file);

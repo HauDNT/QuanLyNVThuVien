@@ -157,7 +157,7 @@ function StatusDocs() {
             </tbody>
           </table>
 
-          <Paginate data={statusDocs} applyPaginateData={applyPaginate} />
+          <Paginate data={statusDocs} applyPaginateData={applyPaginate} page={5} />
         </div>
       </div>
     </>

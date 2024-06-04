@@ -234,7 +234,7 @@ function Bills() {
               </tbody>
             </table>
 
-            <Paginate data={listBills} applyPaginateData={applyPaginate} />
+            <Paginate data={listBills} applyPaginateData={applyPaginate} page={5} />
           </div>
         </>
       )}

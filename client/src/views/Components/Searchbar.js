@@ -275,7 +275,6 @@ const Searchbar = ({
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
-            <option value="0">Chọn hạng mục</option>
             {categories ? (
               categories.map((item) => (
                 <option value={item.value}>{item.name}</option>

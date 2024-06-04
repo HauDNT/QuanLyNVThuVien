@@ -157,7 +157,7 @@ function StoreTypes() {
             </tbody>
           </table>
 
-          <Paginate data={storeTypes} applyPaginateData={applyPaginate} />
+          <Paginate data={storeTypes} applyPaginateData={applyPaginate} page={5} />
         </div>
       </div>
     </>

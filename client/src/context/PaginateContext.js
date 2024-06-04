@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
-const Paginate = ({ data, applyPaginateData }) => {
+const Paginate = ({ data, applyPaginateData, page }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
+  const recordsPerPage = page;
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;

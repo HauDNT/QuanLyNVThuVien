@@ -136,7 +136,7 @@ function BillDetail() {
               </tbody>
             </table>
 
-            <Paginate data={detail} applyPaginateData={applyPaginate} />
+            <Paginate data={detail} applyPaginateData={applyPaginate} page={10}/>
           </div>
         </>
       )}

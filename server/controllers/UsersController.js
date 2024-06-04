@@ -234,30 +234,33 @@ class UsersController {
         role,
         phoneNumber,
       } = req.body;
-      const getUserId = await Users.findOne({
-        attributes: ["id"],
-        where: { Username: username },
-      });
 
-      await UsersInfo.create({
-        Fullname: fullname,
-        Birthday: birthday,
-        Email: email,
-        Avatar: avatar,
-        PositionId: position,
-        RoomId: room,
-        PhoneNumber: phoneNumber,
-        UserId: getUserId.id,
-      });
+      return res.json(req.body);
 
-      await User_Roles.create({
-        UserId: getUserId.id,
-        RoleId: role,
-      });
+      // const getUserId = await Users.findOne({
+      //   attributes: ["id"],
+      //   where: { Username: username },
+      // });
 
-      return res.json({
-        success: "Tạo tài khoản mới và thông tin cá nhân thành công!",
-      });
+      // await UsersInfo.create({
+      //   Fullname: fullname,
+      //   Birthday: birthday,
+      //   Email: email,
+      //   Avatar: avatar,
+      //   PositionId: position,
+      //   RoomId: room,
+      //   PhoneNumber: phoneNumber,
+      //   UserId: getUserId.id,
+      // });
+
+      // await User_Roles.create({
+      //   UserId: getUserId.id,
+      //   RoleId: role,
+      // });
+
+      // return res.json({
+      //   success: "Tạo tài khoản mới và thông tin cá nhân thành công!",
+      // });
     } catch (error) {
       return res.json({ error: "Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!" });
     }
