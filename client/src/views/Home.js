@@ -3,7 +3,6 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import Nav from './Components/Navbar.js';
 import SideBar from './Components/SideBar.js';
 import { TfiMenu } from 'react-icons/tfi';
-import '../styles/Home.scss';
 
 function Home() {
     let navigator = useNavigate();

@@ -1,6 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './styles/index.scss';
 
 // CONTEXTS:
 import ProviderContext from './context/ProviderContext.js';

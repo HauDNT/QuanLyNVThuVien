@@ -81,7 +81,7 @@ function Dashboard() {
             )
             .catch((error) => {
                 setLoading(false);
-                // toast.error('Đã xảy ra lỗi khi lấy dữ liệu!');
+                toast.error('Đã xảy ra lỗi khi lấy dữ liệu!');
             });
     }, [year, month]);
 
@@ -104,7 +104,7 @@ function Dashboard() {
                             />
                         </Link>
                         <Link
-                            to={'/bills/1'}
+                            to={'/bills/2'}
                             className="col-md-3 col-sm-12 zoom-effect"
                         >
                             <Card

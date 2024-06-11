@@ -483,6 +483,7 @@ function ApproveCreate() {
                             <button
                                 onClick={() => window.history.back()}
                                 className="btn btn-back col-md-2 col-sm-12"
+                                type='button'
                             >
                                 Quay về
                             </button>
