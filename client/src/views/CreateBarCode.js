@@ -14,7 +14,7 @@ function CreateBarCode() {
     
     let navigate = useNavigate();
 
-    if (idRole !== 2) {
+    if (idRole !== 2 && idRole !== 3) {
         navigate('/page-not-found');
     };
 
