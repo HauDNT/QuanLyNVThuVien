@@ -4,7 +4,7 @@
     width: 20% !important;
     height: 100vh !important;
     background-color: rgba(255, 255, 255, 0.801);
-    z-index: 2000;
+    z-index: 1500;
 }
 
 .sidebar_show {
@@ -12,12 +12,12 @@
 }
 
 .sidebar_hide {
-    animation: hide .3s forwards;
+    animation: hide .5s forwards;
 }
 
 @keyframes show {
     from {
-        left: -300px;
+        left: -1000px;
         opacity: 0.5;
     }
     to { 
@@ -32,7 +32,7 @@
         opacity: 1;
     }
     to { 
-        left: -300px; 
+        left: -1000px; 
         opacity: 0;
     }
 }

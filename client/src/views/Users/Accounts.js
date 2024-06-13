@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import config from '../../constance.js';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Searchbar from '../Components/Searchbar.js';
@@ -13,6 +13,12 @@ function Users() {
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2 && idRole !== 3) {
+        navigate('/page-not-found');
+    };
 
     const [listUsers, setListUsers] = useState([]);
     const [userSelected, setUserSelected] = useState([]);
@@ -229,13 +235,16 @@ function Users() {
                                                 <td>{user.PhoneNumber}</td>
                                                 <td>{user.RoomName}</td>
                                                 <td>{user.PositionName}</td>
-                                                <td>
-                                                    <Link
-                                                        to={`edit/${user.id}`}
-                                                    >
-                                                        <FaEdit className="edit-icon table-icon" />
-                                                    </Link>
-                                                </td>
+                                                {
+                                                    idRole === 2 &&
+                                                    <td>
+                                                        <Link
+                                                            to={`edit/${user.id}`}
+                                                        >
+                                                            <FaEdit className="edit-icon table-icon" />
+                                                        </Link>
+                                                    </td>
+                                                }
                                             </tr>
                                         ))
                                     ) : (

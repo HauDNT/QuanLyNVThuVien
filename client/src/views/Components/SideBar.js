@@ -7,6 +7,7 @@ import { GiBookCover } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 
 function SideBar({ display, handleDisplayMenu }) {
+    // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
 
@@ -18,17 +19,22 @@ function SideBar({ display, handleDisplayMenu }) {
                 <MenuItem component={<Link to="/" />} icon={<FaHome />} onClick={handleDisplayMenu}>
                     Trang chủ
                 </MenuItem>
-                {idRole === 1 || idRole === 2 ? (
+                {idRole === 2 || idRole === 3 ? (
                     <SubMenu label="Quản lý người dùng" icon={<FaUser />}>
                         <MenuItem component={<Link to="/users/" />} onClick={handleDisplayMenu}>
                             Quản lý tài khoản
                         </MenuItem>
-                        <MenuItem component={<Link to="/positions/" />} onClick={handleDisplayMenu}>
-                            Chức vụ
-                        </MenuItem>
-                        <MenuItem component={<Link to="/roles/" />} onClick={handleDisplayMenu}>
-                            Quyền hạn
-                        </MenuItem>
+                        {
+                            idRole === 2 && 
+                            <>
+                                <MenuItem component={<Link to="/positions/" />} onClick={handleDisplayMenu}>
+                                    Chức vụ
+                                </MenuItem>
+                                <MenuItem component={<Link to="/roles/" />} onClick={handleDisplayMenu}>
+                                    Quyền hạn
+                                </MenuItem>
+                            </>
+                        }
                     </SubMenu>
                 ) : null}
                 <SubMenu label="Quản lý đơn sách" icon={<FaList />}>
@@ -41,9 +47,12 @@ function SideBar({ display, handleDisplayMenu }) {
                     <MenuItem component={<Link to="/bills/1" />} onClick={handleDisplayMenu}>
                         Đơn chưa phân loại
                     </MenuItem>
-                    <MenuItem component={<Link to="/bills/types" />} onClick={handleDisplayMenu}>
-                        Phân loại hóa đơn
-                    </MenuItem>
+                    {
+                        idRole === 2 &&
+                        <MenuItem component={<Link to="/bills/types" />} onClick={handleDisplayMenu}>
+                            Phân loại hóa đơn
+                        </MenuItem>
+                    }
                 </SubMenu>
                 <SubMenu label="Biên mục sách" icon={<GiBookCover />}>
                     <MenuItem component={<Link to="/book/cataloging/create" />} onClick={handleDisplayMenu}>
@@ -53,7 +62,7 @@ function SideBar({ display, handleDisplayMenu }) {
                         Danh sách biên mục
                     </MenuItem>
                 </SubMenu>
-                {idRole === 1 || idRole === 2 ? (
+                {idRole === 2 ? (
                     <SubMenu
                         label="Thông tin phân phối"
                         icon={<FaCodeBranch />}

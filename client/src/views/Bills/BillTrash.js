@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import config from '../../constance.js';
@@ -10,15 +10,21 @@ import { BillContext } from '../../context/BillContext.js';
 import { formatAndDisplayDatetime } from '../../utils/FormatDateTime.js';
 
 function BillTrash() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     let { type } = useParams();
     const [listBill, setListBill] = useState([]);
     const [billSelected, setBillSelected] = useState([]);
     const [checkAll, setCheckAll] = useState(false);
     const { updateListBill } = useContext(BillContext);
-
-    // Lấy id của loại tài khoản
-    const userRoles = useContext(UserRoleContext);
-    const idRole = userRoles.role.RoleId;
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);

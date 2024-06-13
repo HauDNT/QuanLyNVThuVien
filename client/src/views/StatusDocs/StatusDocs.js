@@ -2,13 +2,25 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field } from 'formik';
-import config from '../../constance.js';
-import { StatusDocContext } from '../../context/StatusDocsContext.js';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { StatusDocContext } from '../../context/StatusDocsContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
+import config from '../../constance.js';
 
 function StatusDocs() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const { statusDocs } = useContext(StatusDocContext);
     const { updateStatusDocs, removeStatusDocs } = useContext(StatusDocContext);
 
@@ -142,7 +154,7 @@ function StatusDocs() {
                             {records.length > 0 ? (
                                 records.map(
                                     (status) =>
-                                        status.id !== 0 && (
+                                        status.id !== 1 && (
                                             <tr
                                                 key={status.id}
                                                 className="text-center"

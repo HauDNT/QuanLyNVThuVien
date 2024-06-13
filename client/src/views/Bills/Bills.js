@@ -138,15 +138,18 @@ function Bills() {
                         // Gọi một callback function để khi có kết quả tìm kiếm thì cập nhật lại listBills
                     />
 
-                    {idRole === 1 || idRole === 2 ? (
+                    {(idRole === 2 || idRole === 3) && (
                         <div className="row">
                             <div className="col-md-2 col-sm-12">
-                                <Link
-                                    className="btn btn-outline-secondary btn-trash mb-2 w-100"
-                                    to={`/bills/trash/${type}`}
-                                >
-                                    <FaTrash className="trash-icon" /> Đơn đã xóa
-                                </Link>
+                                {idRole === 2 && (
+                                    <Link
+                                        className="btn btn-outline-secondary btn-trash mb-2 w-100"
+                                        to={`/bills/trash/${type}`}
+                                    >
+                                        <FaTrash className="trash-icon" /> Đơn
+                                        đã xóa
+                                    </Link>
+                                )}
                             </div>
                             <div className="col-md-6 col-sm-12"></div>
                             <div className="col-md-4 col-sm-12">
@@ -170,7 +173,7 @@ function Bills() {
                                 </div>
                             </div>
                         </div>
-                    ) : null}
+                    )}
                     <table className="styled-table">
                         <thead>
                             <tr>
@@ -184,25 +187,22 @@ function Bills() {
                                     />
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Mã đơn{' '}
+                                    Mã đơn
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Tên đơn{' '}
+                                    Tên đơn
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Thời gian tạo{' '}
+                                    Thời gian tạo
                                 </th>
                                 <th scope="col" className="text-center">
-                                    {' '}
-                                    Xem chi tiết{' '}
+                                    Xem chi tiết
                                 </th>
-                                <th scope="col" className="text-center">
-                                    {' '}
-                                    Sửa thông tin{' '}
-                                </th>
+                                {(idRole === 2 || idRole === 3) && (
+                                    <th scope="col" className="text-center">
+                                        Sửa thông tin
+                                    </th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -221,10 +221,9 @@ function Bills() {
                                         <td> {bill.id} </td>
                                         <td> {bill.NameBill} </td>
                                         <td>
-                                            {' '}
                                             {formatAndDisplayDate(
                                                 bill.DateGenerateBill
-                                            )}{' '}
+                                            )}
                                         </td>
                                         <td>
                                             <Link
@@ -233,11 +232,15 @@ function Bills() {
                                                 <FcViewDetails className="info-icon table-icon" />
                                             </Link>
                                         </td>
-                                        <td>
-                                            <Link to={`/bills/edit/${bill.id}`}>
-                                                <FaPenToSquare className="info-icon table-icon" />
-                                            </Link>
-                                        </td>
+                                        {(idRole === 2 || idRole === 3) && (
+                                            <td>
+                                                <Link
+                                                    to={`/bills/edit/${bill.id}`}
+                                                >
+                                                    <FaPenToSquare className="info-icon table-icon" />
+                                                </Link>
+                                            </td>
+                                        )}
                                     </tr>
                                 ))
                             ) : (

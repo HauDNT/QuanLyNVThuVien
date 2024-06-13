@@ -1,0 +1,47 @@
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    table {
+        background-color: #fdfdfd;
+        font-size: 18px !important;
+
+        thead {
+            tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+        }
+    
+        tr {
+            border: 1px solid #ccc;
+    
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+    
+                &:before {
+                    position: absolute;
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+
+                &:nth-child(1), &:nth-child(2) {
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}

@@ -2,13 +2,25 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field } from 'formik';
-import config from '../../constance.js';
-import { RoomContext } from '../../context/RoomContext.js';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { RoomContext } from '../../context/RoomContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
+import config from '../../constance.js';
 
 function Rooms() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const { listRooms } = useContext(RoomContext);
     const { updateListRooms, removeFromRoomList } = useContext(RoomContext);
 
@@ -137,7 +149,7 @@ function Rooms() {
                             {records.length > 0 ? (
                                 records.map(
                                     (room) =>
-                                        room.id !== 0 && (
+                                        room.id !== 1 && (
                                             <tr
                                                 key={room.id}
                                                 className="text-center"

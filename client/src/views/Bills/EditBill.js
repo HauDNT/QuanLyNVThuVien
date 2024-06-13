@@ -2,10 +2,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../../constance.js';
 import { BillContext } from '../../context/BillContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function EditBill() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+
+    let navigate = useNavigate();
+
+    if (idRole !== 2 && idRole !== 3) {
+        navigate('/page-not-found');
+    };
+
     const { billId } = useParams();
     const [typesBill, setTypesBill] = useState([]);
     const [billData, setBillData] = useState({});
@@ -55,7 +66,7 @@ function EditBill() {
                             name="id"
                             type="text"
                             id="input--bookcode"
-                            className="form-control"
+                            className="form-control mb-3"
                             value={billData.id}
                             readOnly
                         />
@@ -68,7 +79,7 @@ function EditBill() {
                             name="NameBill"
                             type="text"
                             id="input--bookname"
-                            className="form-control"
+                            className="form-control mb-3"
                             value={billData.NameBill}
                             onChange={(e) =>
                                 setBillData({
@@ -87,7 +98,7 @@ function EditBill() {
                             name="Supplier"
                             type="text"
                             id="input--supplier"
-                            className="form-control"
+                            className="form-control mb-3"
                             value={billData.Supplier}
                             onChange={(e) =>
                                 setBillData({
@@ -106,7 +117,7 @@ function EditBill() {
                             name="Discount"
                             type="text"
                             id="input--discount"
-                            className="form-control"
+                            className="form-control mb-3"
                             value={billData.Discount}
                             onChange={(e) =>
                                 setBillData({
@@ -120,7 +131,7 @@ function EditBill() {
                     <div className="col-md-4 col-sm-12 input-field">
                         <label
                             for="input--date-create-bill"
-                            className="form-label"
+                            className="form-label mb-3"
                         >
                             Ngày tạo đơn (mm/dd/yyyy)
                         </label>
@@ -128,7 +139,7 @@ function EditBill() {
                             name="DateGenerateBill"
                             type="date"
                             id="input--date-create-bill"
-                            className="form-control"
+                            className="form-control mb-3"
                             placeholder="dd-mm-yyyy"
                             value={billData.DateGenerateBill}
                             onChange={(e) =>
@@ -146,7 +157,7 @@ function EditBill() {
                         </label>
                         <select
                             name="BillTypeId"
-                            class="form-select"
+                            class="form-select mb-3"
                             id="select--type-bill"
                             title="Loại đơn"
                             placeholder="dd-mm-yyyy"

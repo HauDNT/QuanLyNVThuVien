@@ -4,7 +4,7 @@ const RoomsController = require("../controllers/RoomsController");
 const { validToken } = require("../middlewares/AuthenMiddlewares");
 
 router.get("/all", RoomsController.getAllRooms);
-router.post("/addRoom", RoomsController.createRoom);
-router.delete("/deleteRoom/:id", RoomsController.deleteRoom);
+router.post("/addRoom", validToken, RoomsController.createRoom);
+router.delete("/deleteRoom/:id", validToken, RoomsController.deleteRoom);
 
 module.exports = router;

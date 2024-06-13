@@ -1,14 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import config from '../../constance.js';
 import * as Yup from 'yup';
 import LoadingWindow from '../Components/Loading.js';
 import Paginate from '../../context/PaginateContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
 
 function BillTypes() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const [types, setTypes] = useState([]);
     const [initValues, setInitValues] = useState({
         typeId: null,

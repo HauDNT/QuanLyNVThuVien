@@ -162,6 +162,7 @@ class UsersController {
     try {
       const { username, password } = req.body;
       const getUser = await Users.findOne({ where: { Username: username } });
+
       if (!getUser) {
         return res.json({
           error: "Tên người dùng không tồn tại. Hãy kiểm tra và thử lại!",
@@ -179,6 +180,7 @@ class UsersController {
         { username: getUser.Username, id: getUser.id },
         "AuthenticateToken",
       );
+      
       return res.json({
         success: "Đăng nhập thành công",
         id: getUser.id,
@@ -235,32 +237,30 @@ class UsersController {
         phoneNumber,
       } = req.body;
 
-      return res.json(req.body);
+      const getUserId = await Users.findOne({
+        attributes: ["id"],
+        where: { Username: username },
+      });
 
-      // const getUserId = await Users.findOne({
-      //   attributes: ["id"],
-      //   where: { Username: username },
-      // });
+      await UsersInfo.create({
+        Fullname: fullname,
+        Birthday: birthday,
+        Email: email,
+        Avatar: avatar,
+        PositionId: position,
+        RoomId: room,
+        PhoneNumber: phoneNumber,
+        UserId: getUserId.id,
+      });
 
-      // await UsersInfo.create({
-      //   Fullname: fullname,
-      //   Birthday: birthday,
-      //   Email: email,
-      //   Avatar: avatar,
-      //   PositionId: position,
-      //   RoomId: room,
-      //   PhoneNumber: phoneNumber,
-      //   UserId: getUserId.id,
-      // });
+      await User_Roles.create({
+        UserId: getUserId.id,
+        RoleId: role,
+      });
 
-      // await User_Roles.create({
-      //   UserId: getUserId.id,
-      //   RoleId: role,
-      // });
-
-      // return res.json({
-      //   success: "Tạo tài khoản mới và thông tin cá nhân thành công!",
-      // });
+      return res.json({
+        success: "Tạo tài khoản mới và thông tin cá nhân thành công!",
+      });
     } catch (error) {
       return res.json({ error: "Đã xảy ra lỗi từ máy chủ. Hãy thử lại sau!" });
     }

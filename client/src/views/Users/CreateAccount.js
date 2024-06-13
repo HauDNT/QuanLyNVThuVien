@@ -1,11 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import config from '../../constance.js';
 import { RoomContext } from '../../context/RoomContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { toast } from 'react-toastify';
-// import '../../styles/CreatePage.scss';
 
 function CreateAccountUser() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const { listRooms } = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
     const [listRoles, setListRoles] = useState([]);
@@ -22,6 +33,7 @@ function CreateAccountUser() {
         role: 1,
         avatar: null,
     });
+
     const handleClearInput = () => {
         setInputValues({
             username: '',
@@ -52,69 +64,11 @@ function CreateAccountUser() {
             .catch((error) => toast.error('Error!'));
     }, []);
 
-    // const handleCreateAccount = (e) => {
-    //   e.preventDefault();
-
-    //   const formData = new FormData(e.target);
-    //   const data = Object.fromEntries(formData.entries());
-
-    //   const {
-    //     username,
-    //     password,
-    //     repassword,
-    //     fullname,
-    //     email,
-    //     birthday,
-    //     position,
-    //     room,
-    //     avatar,
-    //     role,
-    //     phoneNumber,
-    //   } = data;
-    //   const account = { username, password, repassword };
-    //   const information = {
-    //     username,
-    //     fullname,
-    //     email,
-    //     birthday,
-    //     position,
-    //     room,
-    //     avatar,
-    //     role,
-    //     phoneNumber,
-    //   };
-    // };
-
     const handleCreateAccount = (e) => {
         e.preventDefault();
 
-        // const formData = new FormData();
-
-        // formData.append('username', inputValues.username);
-        // formData.append('password', inputValues.password);
-        // formData.append('repassword', inputValues.repassword);
-        // formData.append('fullname', inputValues.fullname);
-        // formData.append('email', inputValues.email);
-        // formData.append('birthday', inputValues.birthday);
-        // formData.append('position', inputValues.position);
-        // formData.append('room', inputValues.room);
-        // formData.append('avatar', inputValues.avatar);
-        // formData.append('role', inputValues.role);
-        // formData.append('phoneNumber', inputValues.phoneNumber);
-
-        const data = {
-            username: inputValues.username,
-            password: inputValues.password,
-            repassword: inputValues.repassword,
-            fullname: inputValues.fullname,
-            email: inputValues.email,
-            birthday: inputValues.birthday,
-            position: inputValues.position,
-            room: inputValues.room,
-            role: inputValues.role,
-            phoneNumber: inputValues.phoneNumber,
-            avatar: 'C:/Users/ThomasDang/Pictures/Backgrounds/avatar.jpg',
-        };
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
 
         const {
             username,
@@ -131,7 +85,7 @@ function CreateAccountUser() {
         } = data;
 
         const account = { username, password, repassword };
-
+        
         const information = {
             username,
             fullname,
@@ -441,7 +395,7 @@ function CreateAccountUser() {
                                     <button
                                         onClick={() => window.history.back()}
                                         className="btn btn-back col-md-2 col-sm-12"
-                                        type='button'
+                                        type="button"
                                     >
                                         Quay về
                                     </button>

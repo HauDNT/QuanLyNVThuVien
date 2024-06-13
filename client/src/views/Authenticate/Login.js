@@ -104,14 +104,14 @@ function Login() {
                             {({ handleChange, values }) => (
                                 <Form>
                                     <img src={avatarIcon} className="mb-3" />
-                                    <h3 class="title">Welcome to LibTech</h3>
+                                    <h3 class="title mb-3">Quản trị thư viện - LibTech</h3>
 
                                     <div className="input-div one">
                                         <div class="i">
                                             <i class="fas fa-user"></i>
                                         </div>
-                                        <div class="div">
-                                            <h5>Username</h5>
+                                        <div class="div mt-3">
+                                            <h5>Tài khoản</h5>
                                             <Field
                                                 className="input"
                                                 autoComplete="off"
@@ -128,7 +128,7 @@ function Login() {
                                             <i class="fas fa-lock"></i>
                                         </div>
                                         <div class="div">
-                                            <h5>Password</h5>
+                                            <h5>Mật khẩu</h5>
                                             <Field
                                                 className="input"
                                                 autoComplete="off"

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import config from '../../constance.js';
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import LoadingWindow from '../Components/Loading.js';
 import Paginate from '../../context/PaginateContext.js';
+import { formatAndDisplayDatetime } from "../../utils/FormatDateTime.js";
 
 function AccountTrash() {
     const [listAccount, setListAccount] = useState([]);
@@ -13,6 +15,12 @@ function AccountTrash() {
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
+
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
 
     // Set loading và tạo độ trễ (fake loading) để hiển thị dữ liệu:
     const [isLoading, setLoading] = useState(true);
@@ -34,15 +42,6 @@ function AccountTrash() {
             }, 1000);
         });
     }, []);
-
-    const formatAndDisplayDatetime = (dateString) => {
-        const date = new Date();
-        dateString = `
-                ${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
-                ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}
-            `;
-        return dateString;
-    };
 
     // Hàm xử lý khi check chọn 1 user:
     const handleCheck = (event) => {
@@ -233,16 +232,14 @@ function AccountTrash() {
                                         <td> {account.id} </td>
                                         <td> {account.Username} </td>
                                         <td>
-                                            {' '}
                                             {formatAndDisplayDatetime(
                                                 account.createdAt
-                                            )}{' '}
+                                            )}
                                         </td>
                                         <td>
-                                            {' '}
                                             {formatAndDisplayDatetime(
                                                 account.deletedAt
-                                            )}{' '}
+                                            )}
                                         </td>
                                     </tr>
                                 ))

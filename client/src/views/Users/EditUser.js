@@ -1,17 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import config from '../../constance.js';
 import { RoomContext } from '../../context/RoomContext.js';
-import BlobToUrl from '../../utils/BlobToUrl.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 
 function EditUser() {
     const { id } = useParams();
+
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+
     const [userInfo, setUserInfo] = useState([]);
     const { listRooms } = useContext(RoomContext);
     const [listPositions, setListPositions] = useState([]);
     const [listRoles, setListRoles] = useState([]);
+
+    let navigate = useNavigate();
+    
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
 
     useEffect(() => {
         Promise.all([
@@ -54,11 +66,6 @@ function EditUser() {
                     <div className="col-md-12 col-sm-12 label-info">
                         <h5>Thông tin tài khoản</h5>
                     </div>
-
-                    {userInfo?.Avatar?.data ? (
-                        <BlobToUrl blobData={userInfo.Avatar.data} />
-                    ) : null}
-
                     <div className="col-md-4 col-sm-12 input-field mb-3">
                         <label for="input--username" className="form-label">
                             Tên tài khoản

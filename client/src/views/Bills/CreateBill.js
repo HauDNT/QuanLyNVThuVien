@@ -2,9 +2,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../../constance.js';
 import { BillContext } from '../../context/BillContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function CreatBill() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2 || idRole !== 3) {
+        navigate('/page-not-found');
+    };
+
     const [status, setStatus] = useState(false);
     const [amountBills, setAmountBills] = useState(false);
     const [typesBill, setTypesBill] = useState([]);

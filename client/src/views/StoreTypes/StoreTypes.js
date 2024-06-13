@@ -2,13 +2,25 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field } from 'formik';
-import config from '../../constance.js';
-import { StoreTypesContext } from '../../context/StoreTypesContext.js';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { StoreTypesContext } from '../../context/StoreTypesContext.js';
+import { UserRoleContext } from '../../context/UserRoleContext.js';
 import Paginate from '../../context/PaginateContext.js';
 import { FaTimesCircle } from 'react-icons/fa';
+import config from '../../constance.js';
 
 function StoreTypes() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const { storeTypes } = useContext(StoreTypesContext);
     const { updateStoreType, removeStoreType } = useContext(StoreTypesContext);
 
@@ -143,7 +155,7 @@ function StoreTypes() {
                             {records.length > 0 ? (
                                 records.map(
                                     (type) =>
-                                        type.id !== 0 && (
+                                        type.id !== 1 && (
                                             <tr
                                                 key={type.id}
                                                 className="text-center"

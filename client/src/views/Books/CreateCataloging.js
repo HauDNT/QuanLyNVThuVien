@@ -2,12 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../../constance.js';
 import { toast } from 'react-toastify';
-import { Marc21DataContext } from '../../helper/HandleMarc21Data.js';
-// import ReadMarcFile from '../../helper/ReadMarcFile.js';
 
 function CreateCataloging() {
     const idUserCataloging = localStorage.getItem('id');
-    const { records, handleReadFile } = useContext(Marc21DataContext);
     const [fullnameUser, setFullname] = useState('');
     const [inputValues, setInputValues] = useState({
         ISBN: '',

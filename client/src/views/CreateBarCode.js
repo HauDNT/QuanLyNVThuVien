@@ -1,11 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import Barcode from 'react-barcode';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
-import config from '../constance.js';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { UserRoleContext } from '../context/UserRoleContext.js';
+import config from '../constance.js';
 
 function CreateBarCode() {
+    // Lấy id của loại tài khoản
+    const userRoles = useContext(UserRoleContext);
+    const idRole = userRoles.role.RoleId;
+    
+    let navigate = useNavigate();
+
+    if (idRole !== 2) {
+        navigate('/page-not-found');
+    };
+
     const [initValues, setInitValues] = useState({
         firstCode: '',
         lastCode: '',
