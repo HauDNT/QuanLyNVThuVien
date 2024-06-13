@@ -45,30 +45,27 @@ function ApproveCreate() {
         });
     };
 
+    const getNumberSeries = (heading) => {
+        axios
+            .get(`http://${config.URL}/approve/getmaxregiscode/${heading}`)
+            .then((res) => {
+                setInitValues((prevValues) => ({
+                    ...prevValues,
+                    NumberSeries: res.data,
+                }));
+            })
+            .catch((error) => {
+                toast.error(
+                    'Không thể nhận dữ liệu từ Server, hãy thử lại sau!'
+                );
+            });
+    };
+
     // Debouncing lấy giá trị heading, number length để tạo number series
     const debounceCreateNumberSeries = useCallback(
-        debounce(
-            (heading, numberLength) => getNumberSeries(heading, numberLength),
-            1000
-        ),
+        debounce((heading) => getNumberSeries(heading), 1000),
         []
     );
-
-    const getNumberSeries = (heading) => {
-        try {
-            axios
-                .get(`http://${config.URL}/approve/getmaxregiscode/${heading}`)
-                .then((res) => {
-                    setInitValues((prevValues) => ({
-                        ...prevValues,
-                        NumberSeries: res.data,
-                    }));
-                });
-        } catch (error) {
-            toast.error('Không thể nhận dữ liệu từ Server, hãy thử lại sau!');
-            return;
-        }
-    };
 
     // Tạo mã mới nếu có thay đổi thông tin về: Mã đầu, dãy số đăng ký, độ dài dãy số, số lượng
     useEffect(() => {
@@ -80,7 +77,8 @@ function ApproveCreate() {
                 ...prevValues,
                 RegisCode: prevValues.AllRegisCode[0],
             }));
-            // Cập nhật lại biến RegisCode là mã số đầu tiên vừa được tạo mới trong mảng AllRegisCode với mục đích hiển thị mẫu cho người dùng xem
+            // Cập nhật lại biến RegisCode là mã số đầu tiên vừa được tạo mới trong mảng AllRegisCode 
+            // với mục đích hiển thị mẫu cho người dùng xem
         }
     }, [
         initValues.Heading,
@@ -106,6 +104,7 @@ function ApproveCreate() {
     const formatAndCreateRegisCodes = () => {
         // Tạo ra 1 dãy số 0 để đưa vào tạo mã mới
         let strZero = '';
+
         for (let i = 1; i <= initValues.NumberLength; i++)
             strZero = strZero.concat('0');
 
@@ -115,11 +114,8 @@ function ApproveCreate() {
             initValues.AllRegisCode = [];
 
         for (let i = 0; i < initValues.AmountRegis; i++) {
-            numberSeries = (strZero + numberSeries).slice(
-                -initValues.NumberLength
-            );
-            initValues.AllRegisCode[i] =
-                initValues.Heading + '.' + numberSeries;
+            numberSeries = (strZero + numberSeries).slice(-initValues.NumberLength);
+            initValues.AllRegisCode[i] = initValues.Heading + '.' + numberSeries;
             numberSeries++;
         }
     };
@@ -483,7 +479,7 @@ function ApproveCreate() {
                             <button
                                 onClick={() => window.history.back()}
                                 className="btn btn-back col-md-2 col-sm-12"
-                                type='button'
+                                type="button"
                             >
                                 Quay về
                             </button>

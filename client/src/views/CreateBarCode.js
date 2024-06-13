@@ -11,12 +11,12 @@ function CreateBarCode() {
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
-    
+
     let navigate = useNavigate();
 
     if (idRole !== 2 && idRole !== 3) {
         navigate('/page-not-found');
-    };
+    }
 
     const [initValues, setInitValues] = useState({
         firstCode: '',
@@ -188,19 +188,19 @@ function CreateBarCode() {
                 </form>
             </div>
             <div className="row">
-                {notFound && notFound.length > 0 ? (
-                    <div className="not-found">
-                        <p>
-                            Có {notFound.length} mã không có barcode do không
-                            tìm thấy mã số phân phối
-                        </p>
-                        {notFound.map((item) => (
-                            <span>{item.RegisCode}</span>
-                        ))}
-                    </div>
-                ) : (
-                    ''
-                )}
+                <div className="col-md-12 col-sm-12">
+                    {notFound && notFound.length > 0 ? (
+                        <div className="not-found">
+                            <p>
+                                Có {notFound.length} mã không có barcode do
+                                không tìm thấy mã số phân phối:
+                            </p>
+                            {notFound.map((item) => (
+                                <span>{item.RegisCode}</span>
+                            ))}
+                        </div>
+                    ) : null}
+                </div>
             </div>
             <div className="row">
                 {barcode

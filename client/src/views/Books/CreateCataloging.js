@@ -94,7 +94,7 @@ function CreateCataloging() {
     }, [idUserCataloging]);
 
     return (
-        <div className="form-container">
+        <div className="form-container mb-3">
             <h1 className="form-header">Tạo biên mục mới</h1>
             <div className="form-body">
                 <form

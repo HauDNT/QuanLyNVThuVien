@@ -155,10 +155,15 @@ class ApproveController {
             group: ['day', 'year', 'month'],
         });
 
+        // Nếu tháng đó có ngày phân phối thì trả về data
         if (data.length > 0) {
             return res.json(data);
-        }
+        };
 
+        // Còn không thì tạo 1 data như sau:
+        // day: 0 => không có ngày nào
+        // month, year theo đã chọn
+        // amount là 0 vì không có
         data = [
             {
                 day: 0,

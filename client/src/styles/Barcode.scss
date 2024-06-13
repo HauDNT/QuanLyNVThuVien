@@ -1,0 +1,21 @@
+.not-found {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 10em;
+    overflow-y: scroll;
+    padding: 10px;
+    border: 3px solid #faabab;
+    border-radius: 5px;
+    background-color: rgb(248, 213, 213);
+    margin-bottom: 20px;
+
+
+    p {
+        width: 100%;
+        font-weight: 600;
+    }
+
+    span {
+        padding-right: 20px;
+    }
+}

@@ -65,10 +65,10 @@ function CreateAccountUser() {
     }, []);
 
     const handleCreateAccount = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Ngăn form submit - tránh load trang
 
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
+        const formData = new FormData(e.target); // Tạo đối tượng FormData chứa dữ liệu (key - value) từ data của form submit
+        const data = Object.fromEntries(formData.entries()); // Chuyển đổi FormData thành đối tượng JavaScript
 
         const {
             username,

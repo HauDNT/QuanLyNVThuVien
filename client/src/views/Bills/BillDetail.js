@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../constance.js';
@@ -19,13 +19,15 @@ function BillDetail() {
     const [records, setRecords] = useState(0);
 
     useEffect(() => {
-        axios.get(`http://${config.URL}/bills/detail/${billId}`).then((res) => {
-            setTimeout(() => {
-                setDetail(res.data);
-                setLoading(false);
-                setShowData(true);
-            }, 500);
-        });
+        axios
+            .get(`http://${config.URL}/bills/detail/${billId}`)
+            .then((res) => {
+                setTimeout(() => {
+                    setDetail(res.data);
+                    setLoading(false);
+                    setShowData(true);
+                }, 500);
+            });
     }, []);
 
     const calMoney = () => {
@@ -35,8 +37,9 @@ function BillDetail() {
             detail.map((each) => {
                 total +=
                     each.UnitPrice * each.Amount * (1 - each.Discount / 100);
+                    // Tính tiền từng quyển sách rồi cộng dồn vào biến tổng tiền - total
             });
-        }
+        };
 
         return total;
     };
@@ -121,10 +124,7 @@ function BillDetail() {
                                             <td> {info.Discount} </td>
                                             <td>
                                                 {formatCash(
-                                                    info.UnitPrice *
-                                                        info.Amount *
-                                                        (1 -
-                                                            info.Discount / 100)
+                                                    info.UnitPrice * info.Amount * (1 - info.Discount / 100)
                                                 )}
                                             </td>
                                         </tr>

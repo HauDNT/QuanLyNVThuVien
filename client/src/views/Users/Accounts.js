@@ -97,7 +97,7 @@ function Users() {
             } else {
                 setUserSelected(
                     userSelected.filter(
-                        (billId) => billId !== +eachCheckbox.value
+                        (userId) => userId !== +eachCheckbox.value
                     )
                 );
             }

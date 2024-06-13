@@ -30,6 +30,7 @@ function Dashboard() {
         accept: 0,
         unaccept: 0,
     });
+
     const [catalogPerMonth, setCatalogPerMonth] = useState([]);
     const [approvePerDay, setApprovePerDay] = useState([]);
 
@@ -76,7 +77,7 @@ function Dashboard() {
 
                         setLoading(false);
                         setShowData(true);
-                    }, 500);
+                    }, 1000);
                 }
             )
             .catch((error) => {

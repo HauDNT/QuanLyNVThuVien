@@ -10,8 +10,8 @@ import { FaPenToSquare } from 'react-icons/fa6';
 import LoadingWindow from '../Components/Loading.js';
 import { UserRoleContext } from '../../context/UserRoleContext.js';
 import { BillContext } from '../../context/BillContext.js';
-import { formatAndDisplayDate } from '../../utils/FormatDate.js';
 import Paginate from '../../context/PaginateContext.js';
+import { formatAndDisplayDate } from '../../utils/FormatDate.js';
 
 function Bills() {
     const { type } = useParams();
@@ -56,23 +56,25 @@ function Bills() {
             );
         });
 
-        Promise.all(deletePromises).then((res) => {
-            let status = false;
-            res.forEach((res, index) => {
-                const eachBillSelected = billSelected[index];
-                if (!res.data.error) {
-                    setListBills((oldList) =>
-                        oldList.filter((bill) => bill.id !== eachBillSelected)
-                    );
-                    removeFromBillList(eachBillSelected);
-                    status = true;
-                }
-            });
+        Promise
+            .all(deletePromises)
+            .then((res) => {
+                let status = false;
+                res.forEach((res, index) => {
+                    const eachBillSelected = billSelected[index];
+                    if (!res.data.error) {
+                        setListBills((oldList) =>
+                            oldList.filter((bill) => bill.id !== eachBillSelected)
+                        );
+                        removeFromBillList(eachBillSelected);   // Xóa bill này ra khỏi BillContext
+                        status = true;
+                    }
+                });
 
-            if (status) {
-                toast.success('Xóa đơn thành công');
-            } else toast.error('Xóa đơn không thành công!');
-        });
+                if (status) {
+                    toast.success('Xóa đơn thành công');
+                } else toast.error('Xóa đơn không thành công!');
+            });
     };
 
     // Hàm xử lý khi check chọn 1 đơn:
@@ -146,8 +148,8 @@ function Bills() {
                                         className="btn btn-outline-secondary btn-trash mb-2 w-100"
                                         to={`/bills/trash/${type}`}
                                     >
-                                        <FaTrash className="trash-icon" /> Đơn
-                                        đã xóa
+                                        <FaTrash className="trash-icon" /> 
+                                        Đơn đã xóa
                                     </Link>
                                 )}
                             </div>

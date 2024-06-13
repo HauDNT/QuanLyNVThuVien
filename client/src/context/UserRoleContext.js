@@ -7,8 +7,6 @@ import config from '../constance.js';
 const UserRoleContext = createContext();
 
 const UserRoleProvider = ({ children }) => {
-    // let userId;
-
     const secretKeyLocalStorage = 'local-storage-encrypt-key';
 
     const [role, setRole] = useState({

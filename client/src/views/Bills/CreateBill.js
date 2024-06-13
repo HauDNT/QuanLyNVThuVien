@@ -10,12 +10,12 @@ function CreatBill() {
     // Lấy id của loại tài khoản
     const userRoles = useContext(UserRoleContext);
     const idRole = userRoles.role.RoleId;
-    
+
     let navigate = useNavigate();
 
-    if (idRole !== 2 || idRole !== 3) {
+    if (idRole !== 2 && idRole !== 3) {
         navigate('/page-not-found');
-    };
+    }
 
     const [status, setStatus] = useState(false);
     const [amountBills, setAmountBills] = useState(false);
@@ -45,7 +45,7 @@ function CreatBill() {
 
         Promise.all([getNumberBill, getTypesBill])
             .then(([numberBillsRes, typesBillRes]) => {
-                setAmountBills(numberBillsRes.data + 1);
+                setAmountBills(numberBillsRes.data + 1); // Cộng mã đơn lớn nhất lên 1 để tạo thành mã đơn mới
                 setTypesBill(typesBillRes.data);
             })
             .catch((error) =>
@@ -78,7 +78,7 @@ function CreatBill() {
                 } else {
                     handleClearInput();
                     setStatus(false);
-                    updateListBill();
+                    updateListBill(); // Sau khi tạo thành công thì bổ sung vào list bills trong BillContext
                     toast.success(res.data.success);
                 }
             });
@@ -231,7 +231,7 @@ function CreatBill() {
                                     <button
                                         onClick={() => window.history.back()}
                                         className="btn btn-back col-md-2 col-sm-12"
-                                        type='button'
+                                        type="button"
                                     >
                                         Quay về
                                     </button>
