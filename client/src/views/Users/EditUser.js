@@ -18,13 +18,6 @@ function EditUser() {
     const [listPositions, setListPositions] = useState([]);
     const [listRoles, setListRoles] = useState([]);
 
-    let navigate = useNavigate();
-    
-    if (idRole !== 2) {
-        navigate('/page-not-found');
-    };
-
-
     useEffect(() => {
         Promise.all([
             axios.get(`http://${config.URL}/positions/all`),
@@ -43,6 +36,11 @@ function EditUser() {
 
     const handleUpdateInfo = (e) => {
         e.preventDefault();
+
+        if (userInfo.NewPassword?.length > 15 || userInfo.NewPassword?.length < 5) {
+            toast.error("Mật khẩu không hợp lệ!");
+            return;
+        }
 
         axios
             .put(`http://${config.URL}/users/updateinfo/${id}`, userInfo, {

@@ -82,7 +82,7 @@ function SideBar({ display, handleDisplayMenu }) {
                     <MenuItem component={<Link to="/encodetitles" />} onClick={handleDisplayMenu}>
                         Bảng mã hóa tên sách
                     </MenuItem>
-                    {idRole === 1 || idRole === 2 ? (
+                    {idRole === 2 || idRole === 3 ? (
                         <MenuItem component={<Link to="/barcode" />} onClick={handleDisplayMenu}>
                             Tạo mã Barcode 128
                         </MenuItem>

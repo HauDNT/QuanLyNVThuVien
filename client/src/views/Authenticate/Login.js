@@ -31,17 +31,16 @@ function Login() {
     });
 
     const handleLogin = async (data) => {
-        if (!data || !data.username || !data.password) {
+        if (!data || data.username === '' || data.password === '') {
             toast.error('Thông tin không hợp lệ. Hãy kiểm tra và thử lại!');
             return;
         }
 
         axios
             .post(`http://${config.URL}/users/login`, data)
-
             .then((res) => {
                 if (res.data && res.data.error) {
-                    toast.error(res.data.error);
+                    toast.error("Tài khoản không tồn tại. Vui lòng kiểm tra và thử lại");
                 } else {
                     // Phải set vào local storage để khi refresh trang thì data không bị mất:
                     localStorage.setItem('id', res.data.id);
@@ -136,6 +135,7 @@ function Login() {
                                                 name="password"
                                                 onChange={handleChange}
                                                 value={values.password}
+                                                type={"password"}
                                             />
                                         </div>
                                     </div>

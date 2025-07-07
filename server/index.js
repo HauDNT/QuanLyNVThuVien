@@ -10,7 +10,7 @@ const rateLimitRequest = require("express-rate-limit");
 
 const limiter = rateLimitRequest.rateLimit({
   windowMs: 5 * 60 * 100,
-  max: 3000,
+  max: 1000,
   message:
     "Bạn đang gửi quá nhiều yêu cầu trong một thời điểm. Vui lòng đợi...",
 });
@@ -57,3 +57,5 @@ db.sequelize.sync().then(() => {
     );
   });
 });
+
+module.exports = app;

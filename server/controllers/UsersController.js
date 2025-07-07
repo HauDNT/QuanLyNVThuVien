@@ -329,7 +329,7 @@ class UsersController {
                 }
             }
 
-            return res.json({ success: 'Đã cập nhật thông tin thành công!' });
+            return res.status(200).json({ success: 'Đã cập nhật thông tin thành công!' });
         } catch (error) {
             res.json({ error: 'Không cập nhật được thông tin!' });
         }

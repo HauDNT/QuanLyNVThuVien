@@ -581,7 +581,7 @@ function EditCataloging() {
                                     <div className="row">
                                         <div className="col-md-3 col-sm-12">
                                             {isNotAccept > 0 &&
-                                            (idRole === 1 || idRole === 2) ? (
+                                            (idRole === 2 || idRole === 3) ? (
                                                 <button
                                                     onClick={(e) =>
                                                         approveCatalogItem(e)

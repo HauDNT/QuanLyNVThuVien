@@ -120,6 +120,8 @@ class ApproveController {
                 return res.json({ error: 'Không tìm thấy phân phối của sách' });
             }
 
+            console.log('Data length: ' + data.length);
+
             const approve = data.map((item) => ({
                 id: item.id,
                 RegisCode: item.RegisCode,

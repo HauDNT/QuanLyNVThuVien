@@ -169,7 +169,7 @@ function Users() {
                                     </div>
                                 </div>
                             ) : null}
-                            <table className="styled-table">
+                            <table className="styled-table accounts-table">
                                 <thead>
                                     <tr>
                                         <th scope="col" className="text-center">
@@ -200,9 +200,6 @@ function Users() {
                                         </th>
                                         <th scope="col" className="text-center">
                                             Chức vụ
-                                        </th>
-                                        <th scope="col" className="text-center">
-                                            Sửa thông tin
                                         </th>
                                     </tr>
                                 </thead>
